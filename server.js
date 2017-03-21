@@ -2,7 +2,7 @@ var http = require("http");
 
 var handlers = require("./handlers.js");
 
-exports.Server = config => {
+exports.Server = function (config) {
   var handler = new handlers.Handler();
   var iface = config.get("server_interface");
   var port = config.get("server_port");
@@ -13,7 +13,27 @@ exports.Server = config => {
 
       var requestHandler = handler.getHandler(req);
       if (requestHandler) {
-        requestHandler.call(this, req, res);
+        requestHandler.call(this, req, (opts, content) => {
+          if (typeof opts !== "object") {
+            content = opts;
+            opts = {};
+          }
+
+          opts = Object.assign(opts, {content});
+          handlers.renderer(req, res, opts);
+        });
+      }
+      else {
+        var customErrorPage = handlers.getStaticContent("404.html");
+        if (customErrorPage) {
+          res.statusCode = 404;
+          res.write(customErrorPage);
+          res.end();
+        }
+        else {
+          res.writeHead(404, 'Not Found');
+          res.end();
+        }
       }
     });
 
