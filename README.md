@@ -7,3 +7,17 @@ Start with `index.js` - that's the entry point when the server's launched. The c
 
 The "application" code is under `app/`. Ideally, the server and the application would be separated as they are in Rails,
 but that's deferred for now.
+
+### How?
+To install for development or testing on your local machine, you'll need a copy of Node.js and npm, node's package
+manager. Once you've got those, clone the repo:
+
+    $ git clone https://github.com/ArtOfCode-/nails
+
+Install dependencies:
+
+    $ npm install
+
+Boot the server with:
+
+    $ npm start
