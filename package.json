@@ -2,14 +2,14 @@
   "name": "node-nails",
   "description": "Rails, in Node",
   "author": "ArtOfCode",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "repository": "https://github.com/ArtOfCode-/nails",
   "license": "MIT",
   "bugs": "https://github.com/ArtOfCode-/nails/issues",
   "scripts": {
-    "test": "xo",
-    "start": "node index.js"
+    "test": "xo"
   },
+  "main": "nails.js",
   "xo": {
     "space": true,
     "envs": [
@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "ejs": "^2.5.6",
-    "websocket": "~1.0.24",
-    "glob": "~7.1.1"
+    "glob": "~7.1.1",
+    "websocket": "~1.0.24"
   }
 }
