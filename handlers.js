@@ -1,5 +1,6 @@
 var fs = require("fs");
 var url = require("url");
+var ejs = require("ejs");
 var utils = require("./utils.js");
 
 var controllers = {};
@@ -26,12 +27,18 @@ exports.Handler = function () {
         var controllerFile = "./app/controllers/" + controller + ".js";
 
         if (controllers[controller]) {
-          routes[rawRoutes[i].type][rawRoutes[i].url] = controllers[controller][method];
+          routes[rawRoutes[i].type][rawRoutes[i].url] = {
+            method: controllers[controller][method],
+            view: exports.getView(action)
+          };
         }
         if (fs.existsSync(controllerFile)) {
           var loaded = require(controllerFile);
           controllers[controller] = loaded;
-          routes[rawRoutes[i].type][rawRoutes[i].url] = controllers[controller][method];
+          routes[rawRoutes[i].type][rawRoutes[i].url] = {
+            method: controllers[controller][method],
+            view: exports.getView(action)
+          };
         }
         else {
           console.log("WARNING: Route " + rawRoutes[i] + ": Controller doesn't exist - ignoring.");
@@ -46,10 +53,12 @@ exports.Handler = function () {
     throw new ReferenceError("Tried to load the routing file, but it doesn't exist!");
   }
 
+  this.routes = routes;
+
   this.getHandler = req => {
     var uri = url.parse(req.url, true);
     if (routes[req.method].hasOwnProperty(uri.pathname)) {
-      return routes[req.method][uri.pathname];
+      return routes[req.method][uri.pathname].method;
     }
     return null;
   };
@@ -62,7 +71,24 @@ exports.getStaticContent = name => {
   return null;
 };
 
+exports.getView = route => {
+  var action = route.split(".");
+  var controller = action[0];
+  var method = action[action.length - 1];
+  if (fs.existsSync("app/views/" + controller + "/" + method + ".ejs")) {
+    return ejs.compile(fs.readFileSync("app/views/" + controller + "/" + method + ".ejs").toString());
+  }
+  return null;
+};
+
 exports.renderer = (req, res, opts) => {
+  if (!utils.objValidate(opts, {required: ['routes']})) {
+    res.writeHead(500, 'Internal Server Error');
+    res.end();
+    console.error("ERROR: handlers.renderer: expected opts.routes, got " + opts['routes']);
+    return;
+  }
+
   if (opts.text) {
     opts.content = opts.text;
     delete opts['text'];
@@ -85,7 +111,20 @@ exports.renderer = (req, res, opts) => {
   opts.status = opts.status || 200;
   res.statusCode = opts.status;
 
-  if (opts.content) {
+  if (opts.view) {
+    var view = opts.routes[req.method][url.parse(req.url, true).pathname].view;
+    if (view) {
+      opts.locals = opts.locals || {};
+      res.write(view(opts.locals));
+      res.end();
+    }
+    else {
+      console.log("WARNING: handlers.renderer: render specified view: true, but no view present.");
+      res.statusCode = 204;
+      res.end();
+    }
+  }
+  else if (opts.content) {
     res.write(opts.content);
     res.end();
   }

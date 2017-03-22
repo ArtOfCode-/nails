@@ -9,3 +9,7 @@ exports.paramSwitching = (req, render) => {
 exports.json = (req, render) => {
   render({json: {this: 'renders', as: 'json'}});
 };
+
+exports.view = (req, render) => {
+  render({view: true, locals: {text: 'hi'}});
+};

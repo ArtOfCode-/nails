@@ -1,5 +1,6 @@
 [
   { "type": "GET", "url": "/status", "to": "status.status" },
   { "type": "GET", "url": "/status/param-switching", "to": "status.paramSwitching" },
-  { "type": "GET", "url": "/status/json", "to": "status.json" }
+  { "type": "GET", "url": "/status/json", "to": "status.json" },
+  { "type": "GET", "url": "/status/view", "to": "status.view" }
 ]

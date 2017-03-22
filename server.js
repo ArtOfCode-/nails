@@ -19,7 +19,10 @@ exports.Server = function (config) {
             opts = {};
           }
 
-          opts = Object.assign(opts, {content});
+          if (content !== undefined) {
+            opts = Object.assign(opts, {content});
+          }
+          opts = Object.assign(opts, {routes: handler.routes});
           handlers.renderer(req, res, opts);
         });
       }
