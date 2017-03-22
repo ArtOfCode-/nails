@@ -76,7 +76,9 @@ exports.getView = route => {
   var controller = action[0];
   var method = action[action.length - 1];
   if (fs.existsSync("app/views/" + controller + "/" + method + ".ejs")) {
-    return ejs.compile(fs.readFileSync("app/views/" + controller + "/" + method + ".ejs").toString());
+    return ejs.compile(fs.readFileSync("app/views/" + controller + "/" + method + ".ejs").toString(), {
+      filename: "app/views/" + controller + "/" + method + ".ejs"
+    });
   }
   return null;
 };
