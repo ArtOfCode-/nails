@@ -1,10 +1,11 @@
 {
-  "name": "nails",
+  "name": "node-nails",
   "description": "Rails, in Node",
   "author": "ArtOfCode",
   "version": "0.1.0",
   "repository": "https://github.com/ArtOfCode-/nails",
   "license": "MIT",
+  "bugs": "https://github.com/ArtOfCode-/nails/issues",
   "scripts": {
     "test": "xo",
     "start": "node index.js"
