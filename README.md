@@ -14,6 +14,14 @@ Proof-of-concept for a Rails-like thing in Node.js.
 
     It should Just Work from that point, if your app is constructed correctly.
 
+## Getting Started
+There is brief documentation available below in the README. If, however, you want a step-by-step guide to getting a
+project set up, you can read through the
+[getting started manual](https://github.com/ArtOfCode-/nails/blob/master/docs/getting-started.md).
+
+Full documentation for the project is available in the
+[docs folder](https://github.com/ArtOfCode-/nails/tree/master/docs).
+
 ## Config
 In your app's root directory, there must be a `config.json` file. That file should have *at least* the following in it:
 
