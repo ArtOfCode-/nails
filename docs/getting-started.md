@@ -34,13 +34,11 @@ You need a script that loads nails and tells it where your app is so that it can
 
 ```js
 var nails = require("node-nails").nails;
-nails('.');
+nails('/full/path/to/your/project');
 ```
 
-The `'.'` in the call to `nails` is the path to your app. Assuming your startup script is in the root of your project
-directory, `.` is the correct path. Bear in mind, however, that you will have to *run* the startup script from the same
-directory for this to work. You can also use a relative path to another directory (such as `app/`, for example), or an
-absolute path if you want to be able to run the script outside of its own directory.
+Replace `/full/path/to/your/project` with the *real* full path to your project's directory. This must be a full path -
+relative paths don't work.
 
 ## 3.1. App: Config
 You can start creating your application now. The first thing you'll need is a configuration file, which should be stored
