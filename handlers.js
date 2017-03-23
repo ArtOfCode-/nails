@@ -5,7 +5,7 @@ var utils = require("./utils.js");
 
 var controllers = {};
 
-exports.Handler = function (config) {
+exports = module.exports = function Handler(config) {
   var routes = {
     HEAD: {},
     GET: {},

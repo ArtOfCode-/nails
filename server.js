@@ -1,9 +1,9 @@
 var http = require("http");
-var handlers = require("./handlers.js");
+var Handler = require("./handlers.js");
 var library = require("./library.js");
 
-exports.Server = function (config) {
-  var handler = new handlers.Handler(config);
+exports = module.exports = function Server(config) {
+  var handler = new Handler(config);
   var iface = config.get("server_interface");
   var port = config.get("server_port");
 
@@ -26,12 +26,12 @@ exports.Server = function (config) {
           }
           else {
             opts = Object.assign(opts, {routes: handler.routes});
-            handlers.renderer(req, res, opts);
+            Handler.renderer(req, res, opts);
           }
         }
       }
       else {
-        var customErrorPage = handlers.getStaticContent("404.html", config);
+        var customErrorPage = Handler.getStaticContent("404.html", config);
         if (customErrorPage) {
           res.statusCode = 404;
           res.write(customErrorPage);

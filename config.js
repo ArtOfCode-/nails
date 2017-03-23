@@ -1,6 +1,6 @@
 var fs = require("fs");
 
-exports.Config = function (file) {
+exports = module.exports = function Config(file) {
   var json;
 
   if (fs.existsSync(file) && !fs.lstatSync(file).isDirectory()) {
