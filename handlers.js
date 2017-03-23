@@ -91,6 +91,12 @@ exports.renderer = (req, res, opts) => {
     return;
   }
 
+  opts.headers = opts.headers || {'content-type': 'text/html'};
+  var headerNames = Object.keys(opts.headers);
+  for (var i = 0; i < headerNames.length; i++) {
+    res.setHeader(headerNames[i], opts.headers[headerNames[i]]);
+  }
+
   if (opts.text) {
     opts.content = opts.text;
     delete opts['text'];
@@ -102,12 +108,6 @@ exports.renderer = (req, res, opts) => {
     delete opts['json'];
     exports.renderer(req, res, Object.assign(opts, {headers: {'content-type': 'application/json'}}));
     return;
-  }
-
-  opts.headers = opts.headers || {'content-type': 'text/html'};
-  var headerNames = Object.keys(opts.headers);
-  for (var i = 0; i < headerNames.length; i++) {
-    res.setHeader(headerNames[i], opts.headers[headerNames[i]]);
   }
 
   opts.status = opts.status || 200;
