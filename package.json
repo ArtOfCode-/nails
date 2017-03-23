@@ -2,7 +2,7 @@
   "name": "node-nails",
   "description": "Rails, in Node",
   "author": "ArtOfCode",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "repository": "https://github.com/ArtOfCode-/nails",
   "license": "MIT",
   "bugs": "https://github.com/ArtOfCode-/nails/issues",
