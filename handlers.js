@@ -29,7 +29,7 @@ exports.Handler = function (config) {
         if (controllers[controller]) {
           routes[rawRoutes[i].type][rawRoutes[i].url] = {
             method: controllers[controller][method],
-            view: exports.getView(action)
+            view: exports.getView(action, config)
           };
         }
         if (fs.existsSync(controllerFile)) {
@@ -37,7 +37,7 @@ exports.Handler = function (config) {
           controllers[controller] = loaded;
           routes[rawRoutes[i].type][rawRoutes[i].url] = {
             method: controllers[controller][method],
-            view: exports.getView(action)
+            view: exports.getView(action, config)
           };
         }
         else {

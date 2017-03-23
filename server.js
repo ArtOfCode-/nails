@@ -27,7 +27,7 @@ exports.Server = function (config) {
         });
       }
       else {
-        var customErrorPage = handlers.getStaticContent("404.html");
+        var customErrorPage = handlers.getStaticContent("404.html", config);
         if (customErrorPage) {
           res.statusCode = 404;
           res.write(customErrorPage);
