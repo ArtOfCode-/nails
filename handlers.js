@@ -5,7 +5,7 @@ var utils = require("./utils.js");
 
 var controllers = {};
 
-exports.Handler = function () {
+exports.Handler = function (config) {
   var routes = {
     HEAD: {},
     GET: {},
@@ -16,15 +16,15 @@ exports.Handler = function () {
     OPTIONS: {}
   };
 
-  if (fs.existsSync("app/routes.json")) {
-    var rawRoutes = JSON.parse(fs.readFileSync("app/routes.json"));
+  if (fs.existsSync(config.get('appRoot') + "/routes.json")) {
+    var rawRoutes = JSON.parse(fs.readFileSync(config.get('appRoot') + "/routes.json"));
     for (var i = 0; i < rawRoutes.length; i++) {
       if (utils.objValidate(rawRoutes[i], {required: ['type', 'url', 'to']})) {
         var action = rawRoutes[i].to;
         var actionSplat = action.split(".");
         var controller = actionSplat[0];
         var method = actionSplat[actionSplat.length - 1];
-        var controllerFile = "./app/controllers/" + controller + ".js";
+        var controllerFile = config.get('appRoot') + "/controllers/" + controller + ".js";
 
         if (controllers[controller]) {
           routes[rawRoutes[i].type][rawRoutes[i].url] = {
@@ -64,20 +64,20 @@ exports.Handler = function () {
   };
 };
 
-exports.getStaticContent = name => {
-  if (fs.existsSync("app/static/" + name)) {
-    return fs.readFileSync("app/static/" + name);
+exports.getStaticContent = (name, config) => {
+  if (fs.existsSync(config.get('appRoot') + "/static/" + name)) {
+    return fs.readFileSync(config.get('appRoot') + "/static/" + name);
   }
   return null;
 };
 
-exports.getView = route => {
+exports.getView = (route, config) => {
   var action = route.split(".");
   var controller = action[0];
   var method = action[action.length - 1];
-  if (fs.existsSync("app/views/" + controller + "/" + method + ".ejs")) {
-    return ejs.compile(fs.readFileSync("app/views/" + controller + "/" + method + ".ejs").toString(), {
-      filename: "app/views/" + controller + "/" + method + ".ejs"
+  if (fs.existsSync(config.get('appRoot') + "/views/" + controller + "/" + method + ".ejs")) {
+    return ejs.compile(fs.readFileSync(config.get('appRoot') + "/views/" + controller + "/" + method + ".ejs").toString(), {
+      filename: config.get('appRoot') + "/views/" + controller + "/" + method + ".ejs"
     });
   }
   return null;

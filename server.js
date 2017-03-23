@@ -3,7 +3,7 @@ var http = require("http");
 var handlers = require("./handlers.js");
 
 exports.Server = function (config) {
-  var handler = new handlers.Handler();
+  var handler = new handlers.Handler(config);
   var iface = config.get("server_interface");
   var port = config.get("server_port");
 
