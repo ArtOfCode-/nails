@@ -14,24 +14,26 @@ Any method you make public by exporting it is eligible to be an action (a route'
 specified in a route.
 
 ### Action Format
-An action must take the form of a function that accepts two parameters. The first of these, `req`, is the HTTP request
+An action must take the form of a function that accepts one parameter. This parameter, `req`, is the HTTP request
 as passed to the Nails server. This is a Node.JS `http.IncomingMessage` object, the documentation for which is available
-[here](https://nodejs.org/api/http.html#http_class_http_incomingmessage). The second, `render`, is a function that you
-should call once you're done processing to render the content you want.
+[here](https://nodejs.org/api/http.html#http_class_http_incomingmessage).
+
+The action will be executed in the context of Nails' controller library, which gives you access to controller helper
+methods including `this.render` (as demonstrated in the example below) and `this.redirect`.
 
 **Example:**
 ```js
-exports.index = function (req, render) {
-  render({text: req.headers['user-agent']});
+exports.index = function (req) {
+  this.render({text: req.headers['user-agent']});
 };
 ```
 
 ### Rendering
-The renderer that is passed to your actions supports a similar but smaller set of options to Rails' render method, if
-you're familiar with that. Its signature is this:
+The renderer available in the library (`this.render` in your controllers) supports a similar but smaller set of options
+to Rails' `render` method, if you're familiar with that. Its signature is this:
 
 ```js
-render(opts, content)
+this.render(opts, content)
 ```
 
 Pass options as the `opts` object; pass any HTML content in the `content` parameter. If you don't want to pass options,
@@ -61,8 +63,8 @@ The `opts` object supports the following options:
 
 **Example:** An AJAX request returns JSON with an access control header:
 ```js
-exports.remoteAjax = function (req, render) {
-  render({
+exports.remoteAjax = function (req) {
+  this.render({
     json: {
       date: new Date().toISOString()
     },
@@ -75,10 +77,17 @@ exports.remoteAjax = function (req, render) {
 
 **Example:** A failed request returns a plain string with a status code:
 ```js
-exports.badRequest = function (req, render) {
-  render({
+exports.badRequest = function (req) {
+  this.render({
     text: 'Failed',
     status: 409
   });
 };
 ```
+
+### Redirects
+The other major method available in the Nails library is `redirect`. From your controller actions, you can call
+`this.redirect(path)` to redirect the client to another path. The value of `path` should be a string containing a path
+(for a redirect to elsewhere in your application) or a full URL (for redirection elsewhere on the Internet).
+
+The HTTP response for this will be a 302 Found response with a Location header pointing to your specified resource.

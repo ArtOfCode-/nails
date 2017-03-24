@@ -84,12 +84,12 @@ The third step in creating this app is to create a controller to handle the rout
 In that file, you'll need this content:
 
 ```js
-exports.index = function (req, render) {
-  render({view: true, locals: {ip: req.connection.remoteAddress, ua: req.headers['user-agent']}});
+exports.index = function (req) {
+  this.render({view: true, locals: {ip: req.connection.remoteAddress, ua: req.headers['user-agent']}});
 };
 
-exports.json = function (req, render) {
-  render({json: {status: 'up', ip: req.connection.remoteAddress, ua: req.headers['user-agent']}});
+exports.json = function (req) {
+  this.render({json: {status: 'up', ip: req.connection.remoteAddress, ua: req.headers['user-agent']}});
 };
 ```
 
@@ -123,7 +123,7 @@ you should see JSON data containing `status: 'up'`, and your IP and user agent.
 
 ## 5. Hack it!
 You're done. Now, take the app you've just made and modify it to do... something else. There's full documentation
-available [here](https://github.com/ArtOfCode-/nails/blob/master/docs/docs.md) - if you need help, details of what nails
+available [here](https://github.com/ArtOfCode-/nails/blob/master/docs/README.md) - if you need help, details of what nails
 does and doesn't support should be in there. Bear in mind that nails is by no means fully-fledged, so there are
 doubtless some major features lacking.
 

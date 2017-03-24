@@ -1,6 +1,6 @@
 var http = require("http");
-
 var handlers = require("./handlers.js");
+var library = require("./library.js");
 
 exports.Server = function (config) {
   var handler = new handlers.Handler(config);
@@ -13,18 +13,22 @@ exports.Server = function (config) {
 
       var requestHandler = handler.getHandler(req);
       if (requestHandler) {
-        requestHandler.call(this, req, (opts, content) => {
-          if (typeof opts !== "object") {
-            content = opts;
-            opts = {};
-          }
+        library.resetRequestData();
+        requestHandler.bind(library)(req);
+        var opts = library.getRequestData();
 
-          if (content !== undefined) {
-            opts = Object.assign(opts, {content});
+        if (opts !== null) {
+          if (opts.redirect_to) {
+            res.writeHead(302, {
+              location: opts.redirect_to
+            });
+            res.end();
           }
-          opts = Object.assign(opts, {routes: handler.routes});
-          handlers.renderer(req, res, opts);
-        });
+          else {
+            opts = Object.assign(opts, {routes: handler.routes});
+            handlers.renderer(req, res, opts);
+          }
+        }
       }
       else {
         var customErrorPage = handlers.getStaticContent("404.html", config);
