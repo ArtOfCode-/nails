@@ -1,7 +1,7 @@
 var fs = require("fs");
 var url = require("url");
 var ejs = require("ejs");
-var utils = require("./utils.js");
+var utils = require("./utils");
 
 var controllers = {};
 

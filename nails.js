@@ -1,6 +1,6 @@
 var path = require("path");
-var Server = require("./server.js").Server;
-var Config = require("./config.js").Config;
+var Server = require("./server");
+var Config = require("./config");
 
 exports.nails = (appRoot = path.dirname(require.main.filename)) => {
   var cfg = new Config(appRoot + "/config.json");

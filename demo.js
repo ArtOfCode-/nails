@@ -1,3 +1,3 @@
-var nails = require("./nails.js");
+var nails = require("./nails");
 
 nails('./app');

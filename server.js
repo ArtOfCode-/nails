@@ -1,6 +1,6 @@
 var http = require("http");
-var Handler = require("./handlers.js");
-var library = require("./library.js");
+var Handler = require("./handlers");
+var library = require("./library");
 
 exports = module.exports = function Server(config) {
   var handler = new Handler(config);
