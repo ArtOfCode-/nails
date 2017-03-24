@@ -9,7 +9,7 @@ Proof-of-concept for a Rails-like thing in Node.js.
 
     ```js
     var nails = require("node-nails").nails;
-    nails('/path/to/your/app/root');    // no trailing slash, no relative paths
+    nails();
     ```
 
     It should Just Work from that point, if your app is constructed correctly.
