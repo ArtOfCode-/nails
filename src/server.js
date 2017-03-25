@@ -8,6 +8,9 @@ exports = module.exports = class Server {
     this.config = config;
   }
   run() {
+    this.handler.ready.then(this._run.bind(this));
+  }
+  _run() {
     const iface = this.config.server_interface;
     const port = this.config.server_port;
     const server = http.createServer((req, res) => {
@@ -16,33 +19,36 @@ exports = module.exports = class Server {
       const requestHandler = this.handler.getHandler(req);
       if (requestHandler) {
         const library = new Library();
-        requestHandler.call(library.context, req);
-        let opts = library.requestData;
+        const prom = requestHandler.call(library.context, req);
+        Promise.resolve(prom).then(() => {
+          let opts = library.requestData;
 
-        if (opts != null) {
-          if (opts.redirect_to) {
-            res.writeHead(302, {
-              location: opts.redirect_to
-            });
+          if (opts != null) {
+            if (opts.redirect_to) {
+              res.writeHead(302, {
+                location: opts.redirect_to
+              });
+              res.end();
+            }
+            else {
+              opts = Object.assign(opts, {routes: this.handler.routes});
+              Handler.renderer(req, res, opts);
+            }
+          }
+        });
+      }
+      else {
+        Handler.getStaticContent("404.html", this.config).then(customErrorPage => {
+          if (customErrorPage) {
+            res.statusCode = 404;
+            res.write(customErrorPage);
             res.end();
           }
           else {
-            opts = Object.assign(opts, {routes: this.handler.routes});
-            Handler.renderer(req, res, opts);
+            res.writeHead(404, 'Not Found');
+            res.end();
           }
-        }
-      }
-      else {
-        const customErrorPage = Handler.getStaticContent("404.html", this.config);
-        if (customErrorPage) {
-          res.statusCode = 404;
-          res.write(customErrorPage);
-          res.end();
-        }
-        else {
-          res.writeHead(404, 'Not Found');
-          res.end();
-        }
+        });
       }
     });
 

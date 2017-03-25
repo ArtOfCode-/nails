@@ -24,7 +24,7 @@
       }
     ],
     "rules": {
-      "no-var": 0,
+      "no-var": "error",
       "quotes": 0,
       "no-eval": 1,
       "import/no-unassigned-import": 0,
@@ -44,7 +44,6 @@
       "no-multi-assign": "off",
       "func-names": "off",
       "unicorn/filename-case": "off",
-      "no-var": "error",
       "unicorn/no-process-exit": 0,
       "max-params": [
         1,
@@ -58,6 +57,7 @@
   "dependencies": {
     "ejs": "^2.5.6",
     "glob": "~7.1.1",
+    "mz": "^2.6.0",
     "rewire": "^2.5.2",
     "websocket": "~1.0.24"
   }

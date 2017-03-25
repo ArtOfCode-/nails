@@ -1,10 +1,19 @@
-const fs = require("fs");
 const url = require("url");
 const path = require("path");
+const fs = require("mz/fs");
 const ejs = require("ejs");
 const utils = require("./utils");
 
 const controllers = {};
+
+function setView({action, config, rawRoute, routes, method}) {
+  exports.getView(action, config).then(view => {
+    routes[rawRoute.type][rawRoute.url] = {
+      method,
+      view
+    };
+  });
+}
 
 exports = module.exports = class Handler {
   constructor(config) {
@@ -24,6 +33,8 @@ exports = module.exports = class Handler {
     }
     catch (err) {}
 
+    const promises = [];
+
     if (rawRoutes) {
       for (let i = 0; i < rawRoutes.length; i++) {
         if (utils.objValidate(rawRoutes[i], {required: ['type', 'url', 'to']})) {
@@ -34,10 +45,13 @@ exports = module.exports = class Handler {
           const controllerFile = config.appRoot + '/controllers/' + controller;
 
           if (controllers[controller]) {
-            routes[rawRoutes[i].type][rawRoutes[i].url] = {
-              method: controllers[controller][method],
-              view: exports.getView(action, config)
-            };
+            promises.push(setView({
+              action,
+              config,
+              rawRoute: rawRoutes[i],
+              routes,
+              method: controllers[controller][method]
+            }));
           }
           let loaded;
           try {
@@ -46,10 +60,13 @@ exports = module.exports = class Handler {
           catch (err) {}
           if (loaded) {
             controllers[controller] = loaded;
-            routes[rawRoutes[i].type][rawRoutes[i].url] = {
-              method: controllers[controller][method],
-              view: exports.getView(action, config)
-            };
+            promises.push(setView({
+              action,
+              config,
+              rawRoute: rawRoutes[i],
+              routes,
+              method: controllers[controller][method]
+            }));
           }
           else {
             console.log("WARNING: Route " + rawRoutes[i] + ": Controller doesn't exist - ignoring.");
@@ -64,6 +81,7 @@ exports = module.exports = class Handler {
     else {
       throw new ReferenceError("Tried to load the routing file, but it doesn't exist!");
     }
+    this.ready = promises.reduce((prom, nextProm) => prom.then(nextProm), Promise.resolve());
   }
 
   getHandler(req) {
@@ -77,10 +95,7 @@ exports = module.exports = class Handler {
 
 exports.getStaticContent = (name, config) => {
   const staticPath = path.join(config.appRoot, "static", name);
-  if (fs.existsSync(staticPath)) {
-    return fs.readFileSync(staticPath);
-  }
-  return null;
+  return fs.exists(staticPath).then(exists => exists ? fs.readFile(staticPath, 'utf-8') : null).catch(() => null);
 };
 
 exports.getView = (route, config) => {
@@ -88,12 +103,13 @@ exports.getView = (route, config) => {
   const controller = action[0];
   const method = action[action.length - 1];
   const viewPath = path.join(config.appRoot, "views", controller, method + ".ejs");
-  if (fs.existsSync(viewPath)) {
-    return ejs.compile(fs.readFileSync(viewPath).toString(), {
-      filename: viewPath
-    });
-  }
-  return null;
+  return fs.exists(viewPath).then(exists => {
+    if (exists) {
+      return fs.readFile(viewPath, 'utf-8').then(contents => ejs.compile(contents, {
+        filename: viewPath
+      }));
+    }
+  });
 };
 
 exports.renderer = (req, res, opts) => {
