@@ -1,12 +1,10 @@
-var fs = require("fs");
-
 exports = module.exports = function Config(file) {
   var json;
 
-  if (fs.existsSync(file) && !fs.lstatSync(file).isDirectory()) {
-    json = JSON.parse(fs.readFileSync(file));
+  try {
+    json = require(file);
   }
-  else {
+  catch (err) {
     throw new ReferenceError("File doesn't exist: can't load config");
   }
 
@@ -18,10 +16,7 @@ exports = module.exports = function Config(file) {
     return json[key] || null;
   };
 
-  this.set = (key, value, write) => {
+  this.set = (key, value) => {
     json[key] = value;
-    if (write) {
-      fs.writeFileSync(file, JSON.stringify(json));
-    }
   };
 };
