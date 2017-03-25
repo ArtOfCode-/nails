@@ -41,8 +41,10 @@ exports = module.exports = class Server {
         Handler.getStaticContent("404.html", this.config).then(customErrorPage => {
           if (customErrorPage) {
             res.statusCode = 404;
-            res.write(customErrorPage);
-            res.end();
+            Handler.renderer(req, res, {
+              routes: this.handler.routes,
+              content: customErrorPage
+            });
           }
           else {
             res.writeHead(404, 'Not Found');
