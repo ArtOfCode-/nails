@@ -4,7 +4,9 @@ exports = module.exports = function createConfig(file) {
     json = require(file);
   }
   catch (err) {
-    console.log(err);
+    if (err.code !== 'MODULE_NOT_FOUND') {
+      throw err;
+    }
     throw new ReferenceError("File doesn't exist: can't load config");
   }
   return json;

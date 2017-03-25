@@ -1,4 +1,3 @@
-const path = require('path');
-const nails = require("./src/nails");
+const nails = require(".");
 
-nails(path.join(__dirname, 'app'));
+nails();

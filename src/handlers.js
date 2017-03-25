@@ -31,7 +31,11 @@ exports = module.exports = class Handler {
     try {
       rawRoutes = require(config.appRoot + '/routes');
     }
-    catch (err) {}
+    catch (err) {
+      if (err.code !== 'MODULE_NOT_FOUND') {
+        throw err;
+      }
+    }
 
     const promises = [];
 
@@ -57,7 +61,11 @@ exports = module.exports = class Handler {
           try {
             loaded = require(controllerFile);
           }
-          catch (err) {}
+          catch (err) {
+            if (err.code !== 'MODULE_NOT_FOUND') {
+              throw err;
+            }
+          }
           if (loaded) {
             controllers[controller] = loaded;
             promises.push(setView({
@@ -73,7 +81,7 @@ exports = module.exports = class Handler {
           }
         }
         else {
-          console.log("WARNING: Found route" + rawRoutes[i] + ": missing required key(s): type, url, to - ignoring.");
+          console.log("WARNING: Found route " + JSON.stringify(rawRoutes[i]) + ": missing required key(s): type, url, to - ignoring.");
         }
       }
       this.routes = routes;
