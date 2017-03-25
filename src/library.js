@@ -1,21 +1,28 @@
-let requestData = null;
-
-exports.getRequestData = () => requestData;
-
-exports.resetRequestData = () => {
-  requestData = null;
+const S = {
+  library: Symbol('library')
 };
 
-exports.render = (opts, content) => {
-  if (typeof opts !== "object") {
-    content = opts;
-    opts = {};
+class Context {
+  constructor(library) {
+    this[S.library] = library;
   }
 
-  requestData = Object.assign(opts, {content});
-};
+  render(opts, content) {
+    if (typeof opts !== "object") {
+      content = opts;
+      opts = {};
+    }
 
-exports.redirect = to => {
-  requestData = requestData || {};
-  requestData.redirect_to = to; // eslint-disable-line camelcase
+    this[S.library].requestData = Object.assign(opts, {content});
+  }
+  redirect(to) {
+    this[S.library].requestData.redirect_to = to; // eslint-disable-line camelcase
+  }
+}
+
+exports = module.exports = class Library {
+  constructor() {
+    this.requestData = {};
+    this.context = new Context(this);
+  }
 };

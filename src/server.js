@@ -1,6 +1,6 @@
 const http = require("http");
 const Handler = require("./handlers");
-const library = require("./library");
+const Library = require("./library");
 
 exports = module.exports = class Server {
   constructor(config) {
@@ -15,9 +15,9 @@ exports = module.exports = class Server {
 
       const requestHandler = this.handler.getHandler(req);
       if (requestHandler) {
-        library.resetRequestData();
-        requestHandler.call(library, req);
-        let opts = library.getRequestData();
+        const library = new Library();
+        requestHandler.call(library.context, req);
+        let opts = library.requestData;
 
         if (opts != null) {
           if (opts.redirect_to) {
