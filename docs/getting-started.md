@@ -34,11 +34,8 @@ You need a script that loads nails and tells it where your app is so that it can
 
 ```js
 var nails = require("node-nails").nails;
-nails('/full/path/to/your/project');
+nails();
 ```
-
-Replace `/full/path/to/your/project` with the *real* full path to your project's directory. This must be a full path -
-relative paths don't work.
 
 ## 3.1. App: Config
 You can start creating your application now. The first thing you'll need is a configuration file, which should be stored
@@ -123,7 +120,7 @@ you should see JSON data containing `status: 'up'`, and your IP and user agent.
 
 ## 5. Hack it!
 You're done. Now, take the app you've just made and modify it to do... something else. There's full documentation
-available [here](https://github.com/ArtOfCode-/nails/blob/master/docs/README.md) - if you need help, details of what nails
+available [here](https://artofcode-.github.io/nails) - if you need help, details of what nails
 does and doesn't support should be in there. Bear in mind that nails is by no means fully-fledged, so there are
 doubtless some major features lacking.
 
