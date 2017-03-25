@@ -16,7 +16,7 @@ exports = module.exports = class Server {
       const requestHandler = this.handler.getHandler(req);
       if (requestHandler) {
         library.resetRequestData();
-        requestHandler.bind(library)(req);
+        requestHandler.call(library, req);
         let opts = library.getRequestData();
 
         if (opts != null) {

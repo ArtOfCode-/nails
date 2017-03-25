@@ -17,5 +17,5 @@ exports.render = (opts, content) => {
 
 exports.redirect = to => {
   requestData = requestData || {};
-  requestData['redirect_to'] = to;
+  requestData.redirect_to = to; // eslint-disable-line camelcase
 };

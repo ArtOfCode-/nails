@@ -112,13 +112,13 @@ exports.renderer = (req, res, opts) => {
 
   if (opts.text) {
     opts.content = opts.text;
-    delete opts['text'];
+    delete opts.text;
     exports.renderer(req, res, Object.assign(opts, {headers: {'content-type': 'text/plain'}}));
     return;
   }
   else if (opts.json) {
     opts.content = JSON.stringify(opts.json);
-    delete opts['json'];
+    delete opts.json;
     exports.renderer(req, res, Object.assign(opts, {headers: {'content-type': 'application/json'}}));
     return;
   }
