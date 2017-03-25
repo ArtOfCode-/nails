@@ -1,80 +1,82 @@
-var fs = require("fs");
-var url = require("url");
-var path = require("path");
-var ejs = require("ejs");
-var utils = require("./utils");
+const fs = require("fs");
+const url = require("url");
+const path = require("path");
+const ejs = require("ejs");
+const utils = require("./utils");
 
-var controllers = {};
+const controllers = {};
 
-exports = module.exports = function Handler(config) {
-  var routes = {
-    HEAD: {},
-    GET: {},
-    POST: {},
-    PUT: {},
-    PATCH: {},
-    DELETE: {},
-    OPTIONS: {}
-  };
+exports = module.exports = class Handler {
+  constructor(config) {
+    const routes = {
+      HEAD: {},
+      GET: {},
+      POST: {},
+      PUT: {},
+      PATCH: {},
+      DELETE: {},
+      OPTIONS: {}
+    };
 
-  var rawRoutes;
-  try {
-    rawRoutes = require(config.get('appRoot') + '/routes');
-  }
-  catch (err) {}
+    let rawRoutes;
+    try {
+      rawRoutes = require(config.get('appRoot') + '/routes');
+    }
+    catch (err) {}
 
-  if (rawRoutes) {
-    for (var i = 0; i < rawRoutes.length; i++) {
-      if (utils.objValidate(rawRoutes[i], {required: ['type', 'url', 'to']})) {
-        var action = rawRoutes[i].to;
-        var actionSplat = action.split(".");
-        var controller = actionSplat[0];
-        var method = actionSplat[actionSplat.length - 1];
-        var controllerFile = config.get('appRoot') + '/controllers/' + controller;
+    if (rawRoutes) {
+      for (let i = 0; i < rawRoutes.length; i++) {
+        if (utils.objValidate(rawRoutes[i], {required: ['type', 'url', 'to']})) {
+          const action = rawRoutes[i].to;
+          const actionSplat = action.split(".");
+          const controller = actionSplat[0];
+          const method = actionSplat[actionSplat.length - 1];
+          const controllerFile = config.get('appRoot') + '/controllers/' + controller;
 
-        if (controllers[controller]) {
-          routes[rawRoutes[i].type][rawRoutes[i].url] = {
-            method: controllers[controller][method],
-            view: exports.getView(action, config)
-          };
-        }
-        var loaded;
-        try {
-          loaded = require(controllerFile);
-        }
-        catch (err) {}
-        if (loaded) {
-          controllers[controller] = loaded;
-          routes[rawRoutes[i].type][rawRoutes[i].url] = {
-            method: controllers[controller][method],
-            view: exports.getView(action, config)
-          };
+          if (controllers[controller]) {
+            routes[rawRoutes[i].type][rawRoutes[i].url] = {
+              method: controllers[controller][method],
+              view: exports.getView(action, config)
+            };
+          }
+          let loaded;
+          try {
+            loaded = require(controllerFile);
+          }
+          catch (err) {}
+          if (loaded) {
+            controllers[controller] = loaded;
+            routes[rawRoutes[i].type][rawRoutes[i].url] = {
+              method: controllers[controller][method],
+              view: exports.getView(action, config)
+            };
+          }
+          else {
+            console.log("WARNING: Route " + rawRoutes[i] + ": Controller doesn't exist - ignoring.");
+          }
         }
         else {
-          console.log("WARNING: Route " + rawRoutes[i] + ": Controller doesn't exist - ignoring.");
+          console.log("WARNING: Found route" + rawRoutes[i] + ": missing required key(s): type, url, to - ignoring.");
         }
       }
-      else {
-        console.log("WARNING: Found route" + rawRoutes[i] + ": missing required key(s): type, url, to - ignoring.");
-      }
+      this.routes = routes;
     }
-    this.routes = routes;
-  }
-  else {
-    throw new ReferenceError("Tried to load the routing file, but it doesn't exist!");
+    else {
+      throw new ReferenceError("Tried to load the routing file, but it doesn't exist!");
+    }
   }
 
-  this.getHandler = req => {
-    var uri = url.parse(req.url, true);
-    if (routes[req.method].hasOwnProperty(uri.pathname)) {
-      return routes[req.method][uri.pathname].method;
+  getHandler(req) {
+    const uri = url.parse(req.url, true);
+    if (this.routes[req.method].hasOwnProperty(uri.pathname)) {
+      return this.routes[req.method][uri.pathname].method;
     }
     return null;
-  };
+  }
 };
 
 exports.getStaticContent = (name, config) => {
-  var staticPath = path.join(config.get('appRoot'), "static", name);
+  const staticPath = path.join(config.get('appRoot'), "static", name);
   if (fs.existsSync(staticPath)) {
     return fs.readFileSync(staticPath);
   }
@@ -82,10 +84,10 @@ exports.getStaticContent = (name, config) => {
 };
 
 exports.getView = (route, config) => {
-  var action = route.split(".");
-  var controller = action[0];
-  var method = action[action.length - 1];
-  var viewPath = path.join(config.get('appRoot'), "views", controller, method + ".ejs");
+  const action = route.split(".");
+  const controller = action[0];
+  const method = action[action.length - 1];
+  const viewPath = path.join(config.get('appRoot'), "views", controller, method + ".ejs");
   if (fs.existsSync(viewPath)) {
     return ejs.compile(fs.readFileSync(viewPath).toString(), {
       filename: viewPath
@@ -103,8 +105,8 @@ exports.renderer = (req, res, opts) => {
   }
 
   opts.headers = opts.headers || {'content-type': 'text/html'};
-  var headerNames = Object.keys(opts.headers);
-  for (var i = 0; i < headerNames.length; i++) {
+  const headerNames = Object.keys(opts.headers);
+  for (let i = 0; i < headerNames.length; i++) {
     res.setHeader(headerNames[i], opts.headers[headerNames[i]]);
   }
 
@@ -125,7 +127,7 @@ exports.renderer = (req, res, opts) => {
   res.statusCode = opts.status;
 
   if (opts.view) {
-    var view = opts.routes[req.method][url.parse(req.url, true).pathname].view;
+    const view = opts.routes[req.method][url.parse(req.url, true).pathname].view;
     if (view) {
       opts.locals = opts.locals || {};
       res.write(view(opts.locals));

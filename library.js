@@ -1,14 +1,12 @@
-var requestData = null;
+let requestData = null;
 
-exports.getRequestData = function () {
-  return requestData;
-};
+exports.getRequestData = () => requestData;
 
-exports.resetRequestData = function () {
+exports.resetRequestData = () => {
   requestData = null;
 };
 
-exports.render = function (opts, content) {
+exports.render = (opts, content) => {
   if (typeof opts !== "object") {
     content = opts;
     opts = {};
@@ -17,7 +15,7 @@ exports.render = function (opts, content) {
   requestData = Object.assign(opts, {content});
 };
 
-exports.redirect = function (to) {
+exports.redirect = to => {
   requestData = requestData || {};
   requestData['redirect_to'] = to;
 };

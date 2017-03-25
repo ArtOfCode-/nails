@@ -1,23 +1,25 @@
-var http = require("http");
-var Handler = require("./handlers");
-var library = require("./library");
+const http = require("http");
+const Handler = require("./handlers");
+const library = require("./library");
 
-exports = module.exports = function Server(config) {
-  var handler = new Handler(config);
-  var iface = config.get("server_interface");
-  var port = config.get("server_port");
-
-  this.run = () => {
-    var server = http.createServer((req, res) => {
+exports = module.exports = class Server {
+  constructor(config) {
+    this.handler = new Handler(config);
+    this.config = config;
+  }
+  run() {
+    const iface = this.config.get("server_interface");
+    const port = this.config.get("server_port");
+    const server = http.createServer((req, res) => {
       console.log("[" + (new Date()).toISOString() + "] " + req.method + " " + req.url + " HTTP/" + req.httpVersion);
 
-      var requestHandler = handler.getHandler(req);
+      const requestHandler = this.handler.getHandler(req);
       if (requestHandler) {
         library.resetRequestData();
         requestHandler.bind(library)(req);
-        var opts = library.getRequestData();
+        let opts = library.getRequestData();
 
-        if (opts !== null) {
+        if (opts != null) {
           if (opts.redirect_to) {
             res.writeHead(302, {
               location: opts.redirect_to
@@ -25,13 +27,13 @@ exports = module.exports = function Server(config) {
             res.end();
           }
           else {
-            opts = Object.assign(opts, {routes: handler.routes});
+            opts = Object.assign(opts, {routes: this.handler.routes});
             Handler.renderer(req, res, opts);
           }
         }
       }
       else {
-        var customErrorPage = Handler.getStaticContent("404.html", config);
+        const customErrorPage = Handler.getStaticContent("404.html", this.config);
         if (customErrorPage) {
           res.statusCode = 404;
           res.write(customErrorPage);
@@ -47,5 +49,5 @@ exports = module.exports = function Server(config) {
     server.listen(port, iface, () => {
       console.log("Nails server listening on " + iface + ":" + port);
     });
-  };
+  }
 };
