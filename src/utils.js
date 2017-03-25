@@ -4,14 +4,14 @@ exports.objValidate = (obj, rules) => {
   }
 
   if (rules.hasOwnProperty("required")) {
-    var fieldsExisting = exports.aryCompact(rules.required.map(x => Boolean(obj[x])));
+    const fieldsExisting = exports.aryCompact(rules.required.map(x => Boolean(obj[x])));
     if (fieldsExisting.length !== rules.required.length) {
       return false;
     }
   }
 
   if (rules.hasOwnProperty("forbidden")) {
-    var fieldsAbsent = exports.aryCompact(rules.forbidden.map(x => !obj[x]));
+    const fieldsAbsent = exports.aryCompact(rules.forbidden.map(x => !obj[x]));
     if (fieldsAbsent.length !== rules.forbidden.length) {
       return false;
     }
@@ -21,8 +21,8 @@ exports.objValidate = (obj, rules) => {
 };
 
 exports.aryCompact = (ary, custom) => {
-  var ret = [];
-  for (var i = 0; i < ary.length; i++) {
+  const ret = [];
+  for (let i = 0; i < ary.length; i++) {
     if (typeof custom === "function") {
       if (custom(ary[i])) {
         ret.push(ary[i]);

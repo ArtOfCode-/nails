@@ -43,11 +43,11 @@ automatically.
 The `opts` object supports the following options:
 
  - **`text`** *(type: `String`)*  
-   Specifies a string of plain text to render in the HTTP response. Incompatible with the `json` option; if both are
-   specified, `text` takes priority. Incompatible with the `view` option; if both are specified, `text` takes priority.
+   Specifies a string of plain text to render in the HTTP response. Incompatible with the `json` option; if both are specified, `text` takes priority. Incompatible with the `content` option; if both are specified, `text` takes priority. Incompatible with the `view` option; if both are specified, `text` takes priority.
  - **`json`** *(type: `Object` or `Array`)*  
-   Specifies an object to stringify and render as JSON in the HTTP response. The response will have a `Content-Type` of
-   `application/json`. Incompatible with the `view` option; if both are specified, `json` takes priority.
+   Specifies an object to stringify and render as JSON in the HTTP response. The response will have a `Content-Type` of `application/json`. Incompatible with the `content` option; if both are specified, `json` takes priority. Incompatible with the `view` option; if both are specified, `json` takes priority.
+ - **`content`** *(type: `String`)*
+   Specifies a string of HTML to render in the HTTP response. Incompatible with the `view` option; if both are specified, `html` takes priority.
  - **`headers`** *(type: `Object`)*  
    Specifies a list of key-value pairs to send as HTTP headers in the response; keys are header names, and values are
    their values. Specifying the `text` or `json` options overrides any `Content-Type` option set here.
