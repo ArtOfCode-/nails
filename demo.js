@@ -1,3 +1,3 @@
-const nails = require("./nails");
+const nails = require("./src/nails");
 
 nails('./app');

@@ -9,7 +9,7 @@
   "scripts": {
     "test": "xo"
   },
-  "main": "nails.js",
+  "main": "src/nails.js",
   "xo": {
     "space": true,
     "envs": [
