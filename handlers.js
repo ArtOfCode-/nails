@@ -1,5 +1,6 @@
 var fs = require("fs");
 var url = require("url");
+var path = require("path");
 var ejs = require("ejs");
 var utils = require("./utils");
 
@@ -16,15 +17,20 @@ exports = module.exports = function Handler(config) {
     OPTIONS: {}
   };
 
-  if (fs.existsSync(config.get('appRoot') + "/routes.json")) {
-    var rawRoutes = JSON.parse(fs.readFileSync(config.get('appRoot') + "/routes.json"));
+  var rawRoutes;
+  try {
+    rawRoutes = require(config.get('appRoot') + '/routes');
+  }
+  catch (err) {}
+
+  if (rawRoutes) {
     for (var i = 0; i < rawRoutes.length; i++) {
       if (utils.objValidate(rawRoutes[i], {required: ['type', 'url', 'to']})) {
         var action = rawRoutes[i].to;
         var actionSplat = action.split(".");
         var controller = actionSplat[0];
         var method = actionSplat[actionSplat.length - 1];
-        var controllerFile = config.get('appRoot') + "/controllers/" + controller + ".js";
+        var controllerFile = config.get('appRoot') + '/controllers/' + controller;
 
         if (controllers[controller]) {
           routes[rawRoutes[i].type][rawRoutes[i].url] = {
@@ -32,8 +38,12 @@ exports = module.exports = function Handler(config) {
             view: exports.getView(action, config)
           };
         }
-        if (fs.existsSync(controllerFile)) {
-          var loaded = require(controllerFile);
+        var loaded;
+        try {
+          loaded = require(controllerFile);
+        }
+        catch (err) {}
+        if (loaded) {
           controllers[controller] = loaded;
           routes[rawRoutes[i].type][rawRoutes[i].url] = {
             method: controllers[controller][method],
@@ -48,12 +58,11 @@ exports = module.exports = function Handler(config) {
         console.log("WARNING: Found route" + rawRoutes[i] + ": missing required key(s): type, url, to - ignoring.");
       }
     }
+    this.routes = routes;
   }
   else {
     throw new ReferenceError("Tried to load the routing file, but it doesn't exist!");
   }
-
-  this.routes = routes;
 
   this.getHandler = req => {
     var uri = url.parse(req.url, true);
@@ -65,8 +74,9 @@ exports = module.exports = function Handler(config) {
 };
 
 exports.getStaticContent = (name, config) => {
-  if (fs.existsSync(config.get('appRoot') + "/static/" + name)) {
-    return fs.readFileSync(config.get('appRoot') + "/static/" + name);
+  var staticPath = path.join(config.get('appRoot'), "static", name);
+  if (fs.existsSync(staticPath)) {
+    return fs.readFileSync(staticPath);
   }
   return null;
 };
@@ -75,9 +85,10 @@ exports.getView = (route, config) => {
   var action = route.split(".");
   var controller = action[0];
   var method = action[action.length - 1];
-  if (fs.existsSync(config.get('appRoot') + "/views/" + controller + "/" + method + ".ejs")) {
-    return ejs.compile(fs.readFileSync(config.get('appRoot') + "/views/" + controller + "/" + method + ".ejs").toString(), {
-      filename: config.get('appRoot') + "/views/" + controller + "/" + method + ".ejs"
+  var viewPath = path.join(config.get('appRoot'), "views", controller, method + ".ejs");
+  if (fs.existsSync(viewPath)) {
+    return ejs.compile(fs.readFileSync(viewPath).toString(), {
+      filename: viewPath
     });
   }
   return null;
