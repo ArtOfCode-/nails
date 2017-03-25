@@ -8,8 +8,8 @@ exports = module.exports = class Server {
     this.config = config;
   }
   run() {
-    const iface = this.config.get("server_interface");
-    const port = this.config.get("server_port");
+    const iface = this.config.server_interface;
+    const port = this.config.server_port;
     const server = http.createServer((req, res) => {
       console.log("[" + (new Date()).toISOString() + "] " + req.method + " " + req.url + " HTTP/" + req.httpVersion);
 

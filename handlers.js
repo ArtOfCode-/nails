@@ -20,7 +20,7 @@ exports = module.exports = class Handler {
 
     let rawRoutes;
     try {
-      rawRoutes = require(config.get('appRoot') + '/routes');
+      rawRoutes = require(config.appRoot + '/routes');
     }
     catch (err) {}
 
@@ -31,7 +31,7 @@ exports = module.exports = class Handler {
           const actionSplat = action.split(".");
           const controller = actionSplat[0];
           const method = actionSplat[actionSplat.length - 1];
-          const controllerFile = config.get('appRoot') + '/controllers/' + controller;
+          const controllerFile = config.appRoot + '/controllers/' + controller;
 
           if (controllers[controller]) {
             routes[rawRoutes[i].type][rawRoutes[i].url] = {
@@ -76,7 +76,7 @@ exports = module.exports = class Handler {
 };
 
 exports.getStaticContent = (name, config) => {
-  const staticPath = path.join(config.get('appRoot'), "static", name);
+  const staticPath = path.join(config.appRoot, "static", name);
   if (fs.existsSync(staticPath)) {
     return fs.readFileSync(staticPath);
   }
@@ -87,7 +87,7 @@ exports.getView = (route, config) => {
   const action = route.split(".");
   const controller = action[0];
   const method = action[action.length - 1];
-  const viewPath = path.join(config.get('appRoot'), "views", controller, method + ".ejs");
+  const viewPath = path.join(config.appRoot, "views", controller, method + ".ejs");
   if (fs.existsSync(viewPath)) {
     return ejs.compile(fs.readFileSync(viewPath).toString(), {
       filename: viewPath
