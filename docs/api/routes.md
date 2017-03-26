@@ -1,10 +1,45 @@
-# Routes
-This document covers the `routes.json` file required at the root of a Nails project.
+# Routes JS
+Nails provides a handy library that lets you create routes with pure JS.
 
+To use this library:
+
+```js
+const { Router } = require('nails');
+module.exports = Router.draw(router => {
+  // define your routes here
+})
+```
+The `router` object passed to the function (it’s also the `this` value if you use a regular function) has several methods to help you create routes:
+
+* <code>request(*method*, *path*, *options*)</code>
+  * *`method`*: a valid HTTP verb
+  * *`path`*: the path to match
+  * *`options`*: an object of other options
+    * *`to`*: the controller to render (default: *`path`*)
+* <code>*method*(*path*[, *to*]\[, *options*])</code>
+  * *`method`*: a valid lowercase HTTP verb
+  * *`path`*: the path to match
+  * *`to`*: the controller to render
+  * *`options`*: an object of other options
+* <code>scope(*scope*, *function*)</code>
+  * *`scope`*: the scope component to add
+  * *`function`*: the function to call in this scope. The function is passed the router as its first argument and `this` value.
+  * Example:
+    ```js
+    scope('status', ({ get }) => {
+      get('', 'index') // matches /status, routes to status.index
+    })
+    ```
+    is equivalent to:
+    ```js
+    get('status', 'status.index')
+    ```
+
+# Routes as JSON
 ### Format
 The routes file is a JSON file. It is formatted as a top-level *array*, containing any number of route *objects*.
 Any array member that is not an object is invalid; there is no guarantee of the behaviour of Nails if a non-object is
-included in the routes file.
+included in the routes file. The JavaScript helper above can be used to dynamically generate this file to prevent errors.
 
 ### Required Keys
 In *each* route object, the following keys are **required**:
