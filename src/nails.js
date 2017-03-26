@@ -1,3 +1,6 @@
+require('debug').names.push(/^nails:[^a-z]+$/);
+require('debug').names.push(/^nails$/);
+
 const path = require("path");
 const debug = require('debug')('nails:init');
 const Server = require("./server");
