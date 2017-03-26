@@ -1,7 +1,11 @@
+const debug = require('debug')('nails:config');
+
 exports = module.exports = function createConfig(file) {
   let json;
+  debug('loading config at', file);
   try {
     json = require(file);
+    debug('loaded config');
   }
   catch (err) {
     if (err.code !== 'MODULE_NOT_FOUND') {

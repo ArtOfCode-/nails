@@ -2,6 +2,7 @@ const url = require("url");
 const path = require("path");
 const fs = require("mz/fs");
 const ejs = require("ejs");
+const debug = require('debug')('nails:handlers');
 const utils = require("./utils");
 
 const controllers = {};
@@ -27,9 +28,11 @@ exports = module.exports = class Handler {
       OPTIONS: {}
     };
 
+    const routesPath = config.appRoot + '/routes';
+    debug('loading routes at', routesPath);
     let rawRoutes;
     try {
-      rawRoutes = require(config.appRoot + '/routes');
+      rawRoutes = require(routesPath);
     }
     catch (err) {
       if (err.code !== 'MODULE_NOT_FOUND') {
@@ -62,7 +65,9 @@ exports = module.exports = class Handler {
             loaded = require(controllerFile);
           }
           catch (err) {
-            if (err.code !== 'MODULE_NOT_FOUND') {
+            if (err.code === 'MODULE_NOT_FOUND') {
+              debug('failed to load controller at', controllerFile);
+            } else {
               throw err;
             }
           }
@@ -90,6 +95,9 @@ exports = module.exports = class Handler {
       throw new ReferenceError("Tried to load the routing file, but it doesn't exist!");
     }
     this.ready = promises.reduce((prom, nextProm) => prom.then(nextProm), Promise.resolve());
+    this.ready.then(() => {
+      debug('loaded', rawRoutes.length, 'routes');
+    });
   }
 
   getHandler(req) {

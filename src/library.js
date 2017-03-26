@@ -1,3 +1,5 @@
+const debug = require('debug')('nails:library');
+
 const S = {
   library: Symbol('library')
 };
@@ -8,6 +10,7 @@ class Context {
   }
 
   render(opts, content) {
+    debug('rendering'); // TODO: get controller name
     if (typeof opts !== "object") {
       content = opts;
       opts = {};

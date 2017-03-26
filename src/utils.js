@@ -1,7 +1,10 @@
+const debug = require('debug')('nails:utils');
+
 exports.objValidate = (obj, rules) => {
   if (!obj || !rules) {
     throw new ReferenceError("objValidate called without object or rules");
   }
+  debug('validating %o with %o', obj, rules);
 
   if (rules.hasOwnProperty("required")) {
     const fieldsExisting = exports.aryCompact(rules.required.map(x => Boolean(obj[x])));

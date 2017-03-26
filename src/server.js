@@ -1,6 +1,11 @@
 const http = require("http");
+const createDebug = require('debug');
+const chalk = require('chalk');
 const Handler = require("./handlers");
 const Library = require("./library");
+
+const debug = createDebug('nails:server');
+const log = createDebug('nails');
 
 exports = module.exports = class Server {
   constructor(config) {
@@ -11,10 +16,11 @@ exports = module.exports = class Server {
     this.handler.ready.then(this._run.bind(this));
   }
   _run() {
+    debug('starting server...');
     const iface = this.config.server_interface;
     const port = this.config.server_port;
     const server = http.createServer((req, res) => {
-      console.log("[" + (new Date()).toISOString() + "] " + req.method + " " + req.url + " HTTP/" + req.httpVersion);
+      log(req.method, chalk.underline(req.url), `HTTP/${req.httpVersion}`);
 
       const requestHandler = this.handler.getHandler(req);
       if (requestHandler) {
@@ -50,12 +56,13 @@ exports = module.exports = class Server {
             res.writeHead(404, 'Not Found');
             res.end();
           }
+          log('404 at', req.url);
         });
       }
     });
 
     server.listen(port, iface, () => {
-      console.log("Nails server listening on " + iface + ":" + port);
+      log('Listening on', `${iface}:${port}`);
     });
   }
 };
