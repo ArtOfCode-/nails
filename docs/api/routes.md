@@ -1,10 +1,10 @@
 # Routes
-This document covers the `routes.json` file required at the root of a Nails project.
+This document covers the routing file required at the root of a Nails project.
 
 ### Format
-The routes file is a JSON file. It is formatted as a top-level *array*, containing any number of route *objects*.
-Any array member that is not an object is invalid; there is no guarantee of the behaviour of Nails if a non-object is
-included in the routes file.
+The routes file can be either JavaScript or JSON (or, with a call to `require('coffee-script/register')`, can be
+CoffeeScript). The JSON variant should be formatted as one top level *array* containing any number of route *objects*;
+the script variants should *export* an equivalent array.
 
 ### Required Keys
 In *each* route object, the following keys are **required**:
@@ -21,6 +21,7 @@ In *each* route object, the following keys are **required**:
    should be `status.index`.
 
 ### Example File
+**JSON:**
 ```json
 [
   { "type": "GET", "url": "/status", "to": "status.index" },
@@ -28,3 +29,12 @@ In *each* route object, the following keys are **required**:
   { "type": "POST", "url": "/status/new", "to": "status.create" }
 ]
 ```
+
+**JavaScript:**
+```js
+exports = module.exports = [
+  { type: "GET", url: "/status", to: "status.index" },
+  { type: "GET", url: "/status/new", to: "status.new" },
+  { type: "POST", url: "/status/new", to: "status.create" }
+];
+``

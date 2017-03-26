@@ -1,9 +1,10 @@
 # Config
-This document covers the `config.json` file required at the root of a Nails project.
+This document covers the config file required at the root of a Nails project.
 
 ### Format
-The config file is a JSON file. It is formatted as one top-level object, containing multiple config keys. Each key may
-be one of any valid JSON type - see the key's description below for details of what type is required.
+The configuration file can be either JavaScript or JSON (or, with a call to `require('coffee-script/register')`, can
+be CoffeeScript). The JSON variant should be formatted as one top-level object containing various configuration keys
+(see below for details); script variants should *export* an equivalent object.
 
 ### Required Keys
 The following keys are **required** to be present in the top-level object.
@@ -17,9 +18,18 @@ The following keys are **required** to be present in the top-level object.
    privileges (i.e. through `sudo` on Linux, or from an elevated command prompt on Windows).
 
 ### Example File
+**JSON:**
 ```json
 {
   "server_interface": "127.0.0.1",
   "server_port": 8080
 }
+```
+
+**JavaScript:**
+```js
+exports = module.exports = {
+  server_interface: "127.0.0.1",
+  server_port: 8080
+};
 ```
