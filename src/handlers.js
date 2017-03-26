@@ -73,7 +73,10 @@ exports = module.exports = class Handler {
         else {
           const action = rawRoutes[i].to;
           const actionSplat = action.split(".");
-          const controller = actionSplat[0];
+          if (actionSplat.length === 1) {
+            actionSplat.push();
+          }
+          const controller = actionSplat.slice(0, -1).join('/');
           const method = actionSplat[actionSplat.length - 1];
           const controllerFile = config.appRoot + '/controllers/' + controller;
 
@@ -83,7 +86,7 @@ exports = module.exports = class Handler {
               config,
               rawRoute: rawRoutes[i],
               routes,
-              method: controllers[controller][method]
+              method: method ? controllers[controller][method] : controllers[controller]
             }));
           }
           let loaded;
