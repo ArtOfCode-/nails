@@ -19,12 +19,6 @@ module.exports = class Router {
     debug('creating router');
     methods.forEach(method => {
       this[method] = (path, to, options) => {
-        if (!to) {
-          to = path.replace(/\//g, '.') || 'index';
-        }
-        if (this.scopes.length > 0) {
-          to = `${this.scopes.join('.')}.${to}`;
-        }
         if (typeof to === 'object' && !options) {
           options = to;
         } else {
@@ -47,6 +41,12 @@ module.exports = class Router {
     return router.routes;
   }
   request(method, path, options) {
+    if (!options.to) {
+      options.to = path.replace(/\//g, '.') || 'index';
+    }
+    if (this.scopes.length > 0) {
+      options.to = `${this.scopes.join('.')}.${options.to}`;
+    }
     method = method.toUpperCase();
     const url = `${this.scopes.length > 0 ? '/' : ''}${this.scopes.join('/')}${path.length ? '/' : ''}${path}`;
     const route = Object.assign({
