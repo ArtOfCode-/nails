@@ -1,5 +1,5 @@
 exports.status = function () {
-  this.render({text: "status ok"});
+  this.render({ text: "status ok" });
 };
 
 exports.paramSwitching = function () {
@@ -7,11 +7,11 @@ exports.paramSwitching = function () {
 };
 
 exports.json = function () {
-  this.render({json: {this: 'renders', as: 'json'}});
+  this.render({ json: { this: 'renders', as: 'json' } });
 };
 
 exports.view = function () {
-  this.render({view: true, locals: {text: 'hi'}});
+  this.render({ view: true, locals: { text: 'hi' } });
 };
 
 exports.redirect = function () {

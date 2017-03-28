@@ -13,7 +13,7 @@ exports = module.exports = arg => {
       appRoot: arg
     };
   }
-  const {appRoot = path.dirname(require.main.filename) + '/app', start = true} = arg;
+  const { appRoot = path.dirname(require.main.filename) + '/app', start = true } = arg;
   debug('starting server at', appRoot);
   const config = createConfig(path.join(appRoot, "config"));
   config.appRoot = appRoot;

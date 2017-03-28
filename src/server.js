@@ -44,7 +44,7 @@ exports = module.exports = class Server {
             res.end();
           }
           else {
-            opts = Object.assign(opts, {routes: this.handler.routes});
+            opts = Object.assign(opts, { routes: this.handler.routes });
             Handler.renderer(req, res, opts);
           }
         }

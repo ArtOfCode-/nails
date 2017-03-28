@@ -41,6 +41,7 @@
         "error",
         "smart"
       ],
+      "object-curly-spacing": ["error", "always"],
       "no-multi-assign": "off",
       "func-names": "off",
       "unicorn/filename-case": "off",
