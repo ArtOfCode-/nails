@@ -7,10 +7,20 @@ const Server = require("./server");
 const createConfig = require("./config");
 const Router = require("./router");
 
-exports = module.exports = (appRoot = path.dirname(require.main.filename) + '/app') => {
+exports = module.exports = arg => {
+  if (typeof arg !== "object") {
+    arg = {
+      appRoot: arg
+    };
+  }
+  const { appRoot = path.dirname(require.main.filename) + '/app', start = true } = arg;
   debug('starting server at', appRoot);
   const config = createConfig(path.join(appRoot, "config"));
   config.appRoot = appRoot;
-  new Server(config).run();
+  const server = new Server(config);
+  if (start) {
+    server.run();
+  }
+  return server;
 };
 exports.Router = Router;
