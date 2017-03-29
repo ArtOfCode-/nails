@@ -1,6 +1,9 @@
 const http = require("http");
+
 const createDebug = require('debug');
 const chalk = require('chalk');
+const initSocket = require('./ws');
+
 const Handler = require("./handlers");
 const Library = require("./library");
 
@@ -19,7 +22,7 @@ exports = module.exports = class Server {
     debug('starting server...');
     const iface = this.config.server_interface;
     const port = this.config.server_port;
-    const server = http.createServer((req, res) => {
+    this.server = http.createServer((req, res) => {
       log(req.method, chalk.underline(req.url), `HTTP/${req.httpVersion}`);
 
       const requestHandler = this.handler.getHandler(req);
@@ -61,8 +64,10 @@ exports = module.exports = class Server {
         });
       }
     });
+    
+    this.io = initSocket(this.server, this.config.socketOptions);
 
-    server.listen(port, iface, () => {
+    this.server.listen(port, iface, () => {
       log('Listening on', `${iface}:${port}`);
     });
   }
