@@ -32,7 +32,8 @@ exports = module.exports = class Server {
           if (opts != null) {
             if (opts.redirect_to) {
               res.writeHead(302, {
-                location: opts.redirect_to
+                location: opts.redirect_to,
+                'Turbolinks-Location': opts.redirect_to
               });
               res.end();
             }
