@@ -2,7 +2,11 @@ const url = require("url");
 const path = require("path");
 const fs = require("mz/fs");
 const ejs = require("ejs");
-const utils = require("./utils");
+const createDebug = require('debug');
+const schema = require('validate');
+
+const debug = createDebug('nails:handlers');
+const warn = createDebug('nails:WARNING');
 
 const controllers = {};
 
@@ -14,6 +18,25 @@ function setView({action, config, rawRoute, routes, method}) {
     };
   });
 }
+
+const routeSchema = schema({
+  type: {
+    type: 'string',
+    required: true,
+    message: 'type is required and must be a valid HTTP verb',
+    match: /GET|HEAD|POST|PUT|DELETE|TRACE|OPTIONS|CONNECT|PATCH/i,
+  },
+  url: {
+    type: 'string',
+    required: true,
+    message: 'url is required',
+  },
+  to: {
+    type: 'string',
+    required: true,
+    message: 'to is required',
+  },
+});
 
 exports = module.exports = class Handler {
   constructor(config) {
@@ -27,20 +50,33 @@ exports = module.exports = class Handler {
       OPTIONS: {}
     };
 
+    const routesPath = config.appRoot + '/routes';
+    debug('loading routes at', routesPath);
     let rawRoutes;
     try {
-      rawRoutes = require(config.appRoot + '/routes');
+      rawRoutes = require(routesPath);
     }
-    catch (err) {}
+    catch (err) {
+      if (err.code !== 'MODULE_NOT_FOUND') {
+        throw err;
+      }
+    }
 
     const promises = [];
 
     if (rawRoutes) {
       for (let i = 0; i < rawRoutes.length; i++) {
-        if (utils.objValidate(rawRoutes[i], {required: ['type', 'url', 'to']})) {
+        const errors = routeSchema.validate(rawRoutes[i]);
+        if (errors.length > 0) {
+          warn("found route %o: %s", rawRoutes[i], errors.map(error => error.message).join(', '));
+        }
+        else {
           const action = rawRoutes[i].to;
           const actionSplat = action.split(".");
-          const controller = actionSplat[0];
+          if (actionSplat.length === 1) {
+            actionSplat.push();
+          }
+          const controller = actionSplat.slice(0, -1).join('/');
           const method = actionSplat[actionSplat.length - 1];
           const controllerFile = config.appRoot + '/controllers/' + controller;
 
@@ -50,14 +86,20 @@ exports = module.exports = class Handler {
               config,
               rawRoute: rawRoutes[i],
               routes,
-              method: controllers[controller][method]
+              method: method ? controllers[controller][method] : controllers[controller]
             }));
           }
           let loaded;
           try {
             loaded = require(controllerFile);
           }
-          catch (err) {}
+          catch (err) {
+            if (err.code === 'MODULE_NOT_FOUND') {
+              debug('failed to load controller at', controllerFile);
+            } else {
+              throw err;
+            }
+          }
           if (loaded) {
             controllers[controller] = loaded;
             promises.push(setView({
@@ -72,9 +114,6 @@ exports = module.exports = class Handler {
             console.log("WARNING: Route " + rawRoutes[i] + ": Controller doesn't exist - ignoring.");
           }
         }
-        else {
-          console.log("WARNING: Found route" + rawRoutes[i] + ": missing required key(s): type, url, to - ignoring.");
-        }
       }
       this.routes = routes;
     }
@@ -82,6 +121,9 @@ exports = module.exports = class Handler {
       throw new ReferenceError("Tried to load the routing file, but it doesn't exist!");
     }
     this.ready = promises.reduce((prom, nextProm) => prom.then(nextProm), Promise.resolve());
+    this.ready.then(() => {
+      debug('loaded', rawRoutes.length, 'routes');
+    });
   }
 
   getHandler(req) {
@@ -113,7 +155,7 @@ exports.getView = (route, config) => {
 };
 
 exports.renderer = (req, res, opts) => {
-  if (!utils.objValidate(opts, {required: ['routes']})) {
+  if (exports.renderer.schema(opts)) {
     res.writeHead(500, 'Internal Server Error');
     res.end();
     console.error("ERROR: handlers.renderer: expected opts.routes, got " + opts['routes']);
@@ -164,3 +206,10 @@ exports.renderer = (req, res, opts) => {
     res.end();
   }
 };
+
+exports.renderer.schema = schema({
+  routes: {
+    type: 'array',
+    required: true,
+  },
+});
