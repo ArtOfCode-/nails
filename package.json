@@ -69,8 +69,8 @@
     "glob": "~7.1.1",
     "mz": "^2.6.0",
     "path-to-regexp": "^1.7.0",
+    "socket.io": "^1.7.3",
     "rewire": "^2.5.2",
-    "validate": "^3.0.1",
-    "websocket": "~1.0.24"
+    "validate": "^3.0.1"
   }
 }
