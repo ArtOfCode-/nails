@@ -5,7 +5,19 @@ const path = require("path");
 const debug = require('debug')('nails:init');
 const Server = require("./server");
 const createConfig = require("./config");
-const Router = require("./router");
+
+function lazy(key, get) {
+  const uninitialized = {};
+  let _val = uninitialized;
+  Object.defineProperty(exports, key, {
+    get() {
+      if (_val === uninitialized) {
+        _val = get();
+      }
+      return _val;
+    }
+  });
+}
 
 exports = module.exports = arg => {
   if (typeof arg !== "object") {
@@ -23,4 +35,4 @@ exports = module.exports = arg => {
   }
   return server;
 };
-exports.Router = Router;
+lazy('Router', () => require('./router'));
