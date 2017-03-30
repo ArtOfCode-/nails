@@ -155,10 +155,11 @@ exports.getView = (route, config) => {
 };
 
 exports.renderer = (req, res, opts) => {
-  if (exports.renderer.schema(opts)) {
+  const errors = exports.renderer.schema.validate(opts);
+  if (errors.length > 0) {
     res.writeHead(500, 'Internal Server Error');
     res.end();
-    console.error("ERROR: handlers.renderer: expected opts.routes, got " + opts['routes']);
+    warn("handlers.render: %s; got %o", errors.map(error => error.message).join(', '), errors);
     return;
   }
 
@@ -209,7 +210,9 @@ exports.renderer = (req, res, opts) => {
 
 exports.renderer.schema = schema({
   routes: {
-    type: 'array',
+    type: 'object',
     required: true,
   },
+}, {
+  strip: false
 });
