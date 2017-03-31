@@ -10,7 +10,7 @@ const warn = createDebug('nails:WARNING');
 
 const controllers = {};
 
-function setView({action, config, rawRoute, routes, method}) {
+function setView({ action, config, rawRoute, routes, method }) {
   exports.getView(action, config).then(view => {
     routes[rawRoute.type][rawRoute.url] = {
       method,
@@ -155,14 +155,15 @@ exports.getView = (route, config) => {
 };
 
 exports.renderer = (req, res, opts) => {
-  if (exports.renderer.schema(opts)) {
+  const errors = exports.renderer.schema.validate(opts);
+  if (errors.length > 0) {
     res.writeHead(500, 'Internal Server Error');
     res.end();
-    console.error("ERROR: handlers.renderer: expected opts.routes, got " + opts['routes']);
+    warn("handlers.render: %s; got %o", errors.map(error => error.message).join(', '), errors);
     return;
   }
 
-  opts.headers = opts.headers || {'content-type': 'text/html'};
+  opts.headers = opts.headers || { 'content-type': 'text/html' };
   const headerNames = Object.keys(opts.headers);
   for (let i = 0; i < headerNames.length; i++) {
     res.setHeader(headerNames[i], opts.headers[headerNames[i]]);
@@ -171,13 +172,13 @@ exports.renderer = (req, res, opts) => {
   if (opts.text) {
     opts.content = opts.text;
     delete opts.text;
-    exports.renderer(req, res, Object.assign(opts, {headers: {'content-type': 'text/plain'}}));
+    exports.renderer(req, res, Object.assign(opts, { headers: { 'content-type': 'text/plain' } }));
     return;
   }
   else if (opts.json) {
     opts.content = JSON.stringify(opts.json);
     delete opts.json;
-    exports.renderer(req, res, Object.assign(opts, {headers: {'content-type': 'application/json'}}));
+    exports.renderer(req, res, Object.assign(opts, { headers: { 'content-type': 'application/json' } }));
     return;
   }
 
@@ -209,7 +210,9 @@ exports.renderer = (req, res, opts) => {
 
 exports.renderer.schema = schema({
   routes: {
-    type: 'array',
+    type: 'object',
     required: true,
   },
+}, {
+  strip: false
 });

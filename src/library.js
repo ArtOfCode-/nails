@@ -16,7 +16,7 @@ class Context {
       opts = {};
     }
 
-    this[S.library].requestData = Object.assign(opts, {content});
+    this[S.library].requestData = Object.assign(opts, { content });
   }
   redirect(to) {
     this[S.library].requestData.redirect_to = to; // eslint-disable-line camelcase

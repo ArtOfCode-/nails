@@ -1,0 +1,3 @@
+[submodule "nails-example"]
+	path = nails-example
+	url = https://github.com/j-f1/nails-example
