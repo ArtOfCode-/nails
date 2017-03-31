@@ -1,3 +1,0 @@
-const nails = require(".");
-
-nails();
