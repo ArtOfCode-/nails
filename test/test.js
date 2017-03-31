@@ -30,7 +30,7 @@ function assertContentType(res, type) {
 describe('server', () => {
   let server;
   before(() => {
-    server = nails(path.join(__dirname, '..', 'app'));
+    server = nails(path.join(__dirname, '..', 'nails-example', 'app'));
   });
   it('renders plain text', () => testServer(server, '/status').then(res => {
     assert.equal(res._getString(), 'status ok');
