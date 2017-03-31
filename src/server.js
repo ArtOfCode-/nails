@@ -22,7 +22,7 @@ exports = module.exports = class Server {
     const server = http.createServer(this._handleRequest.bind(this));
 
     server.listen(port, iface, () => {
-      console.log("Nails server listening on " + iface + ":" + port);
+      log("Nails server listening on " + iface + ":" + port);
     });
   }
   _handleRequest(req, res) {
