@@ -13,10 +13,10 @@ exports = module.exports = class Server {
     this.handler = new Handler(config);
     this.config = config;
   }
-  run() {
+  /* istanbul ignore next */run() {
     this.handler.ready.then(this._run.bind(this));
   }
-  _run() {
+  /* istanbul ignore next */_run() {
     debug('starting server...');
     const iface = this.config.server_interface;
     const port = this.config.server_port;
@@ -36,6 +36,7 @@ exports = module.exports = class Server {
       Promise.resolve(prom).then(() => {
         let opts = library.requestData;
 
+        // istanbul ignore else
         if (opts != null) {
           if (opts.redirect_to) {
             res.writeHead(302, {

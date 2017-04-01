@@ -8,9 +8,11 @@ exports = module.exports = function createConfig(file) {
     debug('loaded config');
   }
   catch (err) {
+    /* istanbul ignore next */
     if (err.code !== 'MODULE_NOT_FOUND') {
       throw err;
     }
+    /* istanbul ignore next */
     throw new ReferenceError("File doesn't exist: can't load config");
   }
   return json;

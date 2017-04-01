@@ -57,6 +57,7 @@ exports = module.exports = class Handler {
       rawRoutes = require(routesPath);
     }
     catch (err) {
+      /* istanbul ignore next: kinda hard to test */
       if (err.code !== 'MODULE_NOT_FOUND') {
         throw err;
       }
@@ -68,6 +69,7 @@ exports = module.exports = class Handler {
       for (let i = 0; i < rawRoutes.length; i++) {
         const errors = routeSchema.validate(rawRoutes[i]);
         if (errors.length > 0) {
+          /* istanbul ignore next: router.js always returns valid JSON */
           warn("found route %o: %s", rawRoutes[i], errors.map(error => error.message).join(', '));
         }
         else {
@@ -94,6 +96,7 @@ exports = module.exports = class Handler {
             loaded = require(controllerFile);
           }
           catch (err) {
+            /* istanbul ignore next: kinda hard to test */
             if (err.code === 'MODULE_NOT_FOUND') {
               debug('failed to load controller at', controllerFile);
             } else {
@@ -107,7 +110,7 @@ exports = module.exports = class Handler {
               config,
               rawRoute: rawRoutes[i],
               routes,
-              method: controllers[controller][method]
+              method: method ? controllers[controller][method] : controllers[controller]
             }));
           }
           else {
@@ -118,6 +121,7 @@ exports = module.exports = class Handler {
       this.routes = routes;
     }
     else {
+      /* istanbul ignore next: kinda hard to test */
       throw new ReferenceError("Tried to load the routing file, but it doesn't exist!");
     }
     this.ready = promises.reduce((prom, nextProm) => prom.then(nextProm), Promise.resolve());
@@ -137,7 +141,7 @@ exports = module.exports = class Handler {
 
 exports.getStaticContent = (name, config) => {
   const staticPath = path.join(config.appRoot, "static", name);
-  return fs.exists(staticPath).then(exists => exists ? fs.readFile(staticPath, 'utf-8') : null).catch(() => null);
+  return fs.exists(staticPath).then(exists => exists ? fs.readFile(staticPath, 'utf-8') : null).catch(/* istanbul ignore next */ () => null);
 };
 
 exports.getView = (route, config) => {

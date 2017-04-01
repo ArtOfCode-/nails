@@ -10,7 +10,7 @@
     "test": "npm run unit && npm run lint",
     "lint": "xo",
     "unit": "istanbul cover _mocha",
-    "unit-dev": "watch \"clear && npm run unit -- --print none\" -p '/coverage|.git/'"
+    "unit-dev": "watch \"clear && npm run unit -- --print none\" -p '/coverage|.git/' ."
   },
   "main": "src/nails.js",
   "xo": {

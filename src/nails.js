@@ -11,6 +11,7 @@ function lazy(key, get) {
   let _val = uninitialized;
   Object.defineProperty(exports, key, {
     get() {
+      /* istanbul ignore else */
       if (_val === uninitialized) {
         _val = get();
       }
@@ -20,6 +21,7 @@ function lazy(key, get) {
 }
 
 exports = module.exports = arg => {
+  /* istanbul ignore if: only for backwards compatibility */
   if (typeof arg !== "object") {
     arg = {
       appRoot: arg
@@ -30,6 +32,7 @@ exports = module.exports = arg => {
   const config = createConfig(path.join(appRoot, "config"));
   config.appRoot = appRoot;
   const server = new Server(config);
+  /* istanbul ignore if: we don’t actually start the server yet */
   if (start) {
     server.run();
   }
