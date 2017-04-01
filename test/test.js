@@ -5,9 +5,9 @@ const MockReq = require('mock-req');
 const MockRes = require('mock-res');
 
 process.env.DEBUG = process.env.DEBUG || "-*";
+const nails = global.NAILS_TEST_EXPORT = require('..');
 
 const { describe, before, it } = require('mocha');
-const nails = require('..');
 
 function testServer(server, url, method = 'GET') {
   return new Promise(resolve => {
