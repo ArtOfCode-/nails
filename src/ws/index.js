@@ -5,4 +5,4 @@ module.exports = exports = function (server, socketOptions) {
     path: '/ws'
   }, socketOptions));
   return io;
-}
+};
