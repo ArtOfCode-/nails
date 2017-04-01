@@ -5,6 +5,7 @@ const Handler = require("./handlers");
 const Library = require("./library");
 
 const debug = createDebug('nails:server');
+const warn = createDebug('nails:WARNING');
 const log = createDebug('nails');
 
 exports = module.exports = class Server {
@@ -60,11 +61,13 @@ exports = module.exports = class Server {
           });
         }
         else {
-          res.writeHead(404, 'Not Found');
-          res.end();
+          Handler.renderer(req, res, {
+            status: 404,
+            text: 'Not Found'
+          });
         }
         log('404 at', req.url);
-      });
+      }).catch(warn);
     }
   }
 };
