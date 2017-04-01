@@ -74,7 +74,7 @@ exports = module.exports = class Handler {
           const action = rawRoutes[i].to;
           const actionSplat = action.split(".");
           if (actionSplat.length === 1) {
-            actionSplat.push();
+            actionSplat.push(undefined);
           }
           const controller = actionSplat.slice(0, -1).join('/');
           const method = actionSplat[actionSplat.length - 1];
