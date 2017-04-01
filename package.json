@@ -7,7 +7,7 @@
   "license": "MIT",
   "bugs": "https://github.com/ArtOfCode-/nails/issues",
   "scripts": {
-    "test": "xo && mocha"
+    "test": "mocha && xo"
   },
   "main": "src/nails.js",
   "xo": {
