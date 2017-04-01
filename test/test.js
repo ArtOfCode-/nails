@@ -1,6 +1,6 @@
 const assert = require('assert');
 const path = require('path');
-const fs = require('fs');
+const fs = require('mz/fs');
 
 const MockReq = require('mock-req');
 const MockRes = require('mock-res');
@@ -8,7 +8,7 @@ const MockRes = require('mock-res');
 process.env.DEBUG = process.env.DEBUG || "-*";
 const serverPath = path.join(__dirname, '..', 'nails-example', 'app');
 
-const { describe, before, it } = require('mocha');
+const { describe, before, it, after } = require('mocha');
 const nails = global.NAILS_TEST_EXPORT = require('..');
 
 function testServer(server, url, method = 'GET') {
@@ -51,8 +51,18 @@ describe('server', () => {
     assert.equal(res.getHeader('location'), '/status');
     assert.equal(res._getString(), '');
   }));
-  it('renders a 404 page as HTML', () => testServer(server, '/').then(res => {
-    assert.equal(res._getString(), fs.readFileSync(path.join(serverPath, 'static', '404.html'), 'utf8'));
-    assertContentType(res, 'text/html');
-  }));
+  describe('renders 404 pages as', () => {
+    const fourOhFourPath = path.join(serverPath, 'static', '404.html');
+    it('HTML if 404.html is present', () => testServer(server, '/blah').then(res => {
+      assert.equal(res._getString(), fs.readFileSync(fourOhFourPath, 'utf8'));
+      assertContentType(res, 'text/html');
+    }));
+    it('static text if 404.html is not present', () => fs.rename(fourOhFourPath, fourOhFourPath + '.bak').then(() => {
+      return testServer(server, '/blah');
+    }).then(res => {
+      assert.equal(res._getString(), 'Not Found');
+      assertContentType(res, 'text/plain');
+    }));
+    after(() => fs.rename(fourOhFourPath + '.bak', fourOhFourPath));
+  });
 });
