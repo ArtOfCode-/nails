@@ -1,13 +1,15 @@
 const assert = require('assert');
 const path = require('path');
+const fs = require('fs');
 
 const MockReq = require('mock-req');
 const MockRes = require('mock-res');
 
 process.env.DEBUG = process.env.DEBUG || "-*";
-const nails = global.NAILS_TEST_EXPORT = require('..');
+const serverPath = path.join(__dirname, '..', 'nails-example', 'app');
 
 const { describe, before, it } = require('mocha');
+const nails = global.NAILS_TEST_EXPORT = require('..');
 
 function testServer(server, url, method = 'GET') {
   return new Promise(resolve => {
@@ -30,7 +32,7 @@ function assertContentType(res, type) {
 describe('server', () => {
   let server;
   before(() => {
-    server = nails(path.join(__dirname, '..', 'nails-example', 'app'));
+    server = nails(serverPath);
   });
   it('renders plain text', () => testServer(server, '/status').then(res => {
     assert.equal(res._getString(), 'status ok');
@@ -48,5 +50,9 @@ describe('server', () => {
     assert.equal(res.statusCode, 302);
     assert.equal(res.getHeader('location'), '/status');
     assert.equal(res._getString(), '');
+  }));
+  it('renders a 404 page as HTML', () => testServer(server, '/').then(res => {
+    assert.equal(res._getString(), fs.readFileSync(path.join(serverPath, 'static', '404.html'), 'utf8'));
+    assertContentType(res, 'text/html');
   }));
 });
