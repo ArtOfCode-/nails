@@ -48,7 +48,7 @@ module.exports = class Router {
       options.to = `${this.scopes.join('.')}.${options.to}`;
     }
     method = method.toUpperCase();
-    const url = `${this.scopes.length > 0 ? '/' : ''}${this.scopes.join('/')}${path.length ? '/' : ''}${path}`;
+    const url = `${this.scopes.length > 0 ? '/' : ''}${this.scopes.join('/')}${path.length ? '/' : ''}${path}` || '/';
     const route = Object.assign({
       type: method,
       url
