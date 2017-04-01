@@ -155,14 +155,6 @@ exports.getView = (route, config) => {
 };
 
 exports.renderer = (req, res, opts) => {
-  const errors = exports.renderer.schema.validate(opts);
-  if (errors.length > 0) {
-    res.writeHead(500, 'Internal Server Error');
-    res.end();
-    warn("handlers.render: %s; got %o", errors.map(error => error.message).join(', '), errors);
-    return;
-  }
-
   opts.headers = opts.headers || { 'content-type': 'text/html' };
   const headerNames = Object.keys(opts.headers);
   for (let i = 0; i < headerNames.length; i++) {
@@ -207,12 +199,3 @@ exports.renderer = (req, res, opts) => {
     res.end();
   }
 };
-
-exports.renderer.schema = schema({
-  routes: {
-    type: 'object',
-    required: true,
-  },
-}, {
-  strip: false
-});
