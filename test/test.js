@@ -88,17 +88,26 @@ describe('server', () => {
     ]);
   }));
 
-  it('returns 204 when view:true is specified, but no view can be found', () => testServer(server, '/test/badView').then(res => {
-    equal([
-      [res.statusCode, 204],
-      [res._getString(), ''],
-    ]);
-  }));
+  describe('returns 204 when', () => {
+    it('view:true is specified, but no view can be found', () => testServer(server, '/test/badView').then(res => {
+      equal([
+        [res.statusCode, 204],
+        [res._getString(), ''],
+      ]);
+    }));
 
-  it('returns 204 when no library methods are called', () => testServer(server, '/test/nada').then(res => {
+    it('no library methods are called', () => testServer(server, '/test/nada').then(res => {
+      equal([
+        [res.statusCode, 204],
+        [res._getString(), ''],
+      ]);
+    }));
+  });
+
+  it('handles params correctly', () => testServer(server, '/test/1').then(res => {
     equal([
-      [res.statusCode, 204],
-      [res._getString(), ''],
+      [res.statusCode, 200],
+      [res._getString(), '1'],
     ]);
   }));
 

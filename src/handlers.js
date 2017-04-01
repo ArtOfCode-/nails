@@ -1,9 +1,12 @@
 const url = require("url");
 const path = require("path");
 const fs = require("mz/fs");
+
 const ejs = require("ejs");
 const createDebug = require('debug');
 const schema = require('validate');
+
+const Route = require('./route');
 
 const debug = createDebug('nails:handlers');
 const warn = createDebug('nails:WARNING');
@@ -11,11 +14,12 @@ const warn = createDebug('nails:WARNING');
 const controllers = {};
 
 function setView({ action, config, rawRoute, routes, method }) {
-  exports.getView(action, config).then(view => {
-    routes[rawRoute.type][rawRoute.url] = {
+  return exports.getView(action, config).then(view => {
+    routes[rawRoute.type].push({
       method,
-      view
-    };
+      view,
+      match: new Route(rawRoute.url)
+    });
   });
 }
 
@@ -41,13 +45,13 @@ const routeSchema = schema({
 exports = module.exports = class Handler {
   constructor(config) {
     const routes = {
-      HEAD: {},
-      GET: {},
-      POST: {},
-      PUT: {},
-      PATCH: {},
-      DELETE: {},
-      OPTIONS: {}
+      HEAD: [],
+      GET: [],
+      POST: [],
+      PUT: [],
+      PATCH: [],
+      DELETE: [],
+      OPTIONS: []
     };
 
     const routesPath = config.appRoot + '/routes';
@@ -124,18 +128,16 @@ exports = module.exports = class Handler {
       /* istanbul ignore next: kinda hard to test */
       throw new ReferenceError("Tried to load the routing file, but it doesn't exist!");
     }
-    this.ready = promises.reduce((prom, nextProm) => prom.then(nextProm), Promise.resolve());
+    this.ready = Promise.all(promises);
     this.ready.then(() => {
       debug('loaded', rawRoutes.length, 'routes');
-    });
+    }).catch(warn);
   }
 
   getHandler(req) {
     const uri = url.parse(req.url, true);
-    if (this.routes[req.method].hasOwnProperty(uri.pathname)) {
-      return this.routes[req.method][uri.pathname].method;
-    }
-    return null;
+    const route = this.routes[req.method].find(({ match }) => match.match(uri.pathname));
+    return route ? { route, params: route.match.match(uri.pathname) } : null;
   }
 };
 
@@ -155,7 +157,7 @@ exports.getView = (route, config) => {
         filename: viewPath
       }));
     }
-  });
+  }).catch(warn);
 };
 
 exports.renderer = (req, res, opts) => {
@@ -182,7 +184,7 @@ exports.renderer = (req, res, opts) => {
   res.statusCode = opts.status;
 
   if (opts.view) {
-    const view = opts.routes[req.method][url.parse(req.url, true).pathname].view;
+    const view = opts.route.view;
     if (view) {
       opts.locals = opts.locals || {};
       res.write(view(opts.locals));

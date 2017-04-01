@@ -29,10 +29,11 @@ exports = module.exports = class Server {
   _handleRequest(req, res) {
     log(req.method, chalk.underline(req.url), `HTTP/${req.httpVersion}`);
 
-    const requestHandler = this.handler.getHandler(req);
-    if (requestHandler) {
-      const library = new Library();
-      const prom = requestHandler.call(library.context, req);
+    const handler = this.handler.getHandler(req);
+    if (handler) {
+      const { route: requestHandler, params } = handler;
+      const library = new Library({ params });
+      const prom = requestHandler.method.call(library.context, req);
       Promise.resolve(prom).then(() => {
         let opts = library.requestData;
 
@@ -46,11 +47,11 @@ exports = module.exports = class Server {
             res.end();
           }
           else {
-            opts = Object.assign(opts, { routes: this.handler.routes });
+            opts = Object.assign(opts, { route: requestHandler });
             Handler.renderer(req, res, opts);
           }
         }
-      });
+      }).catch(warn);
     }
     else {
       Handler.getStaticContent("404.html", this.config).then(customErrorPage => {

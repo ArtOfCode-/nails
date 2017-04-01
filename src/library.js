@@ -1,7 +1,8 @@
 const debug = require('debug')('nails:library');
 
 const S = {
-  library: Symbol('library')
+  library: Symbol('library'),
+  params: Symbol('params')
 };
 
 class Context {
@@ -21,11 +22,16 @@ class Context {
   redirect(to) {
     this[S.library].requestData.redirect_to = to; // eslint-disable-line camelcase
   }
+  get params() {
+    this[S.params] = this[S.params] || Object.freeze(this[S.library].params);
+    return this[S.params];
+  }
 }
 
 exports = module.exports = class Library {
-  constructor() {
+  constructor({ params }) {
     this.requestData = {};
+    this.params = params;
     this.context = new Context(this);
   }
 };
