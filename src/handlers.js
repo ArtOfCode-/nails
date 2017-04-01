@@ -111,7 +111,7 @@ exports = module.exports = class Handler {
             }));
           }
           else {
-            console.log("WARNING: Route " + rawRoutes[i] + ": Controller doesn't exist - ignoring.");
+            warn("Route", rawRoutes[i], "controller doesn't exist - ignoring.");
           }
         }
       }
@@ -185,7 +185,7 @@ exports.renderer = (req, res, opts) => {
       res.end();
     }
     else {
-      console.log("WARNING: handlers.renderer: render specified view: true, but no view present.");
+      warn("handlers.renderer: render specified view: true, but no view present.");
       res.statusCode = 204;
       res.end();
     }
