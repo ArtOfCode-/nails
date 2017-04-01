@@ -7,7 +7,10 @@
   "license": "MIT",
   "bugs": "https://github.com/ArtOfCode-/nails/issues",
   "scripts": {
-    "test": "mocha && xo"
+    "test": "npm run unit && npm run lint",
+    "lint": "xo",
+    "unit": "istanbul cover _mocha",
+    "unit-dev": "watch \"npm run unit -- --print none\" -p /coverage/"
   },
   "main": "src/nails.js",
   "xo": {
@@ -51,6 +54,7 @@
     }
   },
   "devDependencies": {
+    "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "mock-req": "^0.2.0",
     "mock-res": "^0.3.3",
