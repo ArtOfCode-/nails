@@ -1,8 +1,8 @@
-const socket = require('socket.io');
+const Connection = require('./connection');
 
-module.exports = exports = function (server, socketOptions) {
-  const io = socket(server, Object.assign({
-    path: '/ws'
-  }, socketOptions));
+module.exports = exports = function (io, handler) {
+  io.on('connection', sock => {
+    const conn = new Connection(sock, handler);
+  });
   return io;
 };

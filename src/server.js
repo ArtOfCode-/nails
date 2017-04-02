@@ -1,8 +1,9 @@
 const http = require("http");
 
 const chalk = require('chalk');
-const initSocket = require('./ws');
+const socket = require('socket.io');
 
+const initSocket = require('./ws');
 const Handler = require("./handlers");
 const Library = require("./library");
 
@@ -24,7 +25,9 @@ exports = module.exports = class Server {
     const port = this.config.server_port;
     this.server = http.createServer(this._handleRequest.bind(this));
 
-    this.io = initSocket(this.server, this.config.socketOptions);
+    this.io = socket(this.server, Object.assign({
+    }, this.config.socketOptions));
+    initSocket(this.io, this.handler);
     this.server.listen(port, iface, () => {
       log('Listening on', `${iface}:${port}`);
     });

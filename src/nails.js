@@ -49,3 +49,5 @@ exports.genKey = (length = 50) => {
   return value;
 };
 lazy('Router', () => require('./router'));
+lazy('Channel', () => require('./ws/channel'));
+lazy('Connection', () => require('./ws/connection'));
