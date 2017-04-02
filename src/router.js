@@ -18,14 +18,8 @@ exports = module.exports = class Router {
     this.routes = [];
     debug('creating router');
     methods.forEach(method => {
-      this[method] = (path, to, options) => {
-        if (typeof to === 'object' && !options) {
-          options = to;
-        } else {
-          options = options || {};
-          options.to = to;
-        }
-        return this.request(method, path, options);
+      this[method] = (...args) => {
+        return this.request(method, ...args);
       };
     });
     bind(this, ...methods, 'request');
@@ -41,7 +35,9 @@ exports = module.exports = class Router {
     debug('drew', router.routes.length, 'routes.');
     return router.routes;
   }
-  request(method, path, options) {
+
+  request(method, path, to, options) {
+    options = this._processOptions(to, options);
     options.to = this._pathToJS(options.to, path);
     method = method.toUpperCase();
     const route = Object.assign({
@@ -60,6 +56,16 @@ exports = module.exports = class Router {
     f.call(this, this);
     this.scopes.length -= scopes.length;
     debug(this._i + 'leaving scope', chalk.underline(scopes.join('/')));
+  }
+
+  _processOptions(to, options) {
+    if (typeof to === 'object' && !options) {
+      options = to;
+    } else {
+      options = options || {};
+      options.to = to;
+    }
+    return options;
   }
   _url(path) {
     return `${this.scopes.length > 0 ? '/' : ''}${this.scopes.join('/')}${path.length ? '/' : ''}${path}` || '/';
