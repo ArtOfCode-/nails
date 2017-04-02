@@ -12,7 +12,7 @@ const bind = (function () {
   return bind.call.bind(bind);
 })();
 
-module.exports = class Router {
+exports = module.exports = class Router {
   constructor() {
     this.scopes = [];
     this.routes = [];
@@ -28,7 +28,8 @@ module.exports = class Router {
         return this.request(method, path, options);
       };
     });
-    bind(this, ...methods, 'request', 'scope');
+    bind(this, ...methods, 'request');
+    bind(this, 'scope', '_url');
   }
   get _i() {
     return '  '.repeat(this.scopes.length);
@@ -41,27 +42,35 @@ module.exports = class Router {
     return router.routes;
   }
   request(method, path, options) {
-    if (!options.to) {
-      options.to = path.replace(/\//g, '.') || 'index';
-    }
-    if (this.scopes.length > 0) {
-      options.to = `${this.scopes.join('.')}.${options.to}`;
-    }
+    options.to = this._pathToJS(options.to, path);
     method = method.toUpperCase();
-    const url = `${this.scopes.length > 0 ? '/' : ''}${this.scopes.join('/')}${path.length ? '/' : ''}${path}` || '/';
     const route = Object.assign({
       type: method,
-      url
+      url: this._url(path)
     }, options);
     this.routes.push(route);
     debug(this._i + 'created', method === 'GET' ? chalk.gray(method) : chalk.bold(method), 'route', chalk.underline(path) || chalk.gray('<root>'), 'to', chalk.bold(options.to));
     return route;
   }
-  scope(scope, f) {
-    debug(this._i + 'entering scope', chalk.underline(scope));
-    this.scopes.push(scope);
+  scope(...args) {
+    const scopes = args.slice(0, -1);
+    const f = args[args.length - 1];
+    debug(this._i + 'entering scope', chalk.underline(scopes.join('/')));
+    this.scopes = this.scopes.concat(scopes);
     f.call(this, this);
-    this.scopes.pop();
-    debug(this._i + 'leaving scope', chalk.underline(scope));
+    this.scopes.length -= scopes.length;
+    debug(this._i + 'leaving scope', chalk.underline(scopes.join('/')));
+  }
+  _url(path) {
+    return `${this.scopes.length > 0 ? '/' : ''}${this.scopes.join('/')}${path.length ? '/' : ''}${path}` || '/';
+  }
+  _pathToJS(name, path) {
+    if (!name) {
+      name = path.replace(/\//g, '.') || 'index';
+    }
+    if (this.scopes.length > 0) {
+      name = `${this.scopes.join('.')}.${name}`;
+    }
+    return name;
   }
 };
