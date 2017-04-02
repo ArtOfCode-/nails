@@ -75,52 +75,50 @@ exports = module.exports = class Handler {
         if (errors.length > 0) {
           /* istanbul ignore next: router.js always returns valid JSON */
           warn("found route %o: %s", rawRoutes[i], errors.map(error => error.message).join(', '));
+          continue;
         }
-        else {
-          const action = rawRoutes[i].to;
-          const actionSplat = action.split(".");
-          if (actionSplat.length === 1) {
-            actionSplat.push(undefined);
-          }
-          const controller = actionSplat.slice(0, -1).join('/');
-          const method = actionSplat[actionSplat.length - 1];
-          const controllerFile = config.appRoot + '/controllers/' + controller;
+        const action = rawRoutes[i].to;
+        const actionSplat = action.split(".");
+        if (actionSplat.length === 1) {
+          actionSplat.push(undefined);
+        }
+        const controller = actionSplat.slice(0, -1).join('/');
+        const method = actionSplat[actionSplat.length - 1];
+        const controllerFile = config.appRoot + '/controllers/' + controller;
 
-          if (controllers[controller]) {
-            promises.push(setView({
-              action,
-              config,
-              rawRoute: rawRoutes[i],
-              routes,
-              method: method ? controllers[controller][method] : controllers[controller]
-            }));
-          }
-          let loaded;
-          try {
-            loaded = require(controllerFile);
-          }
-          catch (err) {
-            /* istanbul ignore next: kinda hard to test */
-            if (err.code === 'MODULE_NOT_FOUND') {
-              debug('failed to load controller at', controllerFile);
-            } else {
-              throw err;
-            }
-          }
-          if (loaded) {
-            controllers[controller] = loaded;
-            promises.push(setView({
-              action,
-              config,
-              rawRoute: rawRoutes[i],
-              routes,
-              method: method ? controllers[controller][method] : controllers[controller]
-            }));
-          }
-          else {
-            warn("Route", rawRoutes[i], "controller doesn't exist - ignoring.");
+        if (controllers[controller]) {
+          promises.push(setView({
+            action,
+            config,
+            rawRoute: rawRoutes[i],
+            routes,
+            method: method ? controllers[controller][method] : controllers[controller]
+          }));
+        }
+        let loaded;
+        try {
+          loaded = require(controllerFile);
+        }
+        catch (err) {
+          /* istanbul ignore next: kinda hard to test */
+          if (err.code === 'MODULE_NOT_FOUND') {
+            debug('failed to load controller at', controllerFile);
+          } else {
+            throw err;
           }
         }
+        if (!loaded) {
+          warn("Route", rawRoutes[i], "controller doesn't exist - ignoring.");
+          continue;
+        }
+        controllers[controller] = loaded;
+        promises.push(setView({
+          action,
+          config,
+          rawRoute: rawRoutes[i],
+          routes,
+          method: method ? controllers[controller][method] : controllers[controller]
+        }));
       }
       this.routes = routes;
     }
