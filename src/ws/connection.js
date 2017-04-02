@@ -4,7 +4,8 @@ exports = module.exports = class Connection {
     socket.on('join', room => {
       socket.join(room);
       const { route: { method: Channel }, params } = handler.getHandler({ url: room, method: 'ws' });
-      const channel = new Channel({ params, socket });
+      // eslint-disable-next-line no-new
+      new Channel({ params, socket });
     });
   }
 };
