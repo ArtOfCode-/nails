@@ -4,7 +4,7 @@ const MockReq = require('mock-req');
 const MockRes = require('mock-res');
 
 exports.testServer = function testServer(server, url, method = 'GET') {
-  return new Promise(resolve => {
+  return server.handler.ready.then(() => new Promise(resolve => {
     const req = new MockReq({
       method,
       url,
@@ -14,7 +14,7 @@ exports.testServer = function testServer(server, url, method = 'GET') {
       resolve(res);
     });
     server._handleRequest(req, res);
-  });
+  }));
 };
 
 exports.assertContentType = function assertContentType(res, type) {
