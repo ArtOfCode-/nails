@@ -8,8 +8,7 @@ exports = module.exports = class Route {
     this.regex = tokensToRegExp(tokens, options);
     this.reverse = tokensToFunction(tokens);
   }
-  toString() {
-    /* istanbul ignore next */
+  /* istanbul ignore next */toString() {
     return `<route to ${chalk.bold.underline(this.path)}>`;
   }
   match(path) {
