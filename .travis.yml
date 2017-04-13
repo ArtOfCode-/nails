@@ -5,3 +5,9 @@ cache:
     - node_modules
 notifications:
   email: false
+install:
+  - npm i
+  - npm i -g codecov
+script:
+  - npm test
+  - codecov
