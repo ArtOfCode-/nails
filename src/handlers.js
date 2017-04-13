@@ -152,7 +152,7 @@ exports = module.exports = class Handler {
       }
     }
     if (!loaded) {
-      warn("Route", route, `${key} doesn't exist - ignoring.`);
+      warn("Route", route, `${key.slice(0, -1)} doesn't exist - ignoring.`);
       return;
     }
     cache[key][name] = loaded;
