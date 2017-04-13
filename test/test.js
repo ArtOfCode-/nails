@@ -13,6 +13,7 @@ const server = nails({ appRoot: serverPath, start: false });
 before(() => server.handler.ready);
 
 describe('HTTP', () => require('./http')({ server, serverPath }));
+describe('WebSocket', () => require('./ws')({ server }));
 describe('genKey', () => {
   let key;
   it('runs succesfully', () => {
