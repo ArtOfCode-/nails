@@ -3,7 +3,11 @@ exports = module.exports = class Connection {
     this.sock = socket;
     socket.on('join', room => {
       socket.join(room);
-      const { route: { method: Channel }, params } = handler.getHandler({ url: room, method: 'ws' });
+      const val = handler.getHandler({ url: room, method: 'ws' });
+      if (!val) {
+        throw new Error('no match found');
+      }
+      const { route: { method: Channel }, params } = val;
       // eslint-disable-next-line no-new
       new Channel({ params, socket });
     });
