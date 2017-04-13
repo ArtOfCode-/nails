@@ -3,13 +3,12 @@ const path = require("path");
 const fs = require("mz/fs");
 
 const ejs = require("ejs");
-const createDebug = require('debug');
 const schema = require('validate');
 
 const Route = require('./route');
+const { createDebug, warn } = require('./util');
 
-const debug = createDebug('nails:handlers');
-const warn = createDebug('nails:WARNING');
+const debug = createDebug('handlers');
 
 const controllers = {};
 

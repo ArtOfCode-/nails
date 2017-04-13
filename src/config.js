@@ -1,4 +1,4 @@
-const debug = require('debug')('nails:config');
+const debug = require('./util')('config');
 
 exports = module.exports = function createConfig(file) {
   let json;

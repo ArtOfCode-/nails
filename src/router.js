@@ -1,5 +1,5 @@
 const chalk = require('chalk');
-const debug = require('debug')('nails:router');
+const debug = require('./util')('router');
 
 const methods = 'get head post put delete patch'.split(' ');
 

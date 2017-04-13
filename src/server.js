@@ -1,12 +1,12 @@
 const http = require("http");
-const createDebug = require('debug');
+
 const chalk = require('chalk');
 const Handler = require("./handlers");
 const Library = require("./library");
 
-const debug = createDebug('nails:server');
-const warn = createDebug('nails:WARNING');
-const log = createDebug('nails');
+const { createDebug, warn, log } = require('./util');
+
+const debug = createDebug('server');
 
 exports = module.exports = class Server {
   constructor(config) {
