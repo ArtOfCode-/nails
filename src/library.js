@@ -19,6 +19,7 @@ class Context {
     this.cookies.set = (k, v, opts) => set(k, JSON.stringify(v), opts);
     this.cookies.get = (...args) => {
       const str = get(...args);
+      // istanbul ignore if: this is only for compatibility with the library itself
       if (args[0].endsWith('.sig')) {
         return str;
       }
@@ -26,8 +27,10 @@ class Context {
       if (str == undefined || str === 'undefined') {
         return;
       }
+      // istanbul ignore next: there’s no way AFAIK to send cookies with the request.
       return JSON.parse(str);
     };
+    // istanbul ignore next: see above
     this.cookies.delete = key => {
       set(key, null);
       set(key + '.sig', null);
