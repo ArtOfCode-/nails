@@ -4,12 +4,22 @@ const Cookies = require('cookies');
 
 const S = {
   library: Symbol('library'),
-  params: Symbol('params')
+  params: Symbol('params'),
+  rendered: Symbol('rendered?'),
+  doubleRender: Symbol('double render?'),
 };
+
+class DoubleRenderError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'DoubleRenderError';
+  }
+}
 
 class Context {
   constructor(library, { req, res }) {
     this[S.library] = library;
+    this[S.rendered] = false;
 
     this.cookies = new Cookies(req, res, {
       keys: library.config.keys || [library.config.key]
@@ -37,7 +47,14 @@ class Context {
     };
   }
 
+  [S.doubleRender]() {
+    if (this[S.rendered]) {
+      throw new DoubleRenderError('Already rendered ' + require('util').inspect(this[S.library].requestData, { depth: null }));
+    }
+    this[S.rendered] = true;
+  }
   render(opts, content) {
+    this[S.doubleRender]();
     debug('rendering'); // TODO: get controller name
     if (typeof opts !== "object") {
       content = opts;
@@ -47,6 +64,7 @@ class Context {
     this[S.library].requestData = Object.assign(opts, { content });
   }
   redirect(to) {
+    this[S.doubleRender]();
     this[S.library].requestData.redirect_to = to; // eslint-disable-line camelcase
   }
   get params() {
