@@ -19,6 +19,7 @@ function setView({ action, config, route, routes, method }) {
   const ws = route.ws;
   return exports.getView(action, config).then(view => {
     routes[ws ? 'ws' : route.type].push({
+      action,
       method,
       view,
       match: new Route(route.url)

@@ -93,6 +93,9 @@ The other major method available in the Nails library is `redirect`. From your c
 
 The HTTP response for this will be a 302 Found response with a Location header pointing to your specified resource.
 
+#### <code>redirect({ back: *path* })</code>
+Redirect back to the previous page, or *`path`* if the HTTP Referer header is not set.
+
 ### Cookies
 Nails supports cookies (`this.cookies`), using the [`cookies`](https://github.com/pillarjs/cookies) module from `npm`, with some modifications:
 

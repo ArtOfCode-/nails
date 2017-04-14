@@ -38,26 +38,9 @@ exports = module.exports = class Server {
     const handler = this.handler.getHandler(req);
     if (handler) {
       const { route: requestHandler, params } = handler;
-      const library = new Library({ config: this.config, params, req, res });
+      const library = new Library({ config: this.config, params, req, res, requestHandler });
       const prom = requestHandler.method.call(library.context, req);
-      Promise.resolve(prom).then(() => {
-        let opts = library.requestData;
-
-        // istanbul ignore else
-        if (opts != null) {
-          if (opts.redirect_to) {
-            res.writeHead(302, {
-              location: opts.redirect_to,
-              'Turbolinks-Location': opts.redirect_to
-            });
-            res.end();
-          }
-          else {
-            opts = Object.assign(opts, { route: requestHandler });
-            Handler.renderer(req, res, opts);
-          }
-        }
-      }).catch(warn);
+      Promise.resolve(prom).then(library.finalize).catch(warn);
     }
     else {
       Handler.getStaticContent("404.html", this.config).then(customErrorPage => {

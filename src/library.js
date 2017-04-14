@@ -1,15 +1,28 @@
+const assert = require('assert');
 const debug = require('debug')('nails:library');
 
 const Cookies = require('cookies');
 
+const Handler = require("./handlers");
+
 const S = {
   library: Symbol('library'),
-  params: Symbol('params')
+  params: Symbol('params'),
+  rendered: Symbol('rendered?'),
+  doubleRender: Symbol('double render?'),
 };
+
+class DoubleRenderError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'DoubleRenderError';
+  }
+}
 
 class Context {
   constructor(library, { req, res }) {
     this[S.library] = library;
+    this[S.rendered] = false;
 
     this.cookies = new Cookies(req, res, {
       keys: library.config.keys || [library.config.key]
@@ -37,17 +50,40 @@ class Context {
     };
   }
 
+  [S.doubleRender]() {
+    if (this[S.rendered]) {
+      throw new DoubleRenderError('Already rendered ' + require('util').inspect(this[S.library].requestData, { depth: null }));
+    }
+    this[S.rendered] = true;
+  }
   render(opts, content) {
-    debug('rendering'); // TODO: get controller name
+    this[S.doubleRender]();
+    debug('rendering', this[S.library].requestHandler.action);
     if (typeof opts !== "object") {
       content = opts;
       opts = {};
     }
-
-    this[S.library].requestData = Object.assign(opts, { content });
+    Object.assign(opts, { content, route: this[S.library].requestHandler });
+    Handler.renderer(this[S.library].req, this[S.library].res, opts);
   }
   redirect(to) {
-    this[S.library].requestData.redirect_to = to; // eslint-disable-line camelcase
+    this[S.doubleRender]();
+    const res = this[S.library].res;
+    if (typeof to === 'object') {
+      if (to.back) {
+        assert.equal(typeof to.back, 'string');
+        if (this[S.library].req.headers.referer) { // [sic]
+          to = this[S.library].req.headers.referer;
+        } else {
+          to = to.back;
+        }
+      }
+    }
+    res.writeHead(302, {
+      location: to,
+      'Turbolinks-Location': to
+    });
+    res.end();
   }
   get params() {
     this[S.params] = this[S.params] || Object.freeze(this[S.library].params);
@@ -56,10 +92,15 @@ class Context {
 }
 
 exports = module.exports = class Library {
-  constructor({ config, params, req, res }) {
-    this.requestData = {};
-    this.params = params;
-    this.config = config;
+  constructor({ config, params, req, res, requestHandler }) {
+    Object.assign(this, { config, params, req, res, requestHandler });
     this.context = new Context(this, { req, res });
+    this.finalize = this.finalize.bind(this);
+  }
+  finalize() {
+    if (!this.context[S.rendered]) {
+      this.res.writeHead(204);
+      this.res.end();
+    }
   }
 };
