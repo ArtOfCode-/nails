@@ -1,9 +1,13 @@
 const assert = require('assert');
-const debug = require('debug')('nails:library');
+const path = require('path');
+const fs = require('fs');
 
 const Cookies = require('cookies');
+const chalk = require('chalk');
 
 const Handler = require("./handlers");
+const { warn } = require('./util');
+const debug = require('./util')('library');
 
 const S = {
   library: Symbol('library'),
@@ -27,6 +31,20 @@ class Context {
     this.setHeader = this.header = res.setHeader.bind(res);
     this.getHeader = this.header.get = res.getHeader.bind(res);
     this.removeHeader = this.header.remove = this.header.del = res.removeHeader.bind(res);
+
+    const keys = Object.keys(require('events').prototype).concat(Object.keys(require('stream').Writable.prototype));
+    for (const key of keys) {
+      if (key[0] === '_' || ['domain'].includes(key)) {
+        continue;
+      }
+      // istanbul ignore else
+      if (typeof res[key] === 'function') {
+        this.stream[key] = res[key].bind(res);
+      } else {
+        warn(chalk.bold(key), 'key not processed in context');
+      }
+    }
+    this.stream.on('pipe', this[S.doubleRender].bind(this));
 
     this.cookies = new Cookies(req, res, {
       keys: library.config.keys || [library.config.key]
@@ -54,12 +72,32 @@ class Context {
     };
   }
 
+  stream(arg) {
+    if (arg.data) {
+      const { data, encoding = 'utf-8' } = arg;
+      return new Promise((resolve, reject) => this.stream.write(data, encoding, err => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      }));
+    } else if (arg.path) {
+      const { path, encoding = 'utf-8', options = {} } = arg;
+      const stream = fs.createReadStream(path, Object.assign({
+        encoding
+      }, options));
+      stream.pipe(this.stream);
+      return Promise.resolve(stream);
+    }
+  }
+
   [S.doubleRender]() {
     if (this[S.rendered]) {
       /* istanbul ignore next */
-      throw new DoubleRenderError('Already rendered ' + require('util').inspect(this[S.library].requestData, { depth: null }));
+      throw new DoubleRenderError('Already rendered ' + this[S.rendered]);
     }
-    this[S.rendered] = true;
+    this[S.rendered] = new Error().stack;
   }
   render(opts, content) {
     this[S.doubleRender]();
@@ -93,6 +131,9 @@ class Context {
   get params() {
     this[S.params] = this[S.params] || Object.freeze(this[S.library].params);
     return this[S.params];
+  }
+  static(...components) {
+    return path.join(this[S.library].config.appRoot, 'static', ...components);
   }
 }
 

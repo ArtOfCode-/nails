@@ -1,3 +1,6 @@
+const path = require('path');
+const fs = require('mz/fs');
+
 const { describe, it } = require('mocha');
 
 const { testServer, equal } = require('./util');
@@ -18,6 +21,12 @@ module.exports = arg => {
     it('sets custom headers', () => testServer(server, '/status/json').then(res => {
       equal([
         [res._headers['x-status'], 'ok'],
+      ]);
+    }));
+    it('loads static files', () => Promise.all([testServer(server, '/static/'), fs.readFile(path.join(server.config.appRoot, 'static', 'index.html'), 'utf8')]).then(([res, content]) => {
+      equal([
+        [res.statusCode, 200],
+        [res._getString(), content]
       ]);
     }));
 
