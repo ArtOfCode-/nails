@@ -27,17 +27,17 @@ module.exports = arg => {
     it('loads static files', () => Promise.all([testServer(server, '/static/'), fs.readFile(path.join(server.config.appRoot, 'static', 'index.html'), 'utf8')]).then(([res, content]) => {
       equal([
         [res.statusCode, 200],
-        [res._getString(), content]
+        [res._getString(), content],
       ]);
     }));
     const query = {
       a: 'b',
-      c: ['d', 'e']
+      c: ['d', 'e'],
     };
     it('handles querystrings correctly', () => testServer(server, '/test/query?' + querystring.stringify(query)).then(res => {
       equal([
         [res.statusCode, 200],
-        [res._getString(), JSON.stringify(query)]
+        [res._getString(), JSON.stringify(query)],
       ]);
     }));
 

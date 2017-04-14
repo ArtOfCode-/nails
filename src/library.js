@@ -6,7 +6,7 @@ const fs = require('fs');
 const Cookies = require('cookies');
 const chalk = require('chalk');
 
-const Handler = require("./handlers");
+const Handler = require('./handlers');
 const { warn } = require('./util');
 const debug = require('./util')('library');
 
@@ -67,7 +67,7 @@ class Context {
     } else if (arg.path) {
       const { path, encoding = 'utf-8', options = {} } = arg;
       const stream = fs.createReadStream(path, Object.assign({
-        encoding
+        encoding,
       }, options));
       stream.pipe(this.stream);
       return Promise.resolve(stream);
@@ -77,7 +77,7 @@ class Context {
   _initCookies() {
     const library = this[S.library];
     this.cookies = new Cookies(library.req, library.res, {
-      keys: library.config.keys || [library.config.key]
+      keys: library.config.keys || [library.config.key],
     });
     const set = this.cookies.set.bind(this.cookies);
     const get = this.cookies.get.bind(this.cookies);
@@ -94,8 +94,7 @@ class Context {
     if (args[0].endsWith('.sig')) {
       return str;
     }
-    // eslint-disable-next-line eqeqeq
-    if (str == undefined || str === 'undefined') {
+    if (str == null || str === 'undefined') {
       return;
     }
     return JSON.parse(str);
@@ -113,7 +112,7 @@ class Context {
   render(opts, content) {
     this[S.doubleRender]();
     debug('rendering', this[S.library].requestHandler.action);
-    if (typeof opts !== "object") {
+    if (typeof opts !== 'object') {
       content = opts;
       opts = {};
     }
@@ -135,7 +134,7 @@ class Context {
     }
     res.writeHead(302, {
       location: to,
-      'Turbolinks-Location': to
+      'Turbolinks-Location': to,
     });
     res.end();
   }

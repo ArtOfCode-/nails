@@ -1,11 +1,11 @@
-const http = require("http");
+const http = require('http');
 
 const chalk = require('chalk');
 const socket = require('socket.io');
 
 const initSocket = require('./ws');
-const Handler = require("./handlers");
-const Library = require("./library");
+const Handler = require('./handlers');
+const Library = require('./library');
 
 const { createDebug, warn, log } = require('./util');
 
@@ -41,20 +41,18 @@ exports = module.exports = class Server {
       const library = new Library({ config: this.config, params, req, res, requestHandler });
       const prom = requestHandler.method.call(library.context, req);
       Promise.resolve(prom).then(library.finalize).catch(warn);
-    }
-    else {
-      Handler.getStaticContent("404.html", this.config).then(customErrorPage => {
+    } else {
+      Handler.getStaticContent('404.html', this.config).then(customErrorPage => {
         if (customErrorPage) {
           res.statusCode = 404;
           Handler.renderer(req, res, {
             routes: this.handler.routes,
-            content: customErrorPage
+            content: customErrorPage,
           });
-        }
-        else {
+        } else {
           Handler.renderer(req, res, {
             status: 404,
-            text: 'Not Found'
+            text: 'Not Found',
           });
         }
         log('404 at', req.url);

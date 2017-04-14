@@ -1,7 +1,7 @@
 const assert = require('assert');
 const { it } = require('mocha');
 
-exports.equal = function equal(checks) {
+exports.equal = checks => {
   checks.forEach(arg => {
     if (typeof arg[0] === 'function') {
       const [f, ...args] = arg;

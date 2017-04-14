@@ -1,8 +1,8 @@
-const url = require("url");
-const path = require("path");
-const fs = require("mz/fs");
+const url = require('url');
+const path = require('path');
+const fs = require('mz/fs');
 
-const ejs = require("ejs");
+const ejs = require('ejs');
 const schema = require('validate');
 
 const Route = require('./route');
@@ -22,7 +22,7 @@ function setView({ action, config, route, routes, method }) {
       action,
       method,
       view,
-      match: new Route(route.url)
+      match: new Route(route.url),
     });
   });
 }
@@ -30,7 +30,7 @@ function setView({ action, config, route, routes, method }) {
 const routeSchema = schema({
   ws: {
     type: 'boolean',
-    required: false
+    required: false,
   },
   type: {
     type: 'string',
@@ -74,7 +74,7 @@ exports = module.exports = class Handler {
       PUT: [],
       PATCH: [],
       DELETE: [],
-      OPTIONS: []
+      OPTIONS: [],
     };
 
     this.config = config;
@@ -84,8 +84,7 @@ exports = module.exports = class Handler {
     let rawRoutes;
     try {
       rawRoutes = require(routesPath);
-    }
-    catch (err) {
+    } catch (err) {
       /* istanbul ignore next: kinda hard to test */
       if (err.code !== 'MODULE_NOT_FOUND') {
         throw err;
@@ -104,7 +103,7 @@ exports = module.exports = class Handler {
           }
           /* istanbul ignore next: router.js always returns valid JSON */
           if (errors.length > 0) {
-            warn("found route %o: %s", rawRoute, errors.map(error => error.message).join(', '));
+            warn('found route %o: %s', rawRoute, errors.map(error => error.message).join(', '));
             continue;
           }
         }
@@ -113,7 +112,7 @@ exports = module.exports = class Handler {
       }
     } else {
       /* istanbul ignore next: kinda hard to test */
-      throw new ReferenceError("Tried to load the routing file, but it doesn't exist!");
+      throw new ReferenceError('Tried to load the routing file, but it doesn\'t exist!');
     }
     this.ready = Promise.all(promises);
     this.ready.then(() => {
@@ -123,7 +122,7 @@ exports = module.exports = class Handler {
   _parseRoute(route, key) {
     const promises = [];
     const action = route.to;
-    const actionSplat = action.split(".");
+    const actionSplat = action.split('.');
     if (actionSplat.length === 1) {
       actionSplat.push(undefined);
     }
@@ -137,14 +136,13 @@ exports = module.exports = class Handler {
         config: this.config,
         route,
         routes: this.routes,
-        method: method ? cache[key][name][method] : cache[key][name]
+        method: method ? cache[key][name][method] : cache[key][name],
       }));
     }
     let loaded;
     try {
       loaded = require(path);
-    }
-    catch (err) {
+    } catch (err) {
       /* istanbul ignore next: kinda hard to test */
       if (err.code === 'MODULE_NOT_FOUND') {
         debug('failed to load controller at', path);
@@ -153,7 +151,7 @@ exports = module.exports = class Handler {
       }
     }
     if (!loaded) {
-      warn("Route", route, `${key.slice(0, -1)} doesn't exist - ignoring.`);
+      warn('Route', route, `${key.slice(0, -1)} doesn't exist - ignoring.`);
       return;
     }
     cache[key][name] = loaded;
@@ -162,7 +160,7 @@ exports = module.exports = class Handler {
       config: this.config,
       route,
       routes: this.routes,
-      method: method ? cache[key][name][method] : cache[key][name]
+      method: method ? cache[key][name][method] : cache[key][name],
     }));
     return promises;
   }
@@ -175,19 +173,19 @@ exports = module.exports = class Handler {
 };
 
 exports.getStaticContent = (name, config) => {
-  const staticPath = path.join(config.appRoot, "static", name);
+  const staticPath = path.join(config.appRoot, 'static', name);
   return fs.exists(staticPath).then(exists => exists ? fs.readFile(staticPath, 'utf-8') : null).catch(/* istanbul ignore next */ () => null);
 };
 
 exports.getView = (route, config) => {
-  const action = route.split(".");
+  const action = route.split('.');
   const controller = action[0];
   const method = action[action.length - 1];
-  const viewPath = path.join(config.appRoot, 'views', controller, method + ".ejs");
+  const viewPath = path.join(config.appRoot, 'views', controller, method + '.ejs');
   return fs.exists(viewPath).then(exists => {
     if (exists) {
       return fs.readFile(viewPath, 'utf-8').then(contents => ejs.compile(contents, {
-        filename: viewPath
+        filename: viewPath,
       }));
     }
   }).catch(warn);
@@ -205,8 +203,7 @@ exports.renderer = (req, res, opts) => {
     delete opts.text;
     exports.renderer(req, res, Object.assign(opts, { headers: { 'content-type': 'text/plain' } }));
     return;
-  }
-  else if (opts.json) {
+  } else if (opts.json) {
     opts.content = JSON.stringify(opts.json);
     delete opts.json;
     exports.renderer(req, res, Object.assign(opts, { headers: { 'content-type': 'application/json' } }));
@@ -222,18 +219,15 @@ exports.renderer = (req, res, opts) => {
       opts.locals = opts.locals || {};
       res.write(view(opts.locals));
       res.end();
-    }
-    else {
-      warn("handlers.renderer: render specified view: true, but no view present.");
+    } else {
+      warn('handlers.renderer: render specified view: true, but no view present.');
       res.statusCode = 204;
       res.end();
     }
-  }
-  else if (opts.content) {
+  } else if (opts.content) {
     res.write(opts.content);
     res.end();
-  }
-  else {
+  } else {
     res.statusCode = 204;
     res.end();
   }

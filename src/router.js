@@ -42,7 +42,7 @@ exports = module.exports = class Router {
     method = method.toUpperCase();
     const route = Object.assign({
       type: method,
-      url: this._url(path)
+      url: this._url(path),
     }, options);
     this.routes.push(route);
     debug(this._i + 'created', method === 'GET' ? chalk.gray(method) : chalk.bold(method), 'route', chalk.underline(path) || chalk.gray('<root>'), 'to', chalk.bold(options.to));
@@ -63,7 +63,7 @@ exports = module.exports = class Router {
     options.to = this._pathToJS(options.to, path);
     const route = Object.assign({
       ws: true,
-      url: this._url(path)
+      url: this._url(path),
     }, options);
     this.routes.push(route);
     debug(this._i + 'created websocket channel', chalk.underline(path) || chalk.gray('<root>'), 'to', chalk.bold(options.to));

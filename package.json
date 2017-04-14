@@ -24,18 +24,8 @@
     ],
     "rules": {
       "no-var": "error",
-      "quotes": 0,
-      "no-eval": 1,
-      "import/no-unassigned-import": 0,
-      "import/no-dynamic-require": 0,
-      "camelcase": 1,
-      "brace-style": 0,
-      "no-prototype-builtins": 0,
-      "dot-notation": 0,
-      "linebreak-style": "off",
-      "comma-dangle": "off",
+      "comma-dangle": ["error", "always-multiline"],
       "no-eq-null": "off",
-      "no-loop-func": 0,
       "eqeqeq": [
         "error",
         "smart"
@@ -44,14 +34,7 @@
         "error",
         "always"
       ],
-      "no-multi-assign": "off",
-      "func-names": "off",
-      "unicorn/filename-case": "off",
-      "unicorn/no-process-exit": 0,
-      "max-params": [
-        1,
-        5
-      ]
+      "no-multi-assign": "off"
     }
   },
   "devDependencies": {

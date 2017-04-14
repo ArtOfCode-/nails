@@ -1,11 +1,11 @@
 require('debug').names.push(/^nails:[^a-z]+$/);
 require('debug').names.push(/^nails$/);
 
-const path = require("path");
+const path = require('path');
 const { randomBytes } = require('crypto');
 const debug = require('./util')('init');
-const Server = require("./server");
-const createConfig = require("./config");
+const Server = require('./server');
+const createConfig = require('./config');
 
 function lazy(key, get) {
   const uninitialized = {};
@@ -17,20 +17,20 @@ function lazy(key, get) {
         _val = get();
       }
       return _val;
-    }
+    },
   });
 }
 
 exports = module.exports = arg => {
   /* istanbul ignore if: only for backwards compatibility */
-  if (typeof arg !== "object") {
+  if (typeof arg !== 'object') {
     arg = {
-      appRoot: arg
+      appRoot: arg,
     };
   }
   const { appRoot = path.dirname(require.main.filename) + '/app', start = true } = arg;
   debug('starting server at', appRoot);
-  const config = createConfig(path.join(appRoot, "config"));
+  const config = createConfig(path.join(appRoot, 'config'));
   config.appRoot = appRoot;
   const server = new Server(config);
   /* istanbul ignore if: we don’t actually start the server yet */

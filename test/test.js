@@ -1,7 +1,7 @@
 const path = require('path');
 const assert = require('assert');
 
-process.env.DEBUG = process.env.DEBUG || "-nails, nails:test,nails:test:*";
+process.env.DEBUG = process.env.DEBUG || '-nails, nails:test,nails:test:*';
 const debug = require('debug')('nails:test');
 const { before, describe, it } = require('mocha');
 

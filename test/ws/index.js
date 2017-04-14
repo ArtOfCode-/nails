@@ -8,7 +8,7 @@ module.exports = ({ server }) => {
   initSocket({
     on(connection, f) {
       connect = f;
-    }
+    },
   }, server.handler);
   it('connects', () => {
     const io = new IO();
