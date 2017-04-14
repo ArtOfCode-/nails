@@ -34,7 +34,7 @@ exports = module.exports = class Server {
       const { route: requestHandler, params } = handler;
       const library = new Library({ config: this.config, params, req, res, requestHandler });
       const prom = requestHandler.method.call(library.context, req);
-      Promise.resolve(prom).catch(warn);
+      Promise.resolve(prom).then(library.finalize).catch(warn);
     }
     else {
       Handler.getStaticContent("404.html", this.config).then(customErrorPage => {
