@@ -15,6 +15,7 @@ const controllers = {};
 function setView({ action, config, rawRoute, routes, method }) {
   return exports.getView(action, config).then(view => {
     routes[rawRoute.type].push({
+      action,
       method,
       view,
       match: new Route(rawRoute.url)

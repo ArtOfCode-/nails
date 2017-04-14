@@ -2,6 +2,8 @@ const debug = require('debug')('nails:library');
 
 const Cookies = require('cookies');
 
+const Handler = require("./handlers");
+
 const S = {
   library: Symbol('library'),
   params: Symbol('params'),
@@ -55,17 +57,22 @@ class Context {
   }
   render(opts, content) {
     this[S.doubleRender]();
-    debug('rendering'); // TODO: get controller name
+    debug('rendering', this[S.library].requestHandler.action);
     if (typeof opts !== "object") {
       content = opts;
       opts = {};
     }
-
-    this[S.library].requestData = Object.assign(opts, { content });
+    Object.assign(opts, { content, route: this[S.library].requestHandler });
+    Handler.renderer(this[S.library].req, this[S.library].res, opts);
   }
   redirect(to) {
     this[S.doubleRender]();
-    this[S.library].requestData.redirect_to = to; // eslint-disable-line camelcase
+    const res = this[S.library].res;
+    res.writeHead(302, {
+      location: to,
+      'Turbolinks-Location': to
+    });
+    res.end();
   }
   get params() {
     this[S.params] = this[S.params] || Object.freeze(this[S.library].params);
@@ -74,10 +81,8 @@ class Context {
 }
 
 exports = module.exports = class Library {
-  constructor({ config, params, req, res }) {
-    this.requestData = {};
-    this.params = params;
-    this.config = config;
+  constructor({ config, params, req, res, requestHandler }) {
+    Object.assign(this, { config, params, req, res, requestHandler });
     this.context = new Context(this, { req, res });
   }
 };
