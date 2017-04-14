@@ -24,6 +24,10 @@ class Context {
     this[S.library] = library;
     this[S.rendered] = false;
 
+    this.setHeader = this.header = res.setHeader.bind(res);
+    this.getHeader = this.header.get = res.getHeader.bind(res);
+    this.removeHeader = this.header.remove = this.header.del = res.removeHeader.bind(res);
+
     this.cookies = new Cookies(req, res, {
       keys: library.config.keys || [library.config.key]
     });

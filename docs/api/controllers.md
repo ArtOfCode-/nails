@@ -99,3 +99,27 @@ The HTTP response for this will be a 302 Found response with a Location header p
 
 #### <code>redirect({ back: *path* })</code>
 Redirect back to the previous page, or *`path`* if the HTTP Referer header is not set.
+
+### Cookies
+Nails supports cookies (`this.cookies`), using the [`cookies`](https://github.com/pillarjs/cookies) module from `npm`, with some modifications:
+
+#### <code>cookies.delete(*name*)</code>
+Delete the cookie sent under the specified *`name`*.
+
+#### <code>cookies.set(*name*, *value*, *options*?)</code>
+Set the cookie with the *`value`* encoded using JSON.
+
+#### <code>cookies.get(...)</code>
+Decode the cookie’s value using JSON, throwing if it isn’t valid JSON.
+
+### Headers
+
+#### <code>header(*name*, *value*)</code>
+See [the Node docs](http://devdocs.io/node~6_lts/http#http_response_setheader_name_value)
+
+#### <code>header.get(*name*)</code>
+See [the Node docs](http://devdocs.io/node~6_lts/http#http_response_getheader_name)
+
+#### <code>header.remove(*name*)</code>
+#### <code>header.del(*name*)</code>
+See [the Node docs](http://devdocs.io/node~6_lts/http#http_response_removeheader_name)
