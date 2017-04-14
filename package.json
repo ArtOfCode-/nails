@@ -3,9 +3,14 @@
   "description": "Rails, in Node",
   "author": "ArtOfCode",
   "version": "0.5.1",
-  "repository": "https://github.com/ArtOfCode-/nails",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArtOfCode-/nails.git"
+  },
   "license": "MIT",
-  "bugs": "https://github.com/ArtOfCode-/nails/issues",
+  "bugs": {
+    "url": "https://github.com/ArtOfCode-/nails/issues"
+  },
   "scripts": {
     "update-submodules": "git submodule update --remote --force",
     "test": "npm run unit && npm run lint",
@@ -24,7 +29,10 @@
     ],
     "rules": {
       "no-var": "error",
-      "comma-dangle": ["error", "always-multiline"],
+      "comma-dangle": [
+        "error",
+        "always-multiline"
+      ],
       "no-eq-null": "off",
       "eqeqeq": [
         "error",
@@ -55,5 +63,10 @@
     "rewire": "^2.5.2",
     "socket.io": "^1.7.3",
     "validate": "^3.0.1"
+  },
+  "homepage": "https://github.com/ArtOfCode-/nails#readme",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
   }
 }
