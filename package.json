@@ -9,7 +9,7 @@
   "scripts": {
     "update-submodules": "git submodule update --remote",
     "test": "npm run unit && npm run lint",
-    "lint": "xo",
+    "lint": "xo && echo \"No lint issues!\\nxo 💚 you\"",
     "unit": "istanbul cover _mocha",
     "unit-dev": "watch \"clear && npm run unit -- --print none\" -p '/coverage|.git/' ."
   },
