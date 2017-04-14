@@ -1,5 +1,6 @@
 const assert = require('assert');
 const path = require('path');
+const url = require('url');
 const fs = require('fs');
 
 const Cookies = require('cookies');
@@ -12,6 +13,7 @@ const debug = require('./util')('library');
 const S = {
   library: Symbol('library'),
   params: Symbol('params'),
+  query: Symbol('query'),
   rendered: Symbol('rendered?'),
   doubleRender: Symbol('double render?'),
 };
@@ -24,14 +26,20 @@ class DoubleRenderError extends Error {
 }
 
 class Context {
-  constructor(library, { req, res }) {
+  constructor(library) {
     this[S.library] = library;
     this[S.rendered] = false;
 
+    const res = library.res;
     this.setHeader = this.header = res.setHeader.bind(res);
     this.getHeader = this.header.get = res.getHeader.bind(res);
     this.removeHeader = this.header.remove = this.header.del = res.removeHeader.bind(res);
+    this._initStreaming();
+    this._initCookies();
+  }
 
+  _initStreaming() {
+    const res = this[S.library].res;
     const keys = Object.keys(require('events').prototype).concat(Object.keys(require('stream').Writable.prototype));
     for (const key of keys) {
       if (key[0] === '_' || ['domain'].includes(key)) {
@@ -45,33 +53,7 @@ class Context {
       }
     }
     this.stream.on('pipe', this[S.doubleRender].bind(this));
-
-    this.cookies = new Cookies(req, res, {
-      keys: library.config.keys || [library.config.key]
-    });
-    const set = this.cookies.set.bind(this.cookies);
-    const get = this.cookies.get.bind(this.cookies);
-    this.cookies.set = (k, v, opts) => set(k, JSON.stringify(v), opts);
-    this.cookies.get = (...args) => {
-      const str = get(...args);
-      // istanbul ignore if: this is only for compatibility with the library itself
-      if (args[0].endsWith('.sig')) {
-        return str;
-      }
-      // eslint-disable-next-line eqeqeq
-      if (str == undefined || str === 'undefined') {
-        return;
-      }
-      // istanbul ignore next: there’s no way AFAIK to send cookies with the request.
-      return JSON.parse(str);
-    };
-    // istanbul ignore next: see above
-    this.cookies.delete = key => {
-      set(key, null);
-      set(key + '.sig', null);
-    };
   }
-
   stream(arg) {
     if (arg.data) {
       const { data, encoding = 'utf-8' } = arg;
@@ -92,13 +74,42 @@ class Context {
     }
   }
 
-  [S.doubleRender]() {
-    if (this[S.rendered]) {
-      /* istanbul ignore next */
-      throw new DoubleRenderError('Already rendered ' + this[S.rendered]);
-    }
-    this[S.rendered] = new Error().stack;
+  _initCookies() {
+    const library = this[S.library];
+    this.cookies = new Cookies(library.req, library.res, {
+      keys: library.config.keys || [library.config.key]
+    });
+    const set = this.cookies.set.bind(this.cookies);
+    const get = this.cookies.get.bind(this.cookies);
+    this.cookies.set = (k, v, opts) => set(k, JSON.stringify(v), opts);
+    this.cookies.get = this._getCookie.bind(this, get);
+    this.cookies.delete = key => {
+      set(key, null);
+      set(key + '.sig', null);
+    };
   }
+  _getCookie(get, ...args) {
+    const str = get(...args);
+    // istanbul ignore if: this is only for compatibility with the library itself
+    if (args[0].endsWith('.sig')) {
+      return str;
+    }
+    // eslint-disable-next-line eqeqeq
+    if (str == undefined || str === 'undefined') {
+      return;
+    }
+    return JSON.parse(str);
+  }
+
+  get params() {
+    this[S.params] = this[S.params] || Object.freeze(this[S.library].params);
+    return this[S.params];
+  }
+  get query() {
+    this[S.query] = this[S.query] || Object.freeze(url.parse(this[S.library].req.url, true).query);
+    return this[S.query];
+  }
+
   render(opts, content) {
     this[S.doubleRender]();
     debug('rendering', this[S.library].requestHandler.action);
@@ -128,19 +139,24 @@ class Context {
     });
     res.end();
   }
-  get params() {
-    this[S.params] = this[S.params] || Object.freeze(this[S.library].params);
-    return this[S.params];
-  }
   static(...components) {
     return path.join(this[S.library].config.appRoot, 'static', ...components);
   }
+
+  [S.doubleRender]() {
+    if (this[S.rendered]) {
+      /* istanbul ignore next */
+      throw new DoubleRenderError('Already rendered ' + this[S.rendered]);
+    }
+    this[S.rendered] = new Error().stack;
+  }
+
 }
 
 exports = module.exports = class Library {
   constructor({ config, params, req, res, requestHandler }) {
     Object.assign(this, { config, params, req, res, requestHandler });
-    this.context = new Context(this, { req, res });
+    this.context = new Context(this);
     this.finalize = this.finalize.bind(this);
   }
   finalize() {

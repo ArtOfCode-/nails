@@ -1,3 +1,4 @@
+const querystring = require('querystring');
 const path = require('path');
 const fs = require('mz/fs');
 
@@ -27,6 +28,16 @@ module.exports = arg => {
       equal([
         [res.statusCode, 200],
         [res._getString(), content]
+      ]);
+    }));
+    const query = {
+      a: 'b',
+      c: ['d', 'e']
+    };
+    it('handles querystrings correctly', () => testServer(server, '/test/query?' + querystring.stringify(query)).then(res => {
+      equal([
+        [res.statusCode, 200],
+        [res._getString(), JSON.stringify(query)]
       ]);
     }));
 
