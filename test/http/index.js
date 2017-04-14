@@ -15,6 +15,11 @@ module.exports = arg => {
         [res._getString(), '1'],
       ]);
     }));
+    it('sets custom headers', () => testServer(server, '/status/json').then(res => {
+      equal([
+        [res._headers['x-status'], 'ok'],
+      ]);
+    }));
 
     render(arg);
     twoOhFour(arg);

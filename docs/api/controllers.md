@@ -107,3 +107,15 @@ Set the cookie with the *`value`* encoded using JSON.
 
 #### <code>cookies.get(...)</code>
 Decode the cookie’s value using JSON, throwing if it isn’t valid JSON.
+
+### Headers
+
+#### <code>header(*name*, *value*)</code>
+See [the Node docs](http://devdocs.io/node~6_lts/http#http_response_setheader_name_value)
+
+#### <code>header.get(*name*)</code>
+See [the Node docs](http://devdocs.io/node~6_lts/http#http_response_getheader_name)
+
+#### <code>header.remove(*name*)</code>
+#### <code>header.del(*name*)</code>
+See [the Node docs](http://devdocs.io/node~6_lts/http#http_response_removeheader_name)
