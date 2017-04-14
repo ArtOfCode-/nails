@@ -13,6 +13,7 @@ exports.testServer = function testServer(server, url, method = 'GET') {
     const res = new MockRes(() => {
       resolve(res);
     });
+    req.connection = res.connection = {}
     server._handleRequest(req, res);
   }));
 };

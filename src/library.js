@@ -1,13 +1,37 @@
 const debug = require('debug')('nails:library');
 
+const Cookies = require('cookies');
+
 const S = {
   library: Symbol('library'),
   params: Symbol('params')
 };
 
 class Context {
-  constructor(library) {
+  constructor(library, { req, res }) {
     this[S.library] = library;
+
+    this.cookies = new Cookies(req, res, {
+      keys: library.config.keys || [library.config.key]
+    });
+    const set = this.cookies.set.bind(this.cookies);
+    const get = this.cookies.get.bind(this.cookies);
+    this.cookies.set = (k, v, opts) => set(k, JSON.stringify(v), opts);
+    this.cookies.get = (...args) => {
+      const str = get(...args);
+      if (args[0].endsWith('.sig')) {
+        return str;
+      }
+      // eslint-disable-next-line eqeqeq
+      if (str == undefined || str === 'undefined') {
+        return;
+      }
+      return JSON.parse(str);
+    };
+    this.cookies.delete = key => {
+      set(key, null);
+      set(key + '.sig', null);
+    };
   }
 
   render(opts, content) {
@@ -29,9 +53,10 @@ class Context {
 }
 
 exports = module.exports = class Library {
-  constructor({ params }) {
+  constructor({ config, params, req, res }) {
     this.requestData = {};
     this.params = params;
-    this.context = new Context(this);
+    this.config = config;
+    this.context = new Context(this, { req, res });
   }
 };

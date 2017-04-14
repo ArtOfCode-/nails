@@ -32,7 +32,7 @@ exports = module.exports = class Server {
     const handler = this.handler.getHandler(req);
     if (handler) {
       const { route: requestHandler, params } = handler;
-      const library = new Library({ params });
+      const library = new Library({ config: this.config, params, req, res });
       const prom = requestHandler.method.call(library.context, req);
       Promise.resolve(prom).then(() => {
         let opts = library.requestData;

@@ -15,6 +15,10 @@ exports.equal = function equal(checks) {
   });
 };
 
+exports.match = re => {
+  return val => assert.ok(re.exec(val), `expected \`${val}\` to match ${re}`);
+};
+
 exports.when = (test, ...args) => it('when ' + test, ...args);
 exports.when.only = it.only;
 exports.when.skip = it.skip;

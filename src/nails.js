@@ -2,6 +2,7 @@ require('debug').names.push(/^nails:[^a-z]+$/);
 require('debug').names.push(/^nails$/);
 
 const path = require("path");
+const { randomBytes } = require('crypto');
 const debug = require('./util')('init');
 const Server = require("./server");
 const createConfig = require("./config");
@@ -37,5 +38,14 @@ exports = module.exports = arg => {
     server.run();
   }
   return server;
+};
+exports.genKey = (length = 50) => {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)';
+  const bytes = randomBytes(length);
+  let value = '';
+  for (const byte of bytes) {
+    value += chars[byte % chars.length];
+  }
+  return value;
 };
 lazy('Router', () => require('./router'));
