@@ -1,4 +1,5 @@
 const assert = require('assert');
+const { it } = require('mocha');
 
 exports.equal = function equal(checks) {
   checks.forEach(arg => {
@@ -13,3 +14,7 @@ exports.equal = function equal(checks) {
     }
   });
 };
+
+exports.when = (test, ...args) => it('when ' + test, ...args);
+exports.when.only = it.only;
+exports.when.skip = it.skip;
