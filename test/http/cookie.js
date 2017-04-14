@@ -7,6 +7,8 @@ module.exports = ({ server }) => {
     equal([
       [res.statusCode, 200],
       [res._headers['set-cookie'].length, 2],
+    ]);
+    equal([
       [match(/number=(?:\d|10); path=\//), res._headers['set-cookie'][0]],
       [match(/number\.sig=[a-zA-Z0-9-]{10,}; path=\//), res._headers['set-cookie'][1]],
     ]);
