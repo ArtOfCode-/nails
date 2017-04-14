@@ -13,3 +13,4 @@ Fancy way of saying "do these things to make it work", really.
  - [Config](api/config.md)
  - [Routes](api/routes.md)
  - [Controllers](api/controllers.md)
+ - [WebSockets](api/ws.md)
