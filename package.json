@@ -24,10 +24,32 @@
     "envs": [
       "node"
     ],
+    "settings": {
+      "mocha": {
+        "additionalTestFunctions": [
+          "when",
+          "specify"
+        ]
+      }
+    },
     "ignores": [
       "nails-example/**"
     ],
+    "plugins": [
+      "mocha"
+    ],
     "rules": {
+      "mocha/handle-done-callback": "error",
+      "mocha/no-exclusive-tests": "warn",
+      "mocha/no-global-tests": "error",
+      "mocha/no-hooks-for-single-case": "error",
+      "mocha/no-identical-title": "error",
+      "mocha/no-nested-tests": "error",
+      "mocha/no-pending-tests": "warn",
+      "mocha/no-return-and-callback": "error",
+      "mocha/no-sibling-hooks": "error",
+      "mocha/no-skipped-tests": "warn",
+      "mocha/no-top-level-hooks": "error",
       "no-var": "error",
       "comma-dangle": [
         "error",
@@ -46,6 +68,7 @@
     }
   },
   "devDependencies": {
+    "eslint-plugin-mocha": "^4.9.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "mock-req": "^0.2.0",
@@ -68,5 +91,6 @@
   "directories": {
     "doc": "docs",
     "test": "test"
-  }
+  },
+  "keywords": []
 }
