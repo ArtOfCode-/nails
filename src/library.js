@@ -13,7 +13,7 @@ const S = {
 };
 
 class DoubleRenderError extends Error {
-  constructor(message) {
+  /* istanbul ignore next */constructor(message) {
     super(message);
     this.name = 'DoubleRenderError';
   }
@@ -56,6 +56,7 @@ class Context {
 
   [S.doubleRender]() {
     if (this[S.rendered]) {
+      /* istanbul ignore next */
       throw new DoubleRenderError('Already rendered ' + require('util').inspect(this[S.library].requestData, { depth: null }));
     }
     this[S.rendered] = true;

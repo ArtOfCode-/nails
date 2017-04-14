@@ -10,20 +10,28 @@ const { createDebug, warn } = require('./util');
 
 const debug = createDebug('handlers');
 
-const controllers = {};
+const cache = {
+  channels: {},
+  controllers: {},
+};
 
-function setView({ action, config, rawRoute, routes, method }) {
+function setView({ action, config, route, routes, method }) {
+  const ws = route.ws;
   return exports.getView(action, config).then(view => {
-    routes[rawRoute.type].push({
+    routes[ws ? 'ws' : route.type].push({
       action,
       method,
       view,
-      match: new Route(rawRoute.url)
+      match: new Route(route.url)
     });
   });
 }
 
 const routeSchema = schema({
+  ws: {
+    type: 'boolean',
+    required: false
+  },
   type: {
     type: 'string',
     required: true,
@@ -42,9 +50,24 @@ const routeSchema = schema({
   },
 });
 
+const wsSchema = schema({
+  ws: true,
+  url: {
+    type: 'string',
+    required: true,
+    message: 'url is required',
+  },
+  to: {
+    type: 'string',
+    required: true,
+    message: 'to is required',
+  },
+});
+
 exports = module.exports = class Handler {
   constructor(config) {
-    const routes = {
+    this.routes = {
+      ws: [],
       HEAD: [],
       GET: [],
       POST: [],
@@ -54,7 +77,9 @@ exports = module.exports = class Handler {
       OPTIONS: []
     };
 
-    const routesPath = config.appRoot + '/routes';
+    this.config = config;
+
+    const routesPath = this.config.appRoot + '/routes';
     debug('loading routes at', routesPath);
     let rawRoutes;
     try {
@@ -67,62 +92,26 @@ exports = module.exports = class Handler {
       }
     }
 
-    const promises = [];
+    let promises = [];
 
     if (rawRoutes) {
       for (let i = 0; i < rawRoutes.length; i++) {
-        const errors = routeSchema.validate(rawRoutes[i]);
+        const rawRoute = rawRoutes[i];
+        let errors = routeSchema.validate(rawRoute);
         if (errors.length > 0) {
+          if (rawRoute.ws) {
+            errors = wsSchema.validate(rawRoute);
+          }
           /* istanbul ignore next: router.js always returns valid JSON */
-          warn("found route %o: %s", rawRoutes[i], errors.map(error => error.message).join(', '));
-          continue;
-        }
-        const action = rawRoutes[i].to;
-        const actionSplat = action.split(".");
-        if (actionSplat.length === 1) {
-          actionSplat.push(undefined);
-        }
-        const controller = actionSplat.slice(0, -1).join('/');
-        const method = actionSplat[actionSplat.length - 1];
-        const controllerFile = config.appRoot + '/controllers/' + controller;
-
-        if (controllers[controller]) {
-          promises.push(setView({
-            action,
-            config,
-            rawRoute: rawRoutes[i],
-            routes,
-            method: method ? controllers[controller][method] : controllers[controller]
-          }));
-        }
-        let loaded;
-        try {
-          loaded = require(controllerFile);
-        }
-        catch (err) {
-          /* istanbul ignore next: kinda hard to test */
-          if (err.code === 'MODULE_NOT_FOUND') {
-            debug('failed to load controller at', controllerFile);
-          } else {
-            throw err;
+          if (errors.length > 0) {
+            warn("found route %o: %s", rawRoute, errors.map(error => error.message).join(', '));
+            continue;
           }
         }
-        if (!loaded) {
-          warn("Route", rawRoutes[i], "controller doesn't exist - ignoring.");
-          continue;
-        }
-        controllers[controller] = loaded;
-        promises.push(setView({
-          action,
-          config,
-          rawRoute: rawRoutes[i],
-          routes,
-          method: method ? controllers[controller][method] : controllers[controller]
-        }));
+        const { ws } = rawRoute;
+        promises = promises.concat(this._parseRoute(rawRoute, ws ? 'channels' : 'controllers'));
       }
-      this.routes = routes;
-    }
-    else {
+    } else {
       /* istanbul ignore next: kinda hard to test */
       throw new ReferenceError("Tried to load the routing file, but it doesn't exist!");
     }
@@ -130,6 +119,52 @@ exports = module.exports = class Handler {
     this.ready.then(() => {
       debug('loaded', rawRoutes.length, 'routes');
     }).catch(warn);
+  }
+  _parseRoute(route, key) {
+    const promises = [];
+    const action = route.to;
+    const actionSplat = action.split(".");
+    if (actionSplat.length === 1) {
+      actionSplat.push(undefined);
+    }
+    const name = actionSplat.slice(0, -1).join('/');
+    const method = actionSplat[actionSplat.length - 1];
+    const path = `${this.config.appRoot}/${key}/${name}`;
+
+    if (cache[key][name]) {
+      promises.push(setView({
+        action,
+        config: this.config,
+        route,
+        routes: this.routes,
+        method: method ? cache[key][name][method] : cache[key][name]
+      }));
+    }
+    let loaded;
+    try {
+      loaded = require(path);
+    }
+    catch (err) {
+      /* istanbul ignore next: kinda hard to test */
+      if (err.code === 'MODULE_NOT_FOUND') {
+        debug('failed to load controller at', path);
+      } else {
+        throw err;
+      }
+    }
+    if (!loaded) {
+      warn("Route", route, `${key.slice(0, -1)} doesn't exist - ignoring.`);
+      return;
+    }
+    cache[key][name] = loaded;
+    promises.push(setView({
+      action,
+      config: this.config,
+      route,
+      routes: this.routes,
+      method: method ? cache[key][name][method] : cache[key][name]
+    }));
+    return promises;
   }
 
   getHandler(req) {
@@ -148,7 +183,7 @@ exports.getView = (route, config) => {
   const action = route.split(".");
   const controller = action[0];
   const method = action[action.length - 1];
-  const viewPath = path.join(config.appRoot, "views", controller, method + ".ejs");
+  const viewPath = path.join(config.appRoot, 'views', controller, method + ".ejs");
   return fs.exists(viewPath).then(exists => {
     if (exists) {
       return fs.readFile(viewPath, 'utf-8').then(contents => ejs.compile(contents, {

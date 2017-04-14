@@ -2,20 +2,16 @@
 This document covers any controllers in a Nails project.
 
 ### Format
-Controllers are Node.JS JavaScript files, and should be stored in the `controllers` directory within the root of a Nails
-project.
+Controllers are Node.JS JavaScript files, and should be stored in the `controllers` directory within the root of a Nails project.
 
 ### Standard Library
-All controllers have access to the Node standard library, but you will need to `require()` any components of it that you
-need. Refer to the Node.JS docs for further information about the library and requires.
+All controllers have access to the Node standard library, but you will need to `require()` any components of it that you need. Refer to the Node.JS docs for further information about the library and requires.
 
 ### Public Methods Are Actions
-Any method you make public by exporting it is eligible to be an action (a route's processing function) if it is
-specified in a route.
+Any method you make public by exporting it is eligible to be an action (a route's processing function) if it is specified in a route.
 
 ### Action Format
-An action must take the form of a function that accepts one parameter. This parameter, `req`, is the HTTP request
-as passed to the Nails server. This is a Node.JS `http.IncomingMessage` object, the documentation for which is available
+An action must take the form of a function that accepts one parameter. This parameter, `req`, is the HTTP request as passed to the Nails server. This is a Node.JS `http.IncomingMessage` object, the documentation for which is available
 [here](https://nodejs.org/api/http.html#http_class_http_incomingmessage).
 
 The action will be executed in the context of Nails' controller library, which gives you access to controller helper

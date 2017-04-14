@@ -1,6 +1,9 @@
 const http = require("http");
 
 const chalk = require('chalk');
+const socket = require('socket.io');
+
+const initSocket = require('./ws');
 const Handler = require("./handlers");
 const Library = require("./library");
 
@@ -20,10 +23,13 @@ exports = module.exports = class Server {
     debug('starting server...');
     const iface = this.config.server_interface;
     const port = this.config.server_port;
-    const server = http.createServer(this._handleRequest.bind(this));
+    this.server = http.createServer(this._handleRequest.bind(this));
 
-    server.listen(port, iface, () => {
-      log("Nails server listening on " + iface + ":" + port);
+    this.io = socket(this.server, Object.assign({
+    }, this.config.socketOptions));
+    initSocket(this.io, this.handler);
+    this.server.listen(port, iface, () => {
+      log('Listening on', `${iface}:${port}`);
     });
   }
   _handleRequest(req, res) {
