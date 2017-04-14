@@ -17,7 +17,7 @@ $ npm install --save node-nails
 ```
 This will download and install the nails package, and save it in your `package.json` as a dependency for your project.
 
-## 2. Startup script
+## 2. Server Script
 You need a script that loads nails and tells it where your app is so that it can start serving it. To that end, create a
 `server.js` file in your project, and copy this into it:
 
@@ -95,10 +95,10 @@ Create a `views` directory in the `app` directory. Within that, create a `status
 ```
 
 ## 4. Test it!
-You now have a complete nails app. To test it, run your startup script using Node:
+You now have a complete nails app. To test it, run your server script using Node:
 
 ```
-$ node startup.js
+$ node server.js
 ```
 
 If you've followed this guide, you'll get a confirmation that the nails server is listening on 127.0.0.1, port 8080.
