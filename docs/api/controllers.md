@@ -2,20 +2,16 @@
 This document covers any controllers in a Nails project.
 
 ### Format
-Controllers are Node.JS JavaScript files, and should be stored in the `controllers` directory within the root of a Nails
-project.
+Controllers are Node.JS JavaScript files, and should be stored in the `controllers` directory within the root of a Nails project.
 
 ### Standard Library
-All controllers have access to the Node standard library, but you will need to `require()` any components of it that you
-need. Refer to the Node.JS docs for further information about the library and requires.
+All controllers have access to the Node standard library, but you will need to `require()` any components of it that you need. Refer to the Node.JS docs for further information about the library and requires.
 
 ### Public Methods Are Actions
-Any method you make public by exporting it is eligible to be an action (a route's processing function) if it is
-specified in a route.
+Any method you make public by exporting it is eligible to be an action (a route's processing function) if it is specified in a route.
 
 ### Action Format
-An action must take the form of a function that accepts one parameter. This parameter, `req`, is the HTTP request
-as passed to the Nails server. This is a Node.JS `http.IncomingMessage` object, the documentation for which is available
+An action must take the form of a function that accepts one parameter. This parameter, `req`, is the HTTP request as passed to the Nails server. This is a Node.JS `http.IncomingMessage` object, the documentation for which is available
 [here](https://nodejs.org/api/http.html#http_class_http_incomingmessage).
 
 The action will be executed in the context of Nails' controller library, which gives you access to controller helper
@@ -96,3 +92,15 @@ The other major method available in the Nails library is `redirect`. From your c
 (for a redirect to elsewhere in your application) or a full URL (for redirection elsewhere on the Internet).
 
 The HTTP response for this will be a 302 Found response with a Location header pointing to your specified resource.
+
+### Cookies
+Nails supports cookies (`this.cookies`), using the [`cookies`](https://github.com/pillarjs/cookies) module from `npm`, with some modifications:
+
+#### <code>cookies.delete(*name*)</code>
+Delete the cookie sent under the specified *`name`*.
+
+#### <code>cookies.set(*name*, *value*, *options*?)</code>
+Set the cookie with the *`value`* encoded using JSON.
+
+#### <code>cookies.get(...)</code>
+Decode the cookie’s value using JSON, throwing if it isn’t valid JSON.

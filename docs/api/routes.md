@@ -4,7 +4,7 @@ Nails provides a handy library that lets you create routes with pure JS.
 To use this library:
 
 ```js
-const { Router } = require('nails');
+const { Router } = require('node-nails');
 module.exports = Router.draw(router => {
   // define your routes here
 })
@@ -37,9 +37,7 @@ The `router` object passed to the function (it’s also the `this` value if you 
 
 # Routes as JSON
 ### Format
-The routes file can be either JavaScript or JSON (or, with a call to `require('coffee-script/register')`, can be
-CoffeeScript). The JSON variant should be formatted as one top level *array* containing any number of route *objects*;
-the script variants should *export* an equivalent array. The JavaScript helper above can be used to dynamically generate this file to prevent errors
+The routes file can be either JavaScript or JSON (or CoffeeScript, with a call to `require('coffee-script/register')`). The JSON variant should be formatted as one top level *array* containing any number of route *objects*; the script variants should *export* an equivalent array. The JavaScript helper above can be used to dynamically generate this file to prevent errors.
 
 ### Required Keys
 In *each* route object, the following keys are **required**:
@@ -49,7 +47,7 @@ In *each* route object, the following keys are **required**:
    `PUT`, or `DELETE`.
  - **`url`** *(type: `String`)*  
    Defines the pathname component of the URL (after the host and before the query) that this route will respond to. A
-   `url` of `/status` will respond to `/status` and to `/status?query=xyz`, but not to `/status/json`.
+   `url` of `/status` will respond to `/status` and to `/status?query=xyz`, but not to `/status/json`. This can use express-style `:` variables (`/a/:b` will set `this.params.b` in the controller).
  - **`to`** *(type: `String`)*  
    Defines the controller and function that will handle requests that match this route. Must be provided in the format
    `controller.function`: for a route handled by the `index` function in the `status` controller, the value of this key
@@ -72,4 +70,4 @@ exports = module.exports = [
   { type: "GET", url: "/status/new", to: "status.new" },
   { type: "POST", url: "/status/new", to: "status.create" }
 ];
-``
+```
