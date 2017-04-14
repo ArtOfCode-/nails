@@ -96,3 +96,6 @@ The other major method available in the Nails library is `redirect`. From your c
 (for a redirect to elsewhere in your application) or a full URL (for redirection elsewhere on the Internet).
 
 The HTTP response for this will be a 302 Found response with a Location header pointing to your specified resource.
+
+#### <code>redirect({ back: *path* })</code>
+Redirect back to the previous page, or *`path`* if the HTTP Referer header is not set.

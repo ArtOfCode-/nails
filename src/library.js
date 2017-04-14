@@ -1,3 +1,4 @@
+const assert = require('assert');
 const debug = require('debug')('nails:library');
 
 const Cookies = require('cookies');
@@ -68,6 +69,16 @@ class Context {
   redirect(to) {
     this[S.doubleRender]();
     const res = this[S.library].res;
+    if (typeof to === 'object') {
+      if (to.back) {
+        assert.equal(typeof to.back, 'string');
+        if (this[S.library].req.headers.referer) { // [sic]
+          to = this[S.library].req.headers.referer;
+        } else {
+          to = to.back;
+        }
+      }
+    }
     res.writeHead(302, {
       location: to,
       'Turbolinks-Location': to
