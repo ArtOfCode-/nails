@@ -32,8 +32,8 @@ Nails has simple WebSocket support, using [`socket.io`](https://socket.io). To u
 5. Create the socket and join the appropriate room:
   ```js
   const socket = io();
-  window.sock.emit('join', '/status')
-  window.sock.on('reconnect', function() {
-    window.sock.emit('join', '/status')
+  socket.emit('join', '/status')
+  socket.on('reconnect', function() {
+    socket.emit('join', '/status')
   })
   ```
