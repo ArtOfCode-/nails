@@ -33,9 +33,9 @@ exports = module.exports = class Router {
   }
   static draw(f) {
     const router = new this();
-    this.debug('drawing routes...');
+    router.debug('drawing routes...');
     f.call(router, router);
-    this.debug('drew', router.routes.length, 'routes.');
+    router.debug('drew', router.routes.length, 'routes.');
     return router.routes;
   }
 
