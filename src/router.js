@@ -18,21 +18,24 @@ exports = module.exports = class Router {
     this.routes = [];
     debug('creating router');
     methods.forEach(method => {
-      this[method] = (...args) => {
-        return this.request(method, ...args);
-      };
+      this[method] = this.request.bind(this, method);
     });
     bind(this, ...methods, 'request', 'ws');
-    bind(this, 'scope', '_url');
+    bind(this, 'scope', '_url', 'debug');
   }
-  get _i() {
-    return '  '.repeat(this.scopes.length);
+
+  debug(...args) {
+    if (this.scopes.length === 0) {
+      debug(...args);
+    } else {
+      debug('  '.repeat(this.scopes.length).slice(0, -1), ...args);
+    }
   }
   static draw(f) {
     const router = new this();
-    debug('drawing routes...');
+    this.debug('drawing routes...');
     f.call(router, router);
-    debug('drew', router.routes.length, 'routes.');
+    this.debug('drew', router.routes.length, 'routes.');
     return router.routes;
   }
 
@@ -45,17 +48,17 @@ exports = module.exports = class Router {
       url: this._url(path),
     }, options);
     this.routes.push(route);
-    debug(this._i + 'created', method === 'GET' ? chalk.gray(method) : chalk.bold(method), 'route', chalk.underline(path) || chalk.gray('<root>'), 'to', chalk.bold(options.to));
+    this.debug('created', method === 'GET' ? chalk.gray(method) : chalk.bold(method), 'route', chalk.underline(path) || chalk.gray('<root>'), 'to', chalk.bold(options.to));
     return route;
   }
   scope(...args) {
     const scopes = args.slice(0, -1);
     const f = args[args.length - 1];
-    debug(this._i + 'entering scope', chalk.underline(scopes.join('/')));
+    this.debug('entering scope', chalk.underline(scopes.join('/')));
     this.scopes = this.scopes.concat(scopes);
     f.call(this, this);
     this.scopes.length -= scopes.length;
-    debug(this._i + 'leaving scope', chalk.underline(scopes.join('/')));
+    this.debug('leaving scope', chalk.underline(scopes.join('/')));
   }
 
   ws(path, to, options) {
@@ -66,7 +69,7 @@ exports = module.exports = class Router {
       url: this._url(path),
     }, options);
     this.routes.push(route);
-    debug(this._i + 'created websocket channel', chalk.underline(path) || chalk.gray('<root>'), 'to', chalk.bold(options.to));
+    this.debug('created websocket channel', chalk.underline(path) || chalk.gray('<root>'), 'to', chalk.bold(options.to));
     return route;
   }
 
