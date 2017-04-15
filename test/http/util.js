@@ -3,13 +3,13 @@ const assert = require('assert');
 const MockReq = require('mock-req');
 const MockRes = require('mock-res');
 
-exports.testServer = (server, url, method = 'GET') => {
+exports.testServer = (server, url, opts) => {
   return server.handler.ready.then(() => new Promise(resolve => {
-    const req = new MockReq({
-      method,
+    const req = new MockReq(Object.assign({
+      method: 'GET',
       url,
       httpVersion: 'xx.TEST',
-    });
+    }, opts));
     const res = new MockRes(() => {
       resolve(res);
     });

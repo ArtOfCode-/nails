@@ -1,8 +1,10 @@
 const assert = require('assert');
+const crypto = require('crypto');
 const path = require('path');
 const url = require('url');
 const fs = require('fs');
 
+const auth = require('basic-auth');
 const Cookies = require('cookies');
 const chalk = require('chalk');
 
@@ -14,6 +16,7 @@ const S = {
   library: Symbol('library'),
   params: Symbol('params'),
   query: Symbol('query'),
+  auth: Symbol('auth'),
   rendered: Symbol('rendered?'),
   doubleRender: Symbol('double render?'),
 };
@@ -34,6 +37,7 @@ class Context {
     this.setHeader = this.header = res.setHeader.bind(res);
     this.getHeader = this.header.get = res.getHeader.bind(res);
     this.removeHeader = this.header.remove = this.header.del = res.removeHeader.bind(res);
+    this.requestHeaders = this.headers = library.req.headers;
     this._initStreaming();
     this._initCookies();
   }
@@ -42,14 +46,14 @@ class Context {
     const res = this[S.library].res;
     const keys = Object.keys(require('events').prototype).concat(Object.keys(require('stream').Writable.prototype));
     for (const key of keys) {
-      if (key[0] === '_' || ['domain'].includes(key)) {
+      if (key[0] === '_' || ['domain'].includes(key) || !(key in res)) {
         continue;
       }
       // istanbul ignore else
       if (typeof res[key] === 'function') {
         this.stream[key] = res[key].bind(res);
       } else {
-        warn(chalk.bold(key), 'key not processed in context');
+        warn(chalk.bold(key), 'key not processed in context. Value:', res[key]);
       }
     }
     this.stream.on('pipe', this[S.doubleRender].bind(this));
@@ -107,6 +111,24 @@ class Context {
   get query() {
     this[S.query] = this[S.query] || Object.freeze(url.parse(this[S.library].req.url, true).query);
     return this[S.query];
+  }
+  get auth() {
+    this[S.auth] = this[S.auth] || Object.freeze(Object.assign(auth(this[S.library].req) || { invalid: true }, {
+      check(user, pass) {
+        if (this.invalid) {
+          return false;
+        }
+        let userOK = user.length === this.name.length;
+        userOK = userOK && crypto.timingSafeEqual(Buffer.from(user), Buffer.from(this.name));
+        let passOK = pass.length === this.pass.length;
+        passOK = passOK && crypto.timingSafeEqual(Buffer.from(pass), Buffer.from(this.pass));
+        return userOK && passOK; // Avoid short-circuit-based timing attack
+      },
+      enable: ({ realm = this[S.library].config.appName }) => {
+        this.header('WWW-Authenticate', `Basic realm="${String(realm).replace('"', '\\"')}"`);
+      },
+    }));
+    return this[S.auth];
   }
 
   render(opts, content) {

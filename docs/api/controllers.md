@@ -119,3 +119,17 @@ See [the Node docs](http://devdocs.io/node~6_lts/http#http_response_getheader_na
 #### <code>header.remove(*name*)</code>
 #### <code>header.del(*name*)</code>
 See [the Node docs](http://devdocs.io/node~6_lts/http#http_response_removeheader_name)
+
+### Authentication
+
+#### <code>auth.enable({ *realm*? })</code>
+Require authentication on this page. The default *`realm`* is the directory the start script is in.
+
+#### `auth.name`
+The username provided by the auth dialog box
+
+#### `auth.pass`
+The password provided by the auth dialog box
+
+#### <code>auth.check(*username*, *password*)</code>
+Check the password, in a timing-safe manner.

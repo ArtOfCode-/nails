@@ -9,6 +9,7 @@ const { testServer, equal } = require('./util');
 const twoOhFour = require('./204');
 const render = require('./render');
 const cookie = require('./cookie');
+const auth = require('./auth');
 
 module.exports = arg => {
   describe('server', () => {
@@ -45,4 +46,5 @@ module.exports = arg => {
     twoOhFour(arg);
     cookie(arg);
   });
+  auth(arg);
 };
