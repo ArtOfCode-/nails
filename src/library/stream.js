@@ -5,16 +5,7 @@ const debug = require('./util')('stream');
 
 module.exports = res => {
   const stream = arg => {
-    if (arg.data) {
-      const { data, encoding = 'utf-8' } = arg;
-      return new Promise((resolve, reject) => stream.write(data, encoding, err => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      }));
-    } else if (arg.path) {
+    if (arg.path) {
       const { path, encoding = 'utf-8', options = {} } = arg;
       const fileStream = fs.createReadStream(path, Object.assign({
         encoding,
