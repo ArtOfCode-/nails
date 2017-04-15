@@ -1,5 +1,7 @@
 # Nails [![Travis](https://img.shields.io/travis/ArtOfCode-/nails.svg?style=flat-square)](https://travis-ci.org/ArtOfCode-/nails) [![Codecov](https://img.shields.io/codecov/c/github/ArtOfCode-/nails.svg?style=flat-square)](https://codecov.io/gh/ArtOfCode-/nails) [![MIT license](https://img.shields.io/github/license/ArtOfCode-/nails.svg?style=flat-square)](https://github.com/ArtOfCode-/nails/blob/master/LICENSE) [![npm](https://img.shields.io/npm/v/node-nails.svg?style=flat-square)](https://www.npmjs.com/package/node-nails) [![GitHub contributors](https://img.shields.io/github/contributors/ArtOfCode-/nails.svg?style=flat-square)](https://github.com/ArtOfCode-/nails/graphs/contributors)
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/ArtOfCode-/nails.svg)](https://greenkeeper.io/)
+
 Proof-of-concept for a Rails-like thing in Node.js.
 
 ## Install/Use
