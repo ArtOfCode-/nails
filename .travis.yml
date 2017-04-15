@@ -9,5 +9,8 @@ install:
   - npm i
   - npm i -g codecov
 script:
-  - npm test
-  - codecov
+  - npm run $BUILD_NPM_SCRIPT
+
+env:
+  - BUILD_NPM_SCRIPT=unit-ci
+  - BUILD_NPM_SCRIPT=lint

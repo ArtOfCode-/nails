@@ -16,6 +16,7 @@
     "test": "npm run unit && npm run lint",
     "lint": "xo && echo \"No lint issues!\\nxo 💚 you\"",
     "unit": "istanbul cover _mocha",
+    "unit-ci": "npm run unit && codecov",
     "dev-unit": "watch \"clear && npm run unit -- --print none\" -p '/coverage|.git/' .",
     "serve-cov": "live-server coverage/lcov-report",
     "format-pkg": "npm init -y > /dev/null",
