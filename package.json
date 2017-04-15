@@ -16,7 +16,9 @@
     "test": "npm run unit && npm run lint",
     "lint": "xo && echo \"No lint issues!\\nxo 💚 you\"",
     "unit": "istanbul cover _mocha",
-    "dev-unit": "watch \"clear && npm run unit -- --print none\" -p '/coverage|.git/' ."
+    "dev-unit": "watch \"clear && npm run unit -- --print none\" -p '/coverage|.git/' .",
+    "serve-cov": "live-server coverage/lcov-report",
+    "format-pkg": "npm init -y > /dev/null"
   },
   "main": "src/nails.js",
   "xo": {
@@ -70,9 +72,11 @@
   "devDependencies": {
     "eslint-plugin-mocha": "^4.9.0",
     "istanbul": "^0.4.5",
+    "live-server": "^1.2.0",
     "mocha": "^3.2.0",
     "mock-req": "^0.2.0",
     "mock-res": "^0.3.3",
+    "watch": "^1.0.2",
     "xo": "~0.18.0"
   },
   "dependencies": {
