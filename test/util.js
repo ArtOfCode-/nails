@@ -19,6 +19,13 @@ exports.match = re => {
   return val => assert.ok(re.exec(val), `expected \`${val}\` to match ${re}`);
 };
 
-exports.when = (test, ...args) => it('when ' + test, ...args);
-exports.when.only = it.only;
-exports.when.skip = it.skip;
+const custom = exports.custom = name => {
+  const custom = (test, ...args) => it(name + ' ' + test, ...args);
+  // eslint-disable-next-line mocha/no-exclusive-tests
+  custom.only = (test, ...args) => it.only(name + ' ' + test, ...args);
+  // eslint-disable-next-line mocha/no-skipped-tests
+  custom.skip = (test, ...args) => it.skip(name + ' ' + test, ...args);
+  return custom;
+};
+
+exports.when = custom('when');

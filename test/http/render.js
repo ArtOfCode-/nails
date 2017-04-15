@@ -35,14 +35,6 @@ module.exports = arg => {
       ]);
     }));
 
-    specify('redirects', () => testServer(server, '/status/redirect').then(res => {
-      equal([
-        [res.statusCode, 302],
-        [res.getHeader('location'), '/status'],
-        [res._getString(), ''],
-      ]);
-    }));
-
     fourOhFour(arg);
   });
 };
