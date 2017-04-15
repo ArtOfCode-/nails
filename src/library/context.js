@@ -45,6 +45,7 @@ module.exports = class Context {
       Object.defineProperty(this, key, {
         get: () => {
           const s = Symbol(key);
+          // istanbul ignore else: it’s only caching; what could possibly go wrong?
           if (!this[s]) {
             this[s] = create();
           }
@@ -68,13 +69,11 @@ module.exports = class Context {
     this[S.doubleRender]();
     const res = this[S.library].res;
     if (typeof to === 'object') {
-      if (to.back) {
-        assert.equal(typeof to.back, 'string');
-        if (this[S.library].req.headers.referer) { // [sic]
-          to = this[S.library].req.headers.referer;
-        } else {
-          to = to.back;
-        }
+      assert.equal(typeof to.back, 'string', `typeof ${require('util').inspect(to.back, { depth: null })} was "${typeof to.back}", but it was supposed to be "string."`);
+      if (this[S.library].req.headers.referer) { // [sic]
+        to = this[S.library].req.headers.referer;
+      } else {
+        to = to.back;
       }
     }
     res.writeHead(302, {
@@ -89,7 +88,6 @@ module.exports = class Context {
 
   [S.doubleRender]() {
     if (this[S.rendered]) {
-      /* istanbul ignore next */
       throw new DoubleRenderError('Already rendered ' + this[S.rendered]);
     }
     this[S.rendered] = new Error().stack;
