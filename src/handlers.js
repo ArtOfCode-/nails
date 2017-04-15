@@ -2,7 +2,7 @@ const url = require('url');
 const path = require('path');
 const fs = require('mz/fs');
 
-const ejs = require('ejs');
+const _ = require('lodash');
 const schema = require('validate');
 
 const Route = require('./route');
@@ -184,8 +184,9 @@ exports.getView = (route, config) => {
   const viewPath = path.join(config.appRoot, 'views', controller, method + '.ejs');
   return fs.exists(viewPath).then(exists => {
     if (exists) {
-      return fs.readFile(viewPath, 'utf-8').then(contents => ejs.compile(contents, {
-        filename: viewPath,
+      return fs.readFile(viewPath, 'utf-8').then(contents => _.template(contents, {
+        variable: 'locals',
+        sourceURL: 'file://' + viewPath,
       }));
     }
   }).catch(warn);
@@ -217,7 +218,7 @@ exports.renderer = (req, res, opts) => {
     const view = opts.route.view;
     if (view) {
       opts.locals = opts.locals || {};
-      res.write(view(opts.locals));
+      res.write(view.call(opts.locals, opts.locals));
       res.end();
     } else {
       warn('handlers.renderer: render specified view: true, but no view present.');

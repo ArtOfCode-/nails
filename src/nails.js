@@ -3,9 +3,15 @@ require('debug').names.push(/^nails$/);
 
 const path = require('path');
 const { randomBytes } = require('crypto');
+
+const _ = require('lodash');
+
 const debug = require('./util')('init');
 const Server = require('./server');
 const createConfig = require('./config');
+
+// We ❤️ escaping
+[_.templateSettings.interpolate, _.templateSettings.escape] = [_.templateSettings.escape, _.templateSettings.interpolate];
 
 function lazy(key, get) {
   const uninitialized = {};
