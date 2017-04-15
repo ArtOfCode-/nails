@@ -18,7 +18,9 @@
     "unit": "istanbul cover _mocha",
     "dev-unit": "watch \"clear && npm run unit -- --print none\" -p '/coverage|.git/' .",
     "serve-cov": "live-server coverage/lcov-report",
-    "format-pkg": "npm init -y > /dev/null"
+    "format-pkg": "npm init -y > /dev/null",
+    "contribute": "all-contributors add",
+    "generate": "all-contributors generate"
   },
   "main": "src/nails.js",
   "xo": {
@@ -70,6 +72,7 @@
     }
   },
   "devDependencies": {
+    "all-contributors-cli": "^4.3.0",
     "eslint-plugin-mocha": "^4.9.0",
     "istanbul": "^0.4.5",
     "live-server": "^1.2.0",

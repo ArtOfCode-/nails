@@ -1,0 +1,32 @@
+{
+  "projectName": "nails",
+  "projectOwner": "ArtOfCode-",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "ArtOfCode-",
+      "name": "ArtOfCode",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/10406565?v=3",
+      "profile": "http://artofcode.co.uk/",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "j-f1",
+      "name": "J F",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/25517624?v=3",
+      "profile": "https://j-f1.github.io",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    }
+  ]
+}
