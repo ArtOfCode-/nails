@@ -34,9 +34,16 @@ exports = module.exports = arg => {
       appRoot: arg,
     };
   }
-  const { appRoot = path.dirname(require.main.filename) + '/app', appName = path.basename(path.dirname(appRoot)), start = true } = arg;
+  _.defaults(arg, {
+    appRoot: path.dirname(require.main.filename) + '/app',
+    appName: '',
+    start: true,
+  });
+  arg.appName = arg.appName || path.basename(path.dirname(arg.appRoot));
+
+  const { appRoot, appName, start } = arg;
   debug('starting server for', appName, 'at', appRoot);
-  const config = createConfig(path.join(appRoot, 'config'));
+  const config = createConfig(appRoot + '/config');
   Object.assign(config, { appRoot, appName });
   const server = new Server(config);
   /* istanbul ignore if: we don’t actually start the server yet */

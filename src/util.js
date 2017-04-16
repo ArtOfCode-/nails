@@ -1,11 +1,11 @@
+const _ = require('lodash');
+
 const _createDebug = require('debug');
 
 const createDebug = (...args) => augment(_createDebug(...args));
 function augment(debug) {
   debug.child = function (...ns) {
-    ns = ns.filter(x => x);
-    ns.unshift(debug.namespace);
-    return createDebug(ns.join(':'));
+    return createDebug(_(ns).filter().unshift(debug.namespace).join(':'));
   };
   return debug;
 }

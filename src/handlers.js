@@ -93,24 +93,22 @@ exports = module.exports = class Handler {
 
     let promises = [];
 
-    if (rawRoutes) {
-      for (let i = 0; i < rawRoutes.length; i++) {
-        const rawRoute = rawRoutes[i];
-        let errors = routeSchema.validate(rawRoute);
-        if (errors.length > 0) {
-          if (rawRoute.ws) {
-            errors = wsSchema.validate(rawRoute);
-          }
-          /* istanbul ignore next: router.js always returns valid JSON */
-          if (errors.length > 0) {
-            warn('found route %o: %s', rawRoute, errors.map(error => error.message).join(', '));
-            continue;
-          }
+    _(rawRoutes).forEach(rawRoute => {
+      let errors = routeSchema.validate(rawRoute);
+      if (errors.length > 0) {
+        if (rawRoute.ws) {
+          errors = wsSchema.validate(rawRoute);
         }
-        const { ws } = rawRoute;
-        promises = promises.concat(this._parseRoute(rawRoute, ws ? 'channels' : 'controllers'));
+        /* istanbul ignore next: router.js always returns valid JSON */
+        if (errors.length > 0) {
+          warn('found route %o: %s', rawRoute, _(errors).map('message').join(', '));
+          return;
+        }
       }
-    } else {
+      const { ws } = rawRoute;
+      promises = promises.concat(this._parseRoute(rawRoute, ws ? 'channels' : 'controllers'));
+    });
+    if (_.isEmpty(rawRoutes)) {
       /* istanbul ignore next: kinda hard to test */
       throw new ReferenceError('Tried to load the routing file, but it doesn\'t exist!');
     }

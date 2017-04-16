@@ -2,6 +2,8 @@ const assert = require('assert');
 const path = require('path');
 const url = require('url');
 
+const _ = require('lodash');
+
 const Handler = require('../handlers');
 const debug = require('./util')('context');
 
@@ -67,7 +69,7 @@ module.exports = class Context {
   render(opts, content) {
     this[S.doubleRender]();
     debug('rendering', this[S.library].requestHandler.action);
-    if (typeof opts !== 'object') {
+    if (!_.isObject(opts)) {
       content = opts;
       opts = {};
     }
@@ -77,12 +79,10 @@ module.exports = class Context {
   redirect(to) {
     this[S.doubleRender]();
     const res = this[S.library].res;
-    if (typeof to === 'object') {
-      assert.equal(typeof to.back, 'string', `typeof ${require('util').inspect(to.back, { depth: null })} was "${typeof to.back}", but it was supposed to be "string."`);
-      if (this[S.library].req.headers.referer) { // [sic]
-        to = this[S.library].req.headers.referer;
-      } else {
-        to = to.back;
+    if (_.isObject(to)) {
+      if (to.back) {
+        assert.equal(typeof to.back, 'string', `typeof ${require('util').inspect(to.back, { depth: null })} was "${typeof to.back}", but it was supposed to be "string."`);
+        to = this[S.library].req.headers.referer /* [sic] */ || to.back;
       }
     }
     res.writeHead(302, {
