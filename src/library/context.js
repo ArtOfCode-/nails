@@ -3,10 +3,11 @@ const path = require('path');
 const url = require('url');
 
 const Handler = require('../handlers');
+const debug = require('./util')('context');
+
 const createCookies = require('./cookies');
 const createStream = require('./stream');
 const createAuth = require('./auth');
-const debug = require('./util')('context');
 
 const S = {
   library: Symbol('library'),
@@ -27,7 +28,13 @@ module.exports = class Context {
     this[S.rendered] = false;
 
     const { req, res } = library;
-    this.setHeader = this.header = res.setHeader.bind(res);
+    this.header = (name, value) => {
+      if (value) {
+        return res.setHeader(name, value);
+      }
+      return res.getHeader(name);
+    };
+    this.setHeader = res.setHeader.bind(res);
     this.getHeader = this.header.get = res.getHeader.bind(res);
     this.removeHeader = this.header.remove = this.header.del = res.removeHeader.bind(res);
     this.requestHeaders = this.headers = req.headers;
