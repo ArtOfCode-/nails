@@ -8,6 +8,7 @@ const debug = require('./util')('context');
 const createCookies = require('./cookies');
 const createStream = require('./stream');
 const createAuth = require('./auth');
+const Cache = require('./cache');
 
 const S = {
   library: Symbol('library'),
@@ -48,6 +49,7 @@ module.exports = class Context {
         stream.on('pipe', this[S.doubleRender].bind(this));
         return stream;
       }],
+      ['cache', () => new Cache(this)],
     ].forEach(([key, create]) => {
       Object.defineProperty(this, key, {
         get: () => {
