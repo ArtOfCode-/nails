@@ -1,5 +1,7 @@
 const { it } = require('mocha');
 
+const debug = require('debug')('nails:test');
+
 const initSocket = require('../../src/ws');
 const { IO } = require('./util');
 
@@ -41,7 +43,7 @@ module.exports = ({ server }) => {
       io.emit('join', '/status');
     });
     io.on('error', err => {
-      console.log('err!', err);
+      debug('err!', err);
       done(err);
       io.close();
     });
