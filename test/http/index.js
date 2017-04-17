@@ -9,6 +9,7 @@ const { testServer, equal } = require('./util');
 const twoOhFour = require('./204');
 const render = require('./render');
 const redirect = require('./redirect');
+const caching = require('./caching');
 const cookie = require('./cookie');
 const auth = require('./auth');
 
@@ -47,6 +48,7 @@ module.exports = arg => {
     redirect(arg);
     twoOhFour(arg);
     cookie(arg);
+    caching(arg);
   });
   auth(arg);
 };
