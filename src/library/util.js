@@ -1,1 +1,1 @@
-module.exports = require('../util').kit('library');
+exports = module.exports = require('../util').kit('library');

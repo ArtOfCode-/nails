@@ -41,6 +41,10 @@ module.exports = class Context {
     this.getHeader = this.header.get = res.getHeader.bind(res);
     this.removeHeader = this.header.remove = this.header.del = res.removeHeader.bind(res);
     this.requestHeaders = this.headers = req.headers;
+
+    const register = f => {
+      library.finalizers.push(f);
+    };
     [
       ['auth', () => createAuth(library, this.header)],
       ['cookies', () => createCookies(library)],
@@ -51,7 +55,7 @@ module.exports = class Context {
         stream.on('pipe', this[S.doubleRender].bind(this));
         return stream;
       }],
-      ['cache', () => new Cache(this)],
+      ['cache', () => new Cache(this, register)],
     ].forEach(([key, create]) => {
       Object.defineProperty(this, key, {
         get: () => {
