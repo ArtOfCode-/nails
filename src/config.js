@@ -9,6 +9,7 @@ exports = module.exports = file => {
   } catch (err) {
     /* istanbul ignore next */
     if (err.code !== 'MODULE_NOT_FOUND') {
+      /* istanbul ignore next */
       throw err;
     }
     /* istanbul ignore next */

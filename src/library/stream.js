@@ -19,7 +19,7 @@ module.exports = res => {
     if (key[0] === '_' || ['domain'].includes(key) || !(key in res)) {
       continue;
     }
-    // istanbul ignore else
+    /* istanbul ignore else */
     if (typeof res[key] === 'function') {
       stream[key] = res[key].bind(res);
     } else {

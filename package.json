@@ -71,6 +71,13 @@
         "error",
         "always"
       ],
+      "quotes": [
+        "error",
+        "single",
+        {
+          "avoidEscape": true
+        }
+      ],
       "no-multi-assign": "off"
     }
   },
@@ -82,6 +89,7 @@
     "mocha": "^3.2.0",
     "mock-req": "^0.2.0",
     "mock-res": "^0.3.3",
+    "number-to-words": "^1.2.3",
     "watch": "^1.0.2",
     "xo": "~0.18.0"
   },

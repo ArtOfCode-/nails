@@ -18,7 +18,6 @@ function lazy(key, get) {
   let _val = uninitialized;
   Object.defineProperty(exports, key, {
     get() {
-      /* istanbul ignore else */
       if (_val === uninitialized) {
         _val = get();
       }

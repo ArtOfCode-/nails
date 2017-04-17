@@ -99,7 +99,7 @@ exports = module.exports = class Handler {
         if (rawRoute.ws) {
           errors = wsSchema.validate(rawRoute);
         }
-        /* istanbul ignore next: router.js always returns valid JSON */
+        /* istanbul ignore if: router.js always returns valid JSON */
         if (errors.length > 0) {
           warn('found route %o: %s', rawRoute, _(errors).map('message').join(', '));
           return;
@@ -108,8 +108,8 @@ exports = module.exports = class Handler {
       const { ws } = rawRoute;
       promises = promises.concat(this._parseRoute(rawRoute, ws ? 'channels' : 'controllers'));
     });
+    /* istanbul ignore if: kinda hard to test */
     if (_.isEmpty(rawRoutes)) {
-      /* istanbul ignore next: kinda hard to test */
       throw new ReferenceError('Tried to load the routing file, but it doesn\'t exist!');
     }
     this.ready = Promise.all(promises);
@@ -141,7 +141,7 @@ exports = module.exports = class Handler {
     try {
       loaded = require(path);
     } catch (err) {
-      /* istanbul ignore next: kinda hard to test */
+      /* istanbul ignore else: kinda hard to test */
       if (err.code === 'MODULE_NOT_FOUND') {
         debug('failed to load controller at', path);
       } else {

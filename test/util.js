@@ -3,7 +3,7 @@ const { it } = require('mocha');
 
 exports.equal = checks => {
   checks.forEach(arg => {
-    if (typeof arg[0] === 'function') {
+    if (typeof arg[0] === 'function') { // TODO: get a better heuristic
       const [f, ...args] = arg;
       f(...args);
       // eslint-disable-next-line no-negated-condition
