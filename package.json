@@ -57,6 +57,7 @@
       "mocha/no-skipped-tests": "warn",
       "mocha/no-top-level-hooks": "error",
       "no-var": "error",
+      "no-console": "warn",
       "comma-dangle": [
         "error",
         "always-multiline"
