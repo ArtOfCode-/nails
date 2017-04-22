@@ -1,7 +1,5 @@
 # Nails _(node-nails)_
 
-[![Join the chat at https://gitter.im/ArtOfCode-/nails](https://badges.gitter.im/ArtOfCode-/nails.svg)](https://gitter.im/ArtOfCode-/nails?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [![Travis](https://img.shields.io/travis/ArtOfCode-/nails.svg?style=flat-square)](https://travis-ci.org/ArtOfCode-/nails)
 [![Codecov](https://img.shields.io/codecov/c/github/ArtOfCode-/nails.svg?style=flat-square)](https://codecov.io/gh/ArtOfCode-/nails)
 [![MIT license](https://img.shields.io/github/license/ArtOfCode-/nails.svg?style=flat-square)](https://github.com/ArtOfCode-/nails/blob/master/LICENSE)
@@ -9,6 +7,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
 [![Greenkeeper badge](https://badges.greenkeeper.io/ArtOfCode-/nails.svg)](https://greenkeeper.io/)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
+[![Gitter](https://img.shields.io/gitter/room/ArtOfCode-/nails.svg?style=flat-square)](https://gitter.im/ArtOfCode-/nails?utm_source=badge&utm_medium=badge&utm_campaign=shields-badge&utm_content=badge)
 
 
 [![NPM](https://nodei.co/npm/node-nails.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/node-nails/) [![NPM](https://nodei.co/npm-dl/node-nails.png?months=3&height=3)](https://nodei.co/npm/node-nails/)
