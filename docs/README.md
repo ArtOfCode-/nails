@@ -7,7 +7,7 @@ version number - nails uses [semantic versioning](https://semver.org/):
    can upgrade to the newer version and be guaranteed their behaviour won't change.
  - If a bug is fixed, the patch version number will increment.
 
-## The Public API
+## [The Public API](api)
 Fancy way of saying "do these things to make it work", really.
 
  - [Config](api/config.md)
