@@ -21,6 +21,7 @@ git add .
 
 OLD_EMAIL=$(git config user.email)
 OLD_NAME=$(git config user.name)
+git config push.default matching
 git config --replace-all user.email "git+nails-bot@twopointzero.us"
 git config --replace-all user.name "Nails Bot"
 if [[ $TRAVIS_COMMIT != "" ]]
@@ -31,5 +32,9 @@ else
   git commit -qm "Update site for <unknown commit>"
   echo -e "Skipped upload."
 fi
-git config user.email $OLD_EMAIL
-git config user.name $OLD_NAME
+if [[ $OLD_EMAIL != "" ]]; then
+  git config user.email $OLD_EMAIL
+fi
+if [[ $OLD_NAME != "" ]]; then
+  git config user.name $OLD_NAME
+fi
