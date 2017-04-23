@@ -7,4 +7,4 @@ exclude:
   - vendor
   - Gemfile*
 repository: ArtOfCode-/nails
-baseurl: https://artofcode-.github.io/nails
+baseurl: /nails
