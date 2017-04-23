@@ -3,22 +3,26 @@ node_js: node
 cache:
   directories:
     - node_modules
+    - $HOME/.rvm
+    - docs/vendor/bundle
 notifications:
   email: false
-install:
-  - npm i
-  - npm i -g codecov
-script:
-  - npm run $BUILD_NPM_SCRIPT
-
-env:
-  - BUILD_NPM_SCRIPT=unit-ci
-  - BUILD_NPM_SCRIPT=lint
-
-notifications:
   webhooks:
     urls:
       - https://webhooks.gitter.im/e/8e560925f01de3f7be16
     on_success: always
     on_failure: always
     on_start: always
+install:
+  - rvm use 2.2 --install --binary --fuzzy
+  - npm i
+  - npm i -g codecov
+script:
+  - npm run $BUILD_NPM_SCRIPT
+env:
+  matrix:
+  - BUILD_NPM_SCRIPT=unit-ci
+  - BUILD_NPM_SCRIPT=lint
+  - BUILD_NPM_SCRIPT=jekyll-ci
+  global:
+    secure: iktl7YPWd6BIi4D2rbnlSh3I4ILAnJxOYAIrLA8YwKBhleQOHoOISF/EW4kPFuc3eGKLfxXOAxxTLmhUbAr5/85ZrqoLK7DmNu4914wm4GwGrx16ITjKh8a+TwCyoSwASOkfwrFgT3eekTD+pIaJAsL/tn+0OIQFVTKlp4FvekWTH6d+aEuVT34q8HFVCcnkoKEBAf7B4rUIcARgv89J5CYJEngA2MIIUUonM4pY8GpJGxvUeNjO1flmam9kaP5iM2k5rXXVwBJUGA+XFZT5TiF+uq5AsT53bK8DiOP2ORKBwQQZfpQ1DlIAO9uqN4bJaGeHR+ozC/rz4pCnm/u8sliBTeotAHdpdF2w4Ong5YFUPJpTWHO/bbYMM+6YV7BROPNmNJzA9qwDB2gL7f/7KAKQotNKGqSKIDdMmJ47gtcPK+WsVAbM82ped9XR4/ni2ok/GRNsdVsGd/RpgdFTaZ04ldpHkyqEyHh/VBbuG6bkZfXPLk28QQO/fkdowYL5+Cfp5b6XuI3VJFmgwxWMS02l9Zhr4Z3sd/n+tAQ6JQQq2ULh4Up1uWk79XAQFzt2xqe515upzDovUAyLYxmfEhtTMs9TQKYE1MnuLFpWH3QKJeCPZmWsVXOTJ2Ie05AzZ51mpftWrEcdxr5d2RO8h8Avml5h/pFnebHxM32Df5A=

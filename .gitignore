@@ -2,3 +2,6 @@ node_modules
 npm_debug.log
 coverage
 docs/_site
+docs/vendor
+docs/.bundle
+.jekyll-metadata

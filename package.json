@@ -23,8 +23,9 @@
     "format-pkg": "npm init -y > /dev/null",
     "contribute": "all-contributors add",
     "generate": "all-contributors generate",
+    "jekyll-ci": "script/jekyll-ci.sh",
     "dev-doc": "watch 'script/dev-doc.sh' -p '/docs|.git|_site/' .",
-    "doc": "jsdoc2md --member-index-format=list src/*.js src/**/*.js > docs/api/index.md"
+    "doc": "script/doc.sh"
   },
   "main": "src/nails.js",
   "xo": {
