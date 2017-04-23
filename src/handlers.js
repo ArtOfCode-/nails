@@ -15,6 +15,11 @@ const cache = {
   controllers: {},
 };
 
+/**
+ * Set the view for a specific route
+ * @private
+ * @returns {Promise} Could the view be loaded?
+**/
 function setView({ action, config, route, routes, method }) {
   const ws = route.ws;
   return exports.getView(action, config).then(view => {
@@ -27,22 +32,47 @@ function setView({ action, config, route, routes, method }) {
   });
 }
 
+/**
+ * @typedef RouteJSON
+**/
 const routeSchema = schema({
+  /**
+   * @memberof RouteJSON
+   * @member {?boolean} ws Is this route for a WebSocket connection
+   * instead of an HTTP request?
+  **/
   ws: {
     type: 'boolean',
     required: false,
   },
+  /**
+   * @memberof RouteJSON
+   * @member {?string} type Which HTTP verb should this route respond to?
+   *
+   * This member is required unless `ws` is true.
+  **/
   type: {
     type: 'string',
     required: true,
     message: 'type is required and must be a valid HTTP verb',
     match: /GET|HEAD|POST|PUT|DELETE|TRACE|OPTIONS|CONNECT|PATCH/i,
   },
+  /**
+   * @memberof RouteJSON
+   * @member {string} url What path should the route respond to?
+   *
+   * This supports [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp)-style
+   * path matching.
+  **/
   url: {
     type: 'string',
     required: true,
     message: 'url is required',
   },
+  /**
+   * @memberof RouteJSON
+   * @member {string} to Which controller should be called?
+  **/
   to: {
     type: 'string',
     required: true,
@@ -65,7 +95,20 @@ const wsSchema = schema({
 });
 
 exports = module.exports = class Handler {
+  /**
+   * @class Handler
+   * @classdesc Routing handler
+   * @description
+   * You should not need to create instances of this class yourself.
+   * Nails will automatically create one for you.
+   * @param {Object} config The config object
+  **/
   constructor(config) {
+    /**
+     * @member {Object} routes The route objects
+     * @memberof Handler
+     * @instance
+    **/
     this.routes = {
       ws: [],
       HEAD: [],
@@ -77,6 +120,11 @@ exports = module.exports = class Handler {
       OPTIONS: [],
     };
 
+    /**
+     * @member {Object} config The config object
+     * @memberof Handler
+     * @instance
+    **/
     this.config = config;
 
     const routesPath = this.config.appRoot + '/routes';
@@ -117,6 +165,12 @@ exports = module.exports = class Handler {
       debug('loaded', rawRoutes.length, 'routes');
     }).catch(warn);
   }
+  /**
+   * @private
+   * @param {RouteJSON} route The raw route
+   * @param {string} key The key to look for in the cache (`"channels"` or `"controllers"`)
+   * @returns {Promise[]} The array of promises to wait for until the view is loaded
+  **/
   _parseRoute(route, key) {
     const promises = [];
     const action = route.to;
@@ -163,6 +217,10 @@ exports = module.exports = class Handler {
     return promises;
   }
 
+  /**
+   * @param {Request} req The HTTP request to get a handler for.
+   * @returns {?Handler} The handler, or `null` if it could not be found
+  **/
   getHandler(req) {
     const uri = url.parse(req.url, true);
     const route = this.routes[req.method].find(({ match }) => match.match(uri.pathname));
@@ -170,11 +228,25 @@ exports = module.exports = class Handler {
   }
 };
 
+/**
+ * @memberof Handler
+ * @param {string} name The file path to load
+ * @param {Object} config The nails config
+ * @returns {Promise.<?string>} The file content, or `null` if there was a problem
+**/
 exports.getStaticContent = (name, config) => {
   const staticPath = path.join(config.appRoot, 'static', name);
   return fs.exists(staticPath).then(exists => exists ? fs.readFile(staticPath, 'utf-8') : null).catch(/* istanbul ignore next */ () => null);
 };
 
+/**
+ * @memberof Handler
+ * @param {string} route The `to` value for the route
+ * @param {Object} config The nails config
+ * @returns {Promise.<?Function>} The template function, or `undefined`
+ * if there was a problem
+ * @see {@link http://devdocs.io/lodash~4/index#template _.template in the Lodash docs}
+**/
 exports.getView = (route, config) => {
   const action = route.split('.');
   const controller = action[0];
@@ -190,7 +262,15 @@ exports.getView = (route, config) => {
   }).catch(warn);
 };
 
+/**
+ * @memberof Handler
+ * @param {Request} req The HTTP request
+ * @param {Response} res The HTTP response
+ * @param {Object} opts The options
+ * This renders the response to a request.
+**/
 exports.renderer = (req, res, opts) => {
+  // TODO: Move this to `Context` or `library`
   opts.headers = opts.headers || { 'content-type': 'text/html' };
   const headerNames = Object.keys(opts.headers);
   for (let i = 0; i < headerNames.length; i++) {

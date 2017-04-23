@@ -3,6 +3,19 @@ const fs = require('fs');
 const chalk = require('chalk');
 const debug = require('./util')('stream');
 
+/**
+ * @function stream
+ * @description
+ * Stream something to the response.
+ * This function is also a writable stream, so streams
+ * can be piped into it:
+ * `myStream.pipe(this.stream)`
+ * @param {Object} options The options
+ * @param {string} [options.path] The path to a file to stream into the response
+ * @memberof Context
+ * @instance
+**/
+
 module.exports = res => {
   const stream = arg => {
     if (arg.path) {

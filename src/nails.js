@@ -1,3 +1,8 @@
+/**
+ * Nails, a Rails clone in Node
+ * @module nails
+**/
+
 require('debug').names.push(/^nails:[^a-z]+$/);
 require('debug').names.push(/^nails$/);
 
@@ -13,6 +18,14 @@ const createConfig = require('./config');
 // We ❤️ escaping
 [_.templateSettings.interpolate, _.templateSettings.escape] = [_.templateSettings.escape, _.templateSettings.interpolate];
 
+/**
+ * Define a lazy property on `exports` that
+ * retrieves the value when accessed
+ * the first time
+ * @private
+ * @param {string} key The key to add
+ * @param {Function} get The function to generate the value
+**/
 function lazy(key, get) {
   const uninitialized = {};
   let _val = uninitialized;
@@ -26,21 +39,26 @@ function lazy(key, get) {
   });
 }
 
-exports = module.exports = arg => {
+/**
+ * Call this function to start your Nails app.
+ * @param {(Object|string)} options The options for Nails
+ * @returns {Server} The server instance
+**/
+exports = module.exports = options => {
   /* istanbul ignore if: only for backwards compatibility */
-  if (typeof arg !== 'object') {
-    arg = {
-      appRoot: arg,
+  if (typeof options !== 'object') {
+    options = {
+      appRoot: options,
     };
   }
-  _.defaults(arg, {
+  _.defaults(options, {
     appRoot: path.dirname(require.main.filename) + '/app',
     appName: '',
     start: true,
   });
-  arg.appName = arg.appName || path.basename(path.dirname(arg.appRoot));
+  options.appName = options.appName || path.basename(path.dirname(options.appRoot));
 
-  const { appRoot, appName, start } = arg;
+  const { appRoot, appName, start } = options;
   debug('starting server for', appName, 'at', appRoot);
   const config = createConfig(appRoot + '/config');
   Object.assign(config, { appRoot, appName });
@@ -51,7 +69,13 @@ exports = module.exports = arg => {
   }
   return server;
 };
+/**
+ * Generate a (hopefully) cryptographically secure random secret key
+ * @param {number} length The length of key to generate. Default: 50
+ * @returns {string} The random key
+**/
 exports.genKey = (length = 50) => {
+  // Based on Django’s implementation
   const chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)';
   const bytes = randomBytes(length);
   let value = '';

@@ -11,14 +11,26 @@ const { createDebug, warn, log } = require('./util');
 
 const debug = createDebug('server');
 
-exports = module.exports = class Server {
+/**
+ * HTTP Server handler
+**/
+class Server {
+  /**
+   * @param {Object} config The nails config
+  **/
   constructor(config) {
     this.handler = new Handler(config);
     this.config = config;
   }
+  /**
+   * Start the HTTP server when everything is ready
+  **/
   /* istanbul ignore next */run() {
     this.handler.ready.then(this._run.bind(this));
   }
+  /**
+   * Start the HTTP server for real
+  **/
   /* istanbul ignore next */_run() {
     debug('starting server...');
     const iface = this.config.server_interface;
@@ -32,6 +44,11 @@ exports = module.exports = class Server {
       log('Listening on', `${iface}:${port}`);
     });
   }
+  /**
+   * Handle an incoming request
+   * @param {Request} req The HTTP Request
+   * @param {Response} res The HTTP Response
+  **/
   _handleRequest(req, res) {
     log(req.method, chalk.underline(req.url), `HTTP/${req.httpVersion}`);
 
@@ -59,4 +76,6 @@ exports = module.exports = class Server {
       }).catch(warn);
     }
   }
-};
+}
+
+exports = module.exports = Server;

@@ -22,7 +22,9 @@
     "serve-cov": "live-server coverage/lcov-report",
     "format-pkg": "npm init -y > /dev/null",
     "contribute": "all-contributors add",
-    "generate": "all-contributors generate"
+    "generate": "all-contributors generate",
+    "dev-doc": "watch 'echo \"Building docs...\" && tput cuu 1 && cd docs && npm run --silent doc && tput el && echo -e \"\\033[1K\r\\x1b[32mDocs Built ✓\\x1b[39m\" && tput cuu 1' -p '/docs|.git|_site/' .",
+    "doc": "jsdoc2md --member-index-format=list src/*.js src/**/*.js > docs/api/index.md"
   },
   "main": "src/nails.js",
   "xo": {
@@ -58,9 +60,44 @@
       "mocha/no-top-level-hooks": "error",
       "no-var": "error",
       "no-console": "warn",
+      "spaced-comment": [
+        "error",
+        "always",
+        {
+          "block": {
+            "exceptions": [
+              "*"
+            ],
+            "balanced": true
+          }
+        }
+      ],
       "comma-dangle": [
         "error",
         "always-multiline"
+      ],
+      "require-jsdoc": [
+        "warn",
+        {
+          "require": {
+            "FunctionDeclaration": true,
+            "MethodDefinition": true,
+            "ClassDeclaration": true,
+            "ArrowFunctionExpression": false
+          }
+        }
+      ],
+      "valid-jsdoc": [
+        "error",
+        {
+          "requireReturn": false,
+          "prefer": {
+            "arg": "param",
+            "argument": "param",
+            "return": "returns",
+            "virtual": "abstract"
+          }
+        }
       ],
       "no-eq-null": "off",
       "eqeqeq": [
@@ -85,6 +122,7 @@
     "all-contributors-cli": "^4.3.0",
     "eslint-plugin-mocha": "^4.9.0",
     "istanbul": "^0.4.5",
+    "jsdoc-to-markdown": "^3.0.0",
     "live-server": "^1.2.0",
     "mocha": "^3.2.0",
     "mock-req": "^0.2.0",

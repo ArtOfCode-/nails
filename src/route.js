@@ -2,15 +2,31 @@ const { parse, tokensToRegExp, tokensToFunction } = require('path-to-regexp');
 const chalk = require('chalk');
 
 exports = module.exports = class Route {
+  /**
+   * @class Route
+   * @classdesc
+   * Object representing a route at runtime
+   * @param {string} path The path to match
+   * @param {Object} [options] The options to pass to `path-to-regexp`
+  **/
   constructor(path, options = {}) {
     this.path = path;
     const tokens = parse(path);
     this.regex = tokensToRegExp(tokens, options);
     this.reverse = tokensToFunction(tokens);
   }
+  /**
+   * @returns {string} A representation of the route
+  **/
   /* istanbul ignore next */toString() {
     return `<route to ${chalk.bold.underline(this.path)}>`;
   }
+  /**
+   * Check if the path matches the pattern stored.
+   * @param {string} path The path to match against
+   * @returns {(boolean|Object)} `false` if no match was found, or the `params`
+   * object if there was a match
+  **/
   match(path) {
     const matches = this.regex.exec(path);
     if (!matches) {

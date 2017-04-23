@@ -1,5 +1,12 @@
 const debug = require('./util')('config');
 
+/**
+ * @function createConfig
+ * @description
+ * Load the config from the specified path
+ * @param {string} file The path to the config file
+ * @returns {Object} the loaded object
+**/
 exports = module.exports = file => {
   let json;
   debug('loading config at', file);

@@ -18,14 +18,26 @@ const S = {
   doubleRender: Symbol('double render?'),
 };
 
+/**
+ * Error thrown when a controller calls a rendering method multiple times
+**/
 class DoubleRenderError extends Error {
+  /**
+   * @param {string} message The error message
+  **/
   /* istanbul ignore next */constructor(message) {
     super(message);
     this.name = 'DoubleRenderError';
   }
 }
 
-module.exports = class Context {
+/**
+ * The `this` value available in controllers
+**/
+class Context {
+  /**
+   * @param {Library} library The library to attach to
+  **/
   constructor(library) {
     this[S.library] = library;
     this[S.rendered] = false;
@@ -45,6 +57,32 @@ module.exports = class Context {
     const register = f => {
       library.finalizers.push(f);
     };
+
+    /**
+    * @member {Auth} auth
+    * The HTTP authentication provided
+    * @memberof Context
+    * @instance
+    **/
+    /**
+     * @member {Cookies} cookies
+     * Cookies sent by the client
+     * @memberof Context
+     * @instance
+    **/
+    /**
+     * @member {Object} params
+     * The query params in the URL
+     * @memberof Context
+     * @instance
+    **/
+    /**
+    * @member {Cache} cache
+    * Control how other servers cache the response
+    * @memberof Context
+    * @instance
+    **/
+
     [
       ['auth', () => createAuth(library, this.header)],
       ['cookies', () => createCookies(library)],
@@ -70,6 +108,11 @@ module.exports = class Context {
     });
   }
 
+  /**
+   * Render content to the user
+   * @param {Object} [opts] The options
+   * @param {string} [content] The HTML content to render
+  **/
   render(opts, content) {
     this[S.doubleRender]();
     debug('rendering', this[S.library].requestHandler.action);
@@ -80,6 +123,14 @@ module.exports = class Context {
     Object.assign(opts, { content, route: this[S.library].requestHandler });
     Handler.renderer(this[S.library].req, this[S.library].res, opts);
   }
+  /**
+   * Redirect to the specified location
+   * @param {(Object|string)} to The location to redirect to.
+   *
+   * If `to` is a string, redirect to that path/URL
+   * If `to` is an object with a `back` key, redirect to the previous page,
+   * or the value of the `back` key if the referrer isn’t present.
+  **/
   redirect(to) {
     this[S.doubleRender]();
     const res = this[S.library].res;
@@ -95,17 +146,31 @@ module.exports = class Context {
     });
     res.end();
   }
+  /**
+   * Get the path to a static file
+   * @param {...string} components The path components to join together
+   * @returns {string} The absolute path to the static file
+  **/
   static(...components) {
     return path.join(this[S.library].config.appRoot, 'static', ...components);
   }
 
+  /**
+   * Throws an error if called more than once.
+   * @private
+  **/
   [S.doubleRender]() {
     if (this[S.rendered]) {
       throw new DoubleRenderError('Already rendered ' + this[S.rendered]);
     }
     this[S.rendered] = new Error().stack;
   }
+  /**
+   * @returns {boolean} Has the controller rendered its view?
+  **/
   get rendered() {
     return Boolean(this[S.rendered]);
   }
-};
+}
+
+module.exports = Context;
