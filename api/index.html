@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <meta name="description" content="nails : Better-than-expected Rails clone in Node">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=a67ca65be34c0ab7e6fa493f581779f692079849">
+
+    <title>nails</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="http://github.com/ArtOfCode-/nails">View on GitHub</a>
+
+          <h1 id="project_title">nails</h1>
+          <h2 id="project_tagline">Better-than-expected Rails clone in Node</h2>
+
+          
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>Modules</h2>
+
+<dl>
+<dt><a href="#module_nails">nails</a></dt>
+<dd><p>Nails, a Rails clone in Node</p>
+</dd>
+</dl>
+
+<h2>Classes</h2>
+
+<dl>
+<dt><a href="#Handler">Handler</a></dt>
+<dd><p>Routing handler</p>
+</dd>
+<dt><a href="#Route">Route</a></dt>
+<dd><p>Object representing a route at runtime</p>
+</dd>
+<dt><a href="#Server">Server</a></dt>
+<dd><p>HTTP Server handler</p>
+</dd>
+<dt><a href="#Auth">Auth</a></dt>
+<dd><p>HTTP auth checker and deserializer</p>
+</dd>
+<dt><a href="#Expires">Expires</a></dt>
+<dd><p>Class handling expiry of the response</p>
+</dd>
+<dt><a href="#Cache">Cache</a></dt>
+<dd><p>Class handling caching</p>
+</dd>
+<dt><a href="#DoubleRenderError">DoubleRenderError</a></dt>
+<dd><p>Error thrown when a controller calls a rendering method multiple times</p>
+</dd>
+<dt><a href="#Context">Context</a></dt>
+<dd><p>The <code>this</code> value available in controllers</p>
+</dd>
+<dt><a href="#Cookies">Cookies</a></dt>
+<dd><p>Cookie handling extended from the <a href="https://github.com/pillarjs/cookies#api"><code>cookies</code> module</a> on npm.
+The <code>get</code> and <code>set</code> methods serialize and deserialize the data as JSON.</p>
+</dd>
+</dl>
+
+<h2>Functions</h2>
+
+<dl>
+<dt><a href="#createConfig">createConfig(file)</a> ⇒ <code>Object</code></dt>
+<dd><p>Load the config from the specified path</p>
+</dd>
+</dl>
+
+<h2>Typedefs</h2>
+
+<dl>
+<dt><a href="#RouteJSON">RouteJSON</a></dt>
+<dd></dd>
+<dt><a href="#IO">IO</a></dt>
+<dd><p>A socket.io server</p>
+</dd>
+<dt><a href="#Socket">Socket</a></dt>
+<dd><p>A socket.io socket</p>
+</dd>
+<dt><a href="#Request">Request</a></dt>
+<dd><p>An HTTP request</p>
+</dd>
+<dt><a href="#Response">Response</a></dt>
+<dd><p>An HTTP response</p>
+</dd>
+</dl>
+
+<p><a name="module_nails"></a></p>
+
+<h2>nails</h2>
+
+<p>Nails, a Rails clone in Node</p>
+
+<ul>
+<li><a href="#module_nails">nails</a>
+
+<ul>
+<li><a href="#exp_module_nails--exports">exports</a> ⇒ <code><a href="#Server">Server</a></code> ⏏
+
+<ul>
+<li><a href="#module_nails--exports.Router">.Router</a>
+
+<ul>
+<li><a href="#new_module_nails--exports.Router_new">new Router()</a></li>
+<li><a href="#module_nails--exports.Router+method">router.method(path, to, options)</a> ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></li>
+<li><a href="#module_nails--exports.Router+request">router.request(method, path, to, options)</a> ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></li>
+<li><a href="#module_nails--exports.Router+scope">router.scope(...scopes, f)</a></li>
+<li><a href="#module_nails--exports.Router+ws">router.ws(path, [to], [options])</a> ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></li>
+<li><a href="#module_nails--exports.Router.draw">Router.draw(f)</a> ⇒ <code>Array</code></li>
+</ul></li>
+<li><a href="#module_nails--exports.Channel">.Channel</a>
+
+<ul>
+<li><a href="#new_module_nails--exports.Channel_new">new Channel(options)</a></li>
+<li><a href="#module_nails--exports.Channel+params">channel.params</a> : <code>Object</code></li>
+<li><a href="#module_nails--exports.Channel+socket">channel.socket</a> : <code><a href="#Socket">Socket</a></code></li>
+</ul></li>
+<li><a href="#module_nails--exports.Connection">.Connection</a>
+
+<ul>
+<li><a href="#new_module_nails--exports.Connection_new">new Connection(socket, handler)</a></li>
+<li><a href="#module_nails--exports.Connection+sock">connection.sock</a> : <code><a href="#Socket">Socket</a></code></li>
+</ul></li>
+<li><a href="#module_nails--exports.genKey">.genKey(length)</a> ⇒ <code>string</code></li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p><a name="exp_module_nails--exports"></a></p>
+
+<h3>exports ⇒ <code><a href="#Server">Server</a></code> ⏏</h3>
+
+<p>Call this function to start your Nails app.</p>
+
+<p><strong>Kind</strong>: Exported member<br>
+<strong>Returns</strong>: <code><a href="#Server">Server</a></code> - The server instance  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>options</td>
+<td><code>Object</code> \</td>
+<td><code>string</code></td>
+</tr>
+</tbody></table>
+
+<p><a name="module_nails--exports.Router"></a></p>
+
+<h4>exports.Router</h4>
+
+<p>The routing helper</p>
+
+<p><strong>Kind</strong>: static class of <code><a href="#exp_module_nails--exports">exports</a></code>  </p>
+
+<ul>
+<li><a href="#module_nails--exports.Router">.Router</a>
+
+<ul>
+<li><a href="#new_module_nails--exports.Router_new">new Router()</a></li>
+<li><a href="#module_nails--exports.Router+method">router.method(path, to, options)</a> ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></li>
+<li><a href="#module_nails--exports.Router+request">router.request(method, path, to, options)</a> ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></li>
+<li><a href="#module_nails--exports.Router+scope">router.scope(...scopes, f)</a></li>
+<li><a href="#module_nails--exports.Router+ws">router.ws(path, [to], [options])</a> ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></li>
+<li><a href="#module_nails--exports.Router.draw">Router.draw(f)</a> ⇒ <code>Array</code></li>
+</ul></li>
+</ul>
+
+<p><a name="new_module_nails--exports.Router_new"></a></p>
+
+<h5>new Router()</h5>
+
+<p>Create the router</p>
+
+<p><a name="module_nails--exports.Router+method"></a></p>
+
+<h5>router.method(path, to, options) ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></h5>
+
+<p><code>request()</code> with <code>method</code> prefilled as <em>method</em></p>
+
+<p><strong>Kind</strong>: instance method of <code><a href="#module_nails--exports.Router">Router</a></code><br>
+<strong>Returns</strong>: <code><a href="#RouteJSON">RouteJSON</a></code> - The created route<br>
+<strong>See</strong>: <a href="#module_nails--exports.Router+request">request</a>  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>path</td>
+<td><code>string</code></td>
+<td>The path to match, matched using <code>path-to-regexp</code></td>
+</tr>
+<tr>
+<td>to</td>
+<td><code>string</code></td>
+<td>The controller to call, represented as a string</td>
+</tr>
+<tr>
+<td>options</td>
+<td><code>object</code></td>
+<td>More values to include in the route</td>
+</tr>
+</tbody></table>
+
+<p><a name="module_nails--exports.Router+request"></a></p>
+
+<h5>router.request(method, path, to, options) ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></h5>
+
+<p>Create a route for an HTTP request.</p>
+
+<p><strong>Kind</strong>: instance method of <code><a href="#module_nails--exports.Router">Router</a></code><br>
+<strong>Returns</strong>: <code><a href="#RouteJSON">RouteJSON</a></code> - The created route  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>method</td>
+<td><code>string</code></td>
+<td>The HTTP verb to respond to</td>
+</tr>
+<tr>
+<td>path</td>
+<td><code>string</code></td>
+<td>The path to match, matched using <code>path-to-regexp</code></td>
+</tr>
+<tr>
+<td>to</td>
+<td><code>string</code></td>
+<td>The controller to call, represented as a string</td>
+</tr>
+<tr>
+<td>options</td>
+<td><code>object</code></td>
+<td>More values to include in the route</td>
+</tr>
+</tbody></table>
+
+<p><a name="module_nails--exports.Router+scope"></a></p>
+
+<h5>router.scope(...scopes, f)</h5>
+
+<p><strong>Kind</strong>: instance method of <code><a href="#module_nails--exports.Router">Router</a></code>  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>...scopes</td>
+<td><code>string</code></td>
+<td>The scopes to push onto the router</td>
+</tr>
+<tr>
+<td>f</td>
+<td><code>function</code></td>
+<td>The callback to call with the router</td>
+</tr>
+</tbody></table>
+
+<p><a name="module_nails--exports.Router+ws"></a></p>
+
+<h5>router.ws(path, [to], [options]) ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></h5>
+
+<p><strong>Kind</strong>: instance method of <code><a href="#module_nails--exports.Router">Router</a></code><br>
+<strong>Returns</strong>: <code><a href="#RouteJSON">RouteJSON</a></code> - The route  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>path</td>
+<td><code>string</code></td>
+<td>The path to match</td>
+</tr>
+<tr>
+<td>[to]</td>
+<td><code>string</code></td>
+<td>The channel to call</td>
+</tr>
+<tr>
+<td>[options]</td>
+<td><code>Object</code></td>
+<td>Additional options for the route</td>
+</tr>
+</tbody></table>
+
+<p><a name="module_nails--exports.Router.draw"></a></p>
+
+<h5>Router.draw(f) ⇒ <code>Array</code></h5>
+
+<p>“Draw” the routes. This creates a new router,
+passes it to the function, and returns the created routes.</p>
+
+<p><strong>Kind</strong>: static method of <code><a href="#module_nails--exports.Router">Router</a></code><br>
+<strong>Returns</strong>: <code>Array</code> - The created routes  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>f</td>
+<td><code>function</code></td>
+<td>The function to call to draw the routes.</td>
+</tr>
+</tbody></table>
+
+<p><a name="module_nails--exports.Channel"></a></p>
+
+<h4>exports.Channel</h4>
+
+<p>The class managing a connection. Subclass this in your <code>channels/</code> directory
+to customize its behavior.</p>
+
+<p><strong>Kind</strong>: static class of <code><a href="#exp_module_nails--exports">exports</a></code>  </p>
+
+<ul>
+<li><a href="#module_nails--exports.Channel">.Channel</a>
+
+<ul>
+<li><a href="#new_module_nails--exports.Channel_new">new Channel(options)</a></li>
+<li><a href="#module_nails--exports.Channel+params">channel.params</a> : <code>Object</code></li>
+<li><a href="#module_nails--exports.Channel+socket">channel.socket</a> : <code><a href="#Socket">Socket</a></code></li>
+</ul></li>
+</ul>
+
+<p><a name="new_module_nails--exports.Channel_new"></a></p>
+
+<h5>new Channel(options)</h5>
+
+<p>There is generally no need for you to create your own instance of a channel,
+because Nails will create them automatically.</p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>options</td>
+<td><code>Object</code></td>
+<td>The options</td>
+</tr>
+<tr>
+<td>options.params</td>
+<td><code>Object</code></td>
+<td>The params in the URL</td>
+</tr>
+<tr>
+<td>options.socket</td>
+<td><code><a href="#Socket">Socket</a></code></td>
+<td>The <a href="https://socket.io">socket.io</a> socket</td>
+</tr>
+</tbody></table>
+
+<p><a name="module_nails--exports.Channel+params"></a></p>
+
+<h5>channel.params : <code>Object</code></h5>
+
+<p>The URL params, just like in controllers</p>
+
+<p><strong>Kind</strong>: instance property of <code><a href="#module_nails--exports.Channel">Channel</a></code><br>
+<a name="module_nails--exports.Channel+socket"></a></p>
+
+<h5>channel.socket : <code><a href="#Socket">Socket</a></code></h5>
+
+<p>The <a href="https://socket.io">socket.io</a> socket</p>
+
+<p><strong>Kind</strong>: instance property of <code><a href="#module_nails--exports.Channel">Channel</a></code><br>
+<a name="module_nails--exports.Connection"></a></p>
+
+<h4>exports.Connection</h4>
+
+<p>A class that manages a socket connection and creates channels as needed.</p>
+
+<p><strong>Kind</strong>: static class of <code><a href="#exp_module_nails--exports">exports</a></code>  </p>
+
+<ul>
+<li><a href="#module_nails--exports.Connection">.Connection</a>
+
+<ul>
+<li><a href="#new_module_nails--exports.Connection_new">new Connection(socket, handler)</a></li>
+<li><a href="#module_nails--exports.Connection+sock">connection.sock</a> : <code><a href="#Socket">Socket</a></code></li>
+</ul></li>
+</ul>
+
+<p><a name="new_module_nails--exports.Connection_new"></a></p>
+
+<h5>new Connection(socket, handler)</h5>
+
+<p>You should not need to create an instance of this class yourself. Nails will
+create an instance for each WebSocket connection.</p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>socket</td>
+<td><code><a href="#Socket">Socket</a></code></td>
+<td>The <a href="https://socket.io">socket.io</a> socket that is connecting</td>
+</tr>
+<tr>
+<td>handler</td>
+<td><code><a href="#Handler">Handler</a></code></td>
+<td>The handler object to use to find channels</td>
+</tr>
+</tbody></table>
+
+<p><a name="module_nails--exports.Connection+sock"></a></p>
+
+<h5>connection.sock : <code><a href="#Socket">Socket</a></code></h5>
+
+<p>The <a href="https://socket.io">socket.io</a> socket</p>
+
+<p><strong>Kind</strong>: instance property of <code><a href="#module_nails--exports.Connection">Connection</a></code><br>
+<a name="module_nails--exports.genKey"></a></p>
+
+<h4>exports.genKey(length) ⇒ <code>string</code></h4>
+
+<p>Generate a (hopefully) cryptographically secure random secret key</p>
+
+<p><strong>Kind</strong>: static method of <code><a href="#exp_module_nails--exports">exports</a></code><br>
+<strong>Returns</strong>: <code>string</code> - The random key  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>length</td>
+<td><code>number</code></td>
+<td>The length of key to generate. Default: 50</td>
+</tr>
+</tbody></table>
+
+<p><a name="Handler"></a></p>
+
+<h2>Handler</h2>
+
+<p>Routing handler</p>
+
+<p><strong>Kind</strong>: global class  </p>
+
+<ul>
+<li><a href="#Handler">Handler</a>
+
+<ul>
+<li><a href="#new_Handler_new">new Handler(config)</a></li>
+<li><a href="#Handler+routes">handler.routes</a> : <code>Object</code></li>
+<li><a href="#Handler+config">handler.config</a> : <code>Object</code></li>
+<li><a href="#Handler.exports.getStaticContent">Handler.exports.getStaticContent(name, config)</a> ⇒ <code>Promise.&lt;?string&gt;</code></li>
+<li><a href="#Handler.exports.getView">Handler.exports.getView(route, config)</a> ⇒ <code>Promise.&lt;?function()&gt;</code></li>
+<li><a href="#Handler.exports.renderer">Handler.exports.renderer(req, res, opts)</a></li>
+</ul></li>
+</ul>
+
+<p><a name="new_Handler_new"></a></p>
+
+<h3>new Handler(config)</h3>
+
+<p>You should not need to create instances of this class yourself.
+Nails will automatically create one for you.</p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>config</td>
+<td><code>Object</code></td>
+<td>The config object</td>
+</tr>
+</tbody></table>
+
+<p><a name="Handler+routes"></a></p>
+
+<h3>handler.routes : <code>Object</code></h3>
+
+<p>The route objects</p>
+
+<p><strong>Kind</strong>: instance property of <code><a href="#Handler">Handler</a></code><br>
+<a name="Handler+config"></a></p>
+
+<h3>handler.config : <code>Object</code></h3>
+
+<p>The config object</p>
+
+<p><strong>Kind</strong>: instance property of <code><a href="#Handler">Handler</a></code><br>
+<a name="Handler.exports.getStaticContent"></a></p>
+
+<h3>Handler.exports.getStaticContent(name, config) ⇒ <code>Promise.&lt;?string&gt;</code></h3>
+
+<p><strong>Kind</strong>: static method of <code><a href="#Handler">Handler</a></code><br>
+<strong>Returns</strong>: <code>Promise.&lt;?string&gt;</code> - The file content, or <code>null</code> if there was a problem  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>name</td>
+<td><code>string</code></td>
+<td>The file path to load</td>
+</tr>
+<tr>
+<td>config</td>
+<td><code>Object</code></td>
+<td>The nails config</td>
+</tr>
+</tbody></table>
+
+<p><a name="Handler.exports.getView"></a></p>
+
+<h3>Handler.exports.getView(route, config) ⇒ <code>Promise.&lt;?function()&gt;</code></h3>
+
+<p><strong>Kind</strong>: static method of <code><a href="#Handler">Handler</a></code><br>
+<strong>Returns</strong>: <code>Promise.&lt;?function()&gt;</code> - The template function, or <code>undefined</code>
+if there was a problem<br>
+<strong>See</strong>: <a href="http://devdocs.io/lodash%7E4/index#template">_.template in the Lodash docs</a>  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>route</td>
+<td><code>string</code></td>
+<td>The <code>to</code> value for the route</td>
+</tr>
+<tr>
+<td>config</td>
+<td><code>Object</code></td>
+<td>The nails config</td>
+</tr>
+</tbody></table>
+
+<p><a name="Handler.exports.renderer"></a></p>
+
+<h3>Handler.exports.renderer(req, res, opts)</h3>
+
+<p><strong>Kind</strong>: static method of <code><a href="#Handler">Handler</a></code>  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>req</td>
+<td><code><a href="#Request">Request</a></code></td>
+<td>The HTTP request</td>
+</tr>
+<tr>
+<td>res</td>
+<td><code><a href="#Response">Response</a></code></td>
+<td>The HTTP response</td>
+</tr>
+<tr>
+<td>opts</td>
+<td><code>Object</code></td>
+<td>The options This renders the response to a request.</td>
+</tr>
+</tbody></table>
+
+<p><a name="Route"></a></p>
+
+<h2>Route</h2>
+
+<p>Object representing a route at runtime</p>
+
+<p><strong>Kind</strong>: global class<br>
+<a name="new_Route_new"></a></p>
+
+<h3>new Route(path, [options])</h3>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>path</td>
+<td><code>string</code></td>
+<td>The path to match</td>
+</tr>
+<tr>
+<td>[options]</td>
+<td><code>Object</code></td>
+<td>The options to pass to <code>path-to-regexp</code></td>
+</tr>
+</tbody></table>
+
+<p><a name="Server"></a></p>
+
+<h2>Server</h2>
+
+<p>HTTP Server handler</p>
+
+<p><strong>Kind</strong>: global class  </p>
+
+<ul>
+<li><a href="#Server">Server</a>
+
+<ul>
+<li><a href="#new_Server_new">new Server(config)</a></li>
+<li><a href="#Server+run">server.run()</a></li>
+<li><a href="#Server+_run">server._run()</a></li>
+<li><a href="#Server+_handleRequest">server._handleRequest(req, res)</a></li>
+</ul></li>
+</ul>
+
+<p><a name="new_Server_new"></a></p>
+
+<h3>new Server(config)</h3>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>config</td>
+<td><code>Object</code></td>
+<td>The nails config</td>
+</tr>
+</tbody></table>
+
+<p><a name="Server+run"></a></p>
+
+<h3>server.run()</h3>
+
+<p>Start the HTTP server when everything is ready</p>
+
+<p><strong>Kind</strong>: instance method of <code><a href="#Server">Server</a></code><br>
+<a name="Server+_run"></a></p>
+
+<h3>server._run()</h3>
+
+<p>Start the HTTP server for real</p>
+
+<p><strong>Kind</strong>: instance method of <code><a href="#Server">Server</a></code><br>
+<a name="Server+_handleRequest"></a></p>
+
+<h3>server._handleRequest(req, res)</h3>
+
+<p>Handle an incoming request</p>
+
+<p><strong>Kind</strong>: instance method of <code><a href="#Server">Server</a></code>  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>req</td>
+<td><code><a href="#Request">Request</a></code></td>
+<td>The HTTP Request</td>
+</tr>
+<tr>
+<td>res</td>
+<td><code><a href="#Response">Response</a></code></td>
+<td>The HTTP Response</td>
+</tr>
+</tbody></table>
+
+<p><a name="Auth"></a></p>
+
+<h2>Auth</h2>
+
+<p>HTTP auth checker and deserializer</p>
+
+<p><strong>Kind</strong>: global class<br>
+<strong>Access</strong>: public  </p>
+
+<ul>
+<li><a href="#Auth">Auth</a>
+
+<ul>
+<li><a href="#Auth+name">auth.name</a> : <code>string</code></li>
+<li><a href="#Auth+pass">auth.pass</a> : <code>string</code></li>
+<li><a href="#Auth+invalid">auth.invalid</a> : <code>boolean</code></li>
+<li><a href="#Auth+check">auth.check(user, pass)</a> ⇒ <code>boolean</code></li>
+<li><a href="#Auth+enable">auth.enable(options)</a></li>
+</ul></li>
+</ul>
+
+<p><a name="Auth+name"></a></p>
+
+<h3>auth.name : <code>string</code></h3>
+
+<p>The username provided</p>
+
+<p><strong>Kind</strong>: instance property of <code><a href="#Auth">Auth</a></code><br>
+<a name="Auth+pass"></a></p>
+
+<h3>auth.pass : <code>string</code></h3>
+
+<p>The password provided</p>
+
+<p><strong>Kind</strong>: instance property of <code><a href="#Auth">Auth</a></code><br>
+<a name="Auth+invalid"></a></p>
+
+<h3>auth.invalid : <code>boolean</code></h3>
+
+<p>Is the authentication possibly valid?</p>
+
+<p><strong>Kind</strong>: instance property of <code><a href="#Auth">Auth</a></code><br>
+<a name="Auth+check"></a></p>
+
+<h3>auth.check(user, pass) ⇒ <code>boolean</code></h3>
+
+<p>Check the username and password in a semi-timing-safe manner</p>
+
+<p><strong>Kind</strong>: instance method of <code><a href="#Auth">Auth</a></code><br>
+<strong>Returns</strong>: <code>boolean</code> - Did the username and password sent match <code>user</code> and <code>pass</code>?  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>user</td>
+<td><code>string</code></td>
+<td>The username to check</td>
+</tr>
+<tr>
+<td>pass</td>
+<td><code>string</code></td>
+<td>The password to check</td>
+</tr>
+</tbody></table>
+
+<p><a name="Auth+enable"></a></p>
+
+<h3>auth.enable(options)</h3>
+
+<p><strong>Kind</strong>: instance method of <code><a href="#Auth">Auth</a></code>  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>options</td>
+<td><code>Object</code></td>
+<td></td>
+<td>The options</td>
+</tr>
+<tr>
+<td>[options.realm]</td>
+<td><code>string</code></td>
+<td><code>&quot;config.appName&quot;</code></td>
+<td>The realm name to send to the user</td>
+</tr>
+</tbody></table>
+
+<p><a name="Expires"></a></p>
+
+<h2>Expires</h2>
+
+<p>Class handling expiry of the response</p>
+
+<p><strong>Kind</strong>: global class  </p>
+
+<ul>
+<li><a href="#Expires">Expires</a>
+
+<ul>
+<li><a href="#new_Expires_new">new Expires(cache)</a></li>
+<li><a href="#Expires+in">expires.in()</a></li>
+<li><a href="#Expires+now">expires.now()</a></li>
+</ul></li>
+</ul>
+
+<p><a name="new_Expires_new"></a></p>
+
+<h3>new Expires(cache)</h3>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>cache</td>
+<td><code>Object</code></td>
+<td>The cache manager to attach to</td>
+</tr>
+</tbody></table>
+
+<p><a name="Expires+in"></a></p>
+
+<h3>expires.in()</h3>
+
+<p>Set the response to expire after the given duration.
+See <a href="http://devdocs.io/moment/index#manipulating-add"><code>moment#add()</code></a> for parameter documentation</p>
+
+<p><strong>Kind</strong>: instance method of <code><a href="#Expires">Expires</a></code><br>
+<a name="Expires+now"></a></p>
+
+<h3>expires.now()</h3>
+
+<p>Set the response to expire immediately and not be cached.</p>
+
+<p><strong>Kind</strong>: instance method of <code><a href="#Expires">Expires</a></code><br>
+<a name="Cache"></a></p>
+
+<h2>Cache</h2>
+
+<p>Class handling caching</p>
+
+<p><strong>Kind</strong>: global class<br>
+<a name="Cache.expires"></a></p>
+
+<h3>Cache.expires : <code><a href="#Expires">Expires</a></code></h3>
+
+<p><strong>Kind</strong>: static property of <code><a href="#Cache">Cache</a></code><br>
+<a name="DoubleRenderError"></a></p>
+
+<h2>DoubleRenderError</h2>
+
+<p>Error thrown when a controller calls a rendering method multiple times</p>
+
+<p><strong>Kind</strong>: global class<br>
+<a name="new_DoubleRenderError_new"></a></p>
+
+<h3>new DoubleRenderError(message)</h3>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>message</td>
+<td><code>string</code></td>
+<td>The error message</td>
+</tr>
+</tbody></table>
+
+<p><a name="Context"></a></p>
+
+<h2>Context</h2>
+
+<p>The <code>this</code> value available in controllers</p>
+
+<p><strong>Kind</strong>: global class  </p>
+
+<ul>
+<li><a href="#Context">Context</a>
+
+<ul>
+<li><a href="#new_Context_new">new Context(library)</a></li>
+<li><a href="#Context+auth">context.auth</a> : <code><a href="#Auth">Auth</a></code></li>
+<li><a href="#Context+cookies">context.cookies</a> : <code><a href="#Cookies">Cookies</a></code></li>
+<li><a href="#Context+params">context.params</a> : <code>Object</code></li>
+<li><a href="#Context+cache">context.cache</a> : <code><a href="#Cache">Cache</a></code></li>
+<li><a href="#Context+rendered">context.rendered</a> ⇒ <code>boolean</code></li>
+<li><a href="#Context+render">context.render([opts], [content])</a></li>
+<li><a href="#Context+redirect">context.redirect(to)</a></li>
+<li><a href="#Context+static">context.static(...components)</a> ⇒ <code>string</code></li>
+<li><a href="#Context+stream">context.stream(options)</a></li>
+</ul></li>
+</ul>
+
+<p><a name="new_Context_new"></a></p>
+
+<h3>new Context(library)</h3>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>library</td>
+<td><code><a href="#new_Library_new">Library</a></code></td>
+<td>The library to attach to</td>
+</tr>
+</tbody></table>
+
+<p><a name="Context+auth"></a></p>
+
+<h3>context.auth : <code><a href="#Auth">Auth</a></code></h3>
+
+<p>The HTTP authentication provided</p>
+
+<p><strong>Kind</strong>: instance property of <code><a href="#Context">Context</a></code><br>
+<a name="Context+cookies"></a></p>
+
+<h3>context.cookies : <code><a href="#Cookies">Cookies</a></code></h3>
+
+<p>Cookies sent by the client</p>
+
+<p><strong>Kind</strong>: instance property of <code><a href="#Context">Context</a></code><br>
+<a name="Context+params"></a></p>
+
+<h3>context.params : <code>Object</code></h3>
+
+<p>The query params in the URL</p>
+
+<p><strong>Kind</strong>: instance property of <code><a href="#Context">Context</a></code><br>
+<a name="Context+cache"></a></p>
+
+<h3>context.cache : <code><a href="#Cache">Cache</a></code></h3>
+
+<p>Control how other servers cache the response</p>
+
+<p><strong>Kind</strong>: instance property of <code><a href="#Context">Context</a></code><br>
+<a name="Context+rendered"></a></p>
+
+<h3>context.rendered ⇒ <code>boolean</code></h3>
+
+<p><strong>Kind</strong>: instance property of <code><a href="#Context">Context</a></code><br>
+<strong>Returns</strong>: <code>boolean</code> - Has the controller rendered its view?<br>
+<a name="Context+render"></a></p>
+
+<h3>context.render([opts], [content])</h3>
+
+<p>Render content to the user</p>
+
+<p><strong>Kind</strong>: instance method of <code><a href="#Context">Context</a></code>  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>[opts]</td>
+<td><code>Object</code></td>
+<td>The options</td>
+</tr>
+<tr>
+<td>[content]</td>
+<td><code>string</code></td>
+<td>The HTML content to render</td>
+</tr>
+</tbody></table>
+
+<p><a name="Context+redirect"></a></p>
+
+<h3>context.redirect(to)</h3>
+
+<p>Redirect to the specified location</p>
+
+<p><strong>Kind</strong>: instance method of <code><a href="#Context">Context</a></code>  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>to</td>
+<td><code>Object</code> \</td>
+<td><code>string</code></td>
+</tr>
+</tbody></table>
+
+<p><a name="Context+static"></a></p>
+
+<h3>context.static(...components) ⇒ <code>string</code></h3>
+
+<p>Get the path to a static file</p>
+
+<p><strong>Kind</strong>: instance method of <code><a href="#Context">Context</a></code><br>
+<strong>Returns</strong>: <code>string</code> - The absolute path to the static file  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>...components</td>
+<td><code>string</code></td>
+<td>The path components to join together</td>
+</tr>
+</tbody></table>
+
+<p><a name="Context+stream"></a></p>
+
+<h3>context.stream(options)</h3>
+
+<p>Stream something to the response.
+This function is also a writable stream, so streams
+can be piped into it:
+<code>myStream.pipe(this.stream)</code></p>
+
+<p><strong>Kind</strong>: instance method of <code><a href="#Context">Context</a></code>  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>options</td>
+<td><code>Object</code></td>
+<td>The options</td>
+</tr>
+<tr>
+<td>[options.path]</td>
+<td><code>string</code></td>
+<td>The path to a file to stream into the response</td>
+</tr>
+</tbody></table>
+
+<p><a name="Cookies"></a></p>
+
+<h2>Cookies</h2>
+
+<p>Cookie handling extended from the <a href="https://github.com/pillarjs/cookies#api"><code>cookies</code> module</a> on npm.
+The <code>get</code> and <code>set</code> methods serialize and deserialize the data as JSON.</p>
+
+<p><strong>Kind</strong>: global class<br>
+<a name="Cookies+delete"></a></p>
+
+<h3>cookies.delete(key)</h3>
+
+<p><strong>Kind</strong>: instance method of <code><a href="#Cookies">Cookies</a></code>  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>key</td>
+<td><code>string</code></td>
+<td>The key to delete</td>
+</tr>
+</tbody></table>
+
+<p><a name="createConfig"></a></p>
+
+<h2>createConfig(file) ⇒ <code>Object</code></h2>
+
+<p>Load the config from the specified path</p>
+
+<p><strong>Kind</strong>: global function<br>
+<strong>Returns</strong>: <code>Object</code> - the loaded object  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>file</td>
+<td><code>string</code></td>
+<td>The path to the config file</td>
+</tr>
+</tbody></table>
+
+<p><a name="RouteJSON"></a></p>
+
+<h2>RouteJSON</h2>
+
+<p><strong>Kind</strong>: global typedef  </p>
+
+<ul>
+<li><a href="#RouteJSON">RouteJSON</a>
+
+<ul>
+<li><a href="#RouteJSON.ws">.ws</a> : <code>boolean</code></li>
+<li><a href="#RouteJSON.type">.type</a> : <code>string</code></li>
+<li><a href="#RouteJSON.url">.url</a> : <code>string</code></li>
+<li><a href="#RouteJSON.to">.to</a> : <code>string</code></li>
+</ul></li>
+</ul>
+
+<p><a name="RouteJSON.ws"></a></p>
+
+<h3>RouteJSON.ws : <code>boolean</code></h3>
+
+<p>Is this route for a WebSocket connection
+instead of an HTTP request?</p>
+
+<p><strong>Kind</strong>: static property of <code><a href="#RouteJSON">RouteJSON</a></code><br>
+<a name="RouteJSON.type"></a></p>
+
+<h3>RouteJSON.type : <code>string</code></h3>
+
+<p>Which HTTP verb should this route respond to?</p>
+
+<p>This member is required unless <code>ws</code> is true.</p>
+
+<p><strong>Kind</strong>: static property of <code><a href="#RouteJSON">RouteJSON</a></code><br>
+<a name="RouteJSON.url"></a></p>
+
+<h3>RouteJSON.url : <code>string</code></h3>
+
+<p>What path should the route respond to?</p>
+
+<p>This supports <a href="https://github.com/pillarjs/path-to-regexp"><code>path-to-regexp</code></a>-style
+path matching.</p>
+
+<p><strong>Kind</strong>: static property of <code><a href="#RouteJSON">RouteJSON</a></code><br>
+<a name="RouteJSON.to"></a></p>
+
+<h3>RouteJSON.to : <code>string</code></h3>
+
+<p>Which controller should be called?</p>
+
+<p><strong>Kind</strong>: static property of <code><a href="#RouteJSON">RouteJSON</a></code><br>
+<a name="IO"></a></p>
+
+<h2>IO</h2>
+
+<p>A socket.io server</p>
+
+<p><strong>Kind</strong>: global typedef<br>
+<strong>See</strong>: the <a href="https://socket.io/docs/server-api/#server"><code>Server</code> docs</a><br>
+<a name="Socket"></a></p>
+
+<h2>Socket</h2>
+
+<p>A socket.io socket</p>
+
+<p><strong>Kind</strong>: global typedef<br>
+<strong>See</strong>: the <a href="https://socket.io/docs/server-api/#socket"><code>Socket</code> docs</a><br>
+<a name="Request"></a></p>
+
+<h2>Request</h2>
+
+<p>An HTTP request</p>
+
+<p><strong>Kind</strong>: global typedef<br>
+<strong>See</strong>: the <a href="http://devdocs.io/node%7E6_lts/http#http_class_http_incomingmessage"><code>http.IncomingMessage</code> docs</a><br>
+<a name="Response"></a></p>
+
+<h2>Response</h2>
+
+<p>An HTTP response</p>
+
+<p><strong>Kind</strong>: global typedef<br>
+<strong>See</strong>: the <a href="http://devdocs.io/node%7E6_lts/http#http_class_http_serverresponse"><code>http.ServerResponse</code> docs</a>  </p>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        
+        <p class="copyright">nails maintained by <a href="http://github.com/ArtOfCode-">ArtOfCode-</a></p>
+        
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+  </body>
+</html>

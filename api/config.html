@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <meta name="description" content="nails : Better-than-expected Rails clone in Node">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=a67ca65be34c0ab7e6fa493f581779f692079849">
+
+    <title>nails</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="http://github.com/ArtOfCode-/nails">View on GitHub</a>
+
+          <h1 id="project_title">nails</h1>
+          <h2 id="project_tagline">Better-than-expected Rails clone in Node</h2>
+
+          
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>Config</h1>
+
+<p>This document covers the config file required at the root of a Nails project.</p>
+
+<h3>Format</h3>
+
+<p>The configuration file can be either JavaScript or JSON (or CoffeeScript, with a call to <code>require(&#39;coffee-script/register&#39;)</code>).
+The JSON variant should be formatted as one top-level object containing various configuration keys
+(see below for details); script variants should <em>export</em> an equivalent object.</p>
+
+<h3>Required Keys</h3>
+
+<p>The following keys are <strong>required</strong> to be present in the top-level object.</p>
+
+<ul>
+<li><strong><code>server_interface</code></strong> <em>(type: <code>String</code>)</em><br>
+Determines which IP address the Nails server will bind to on startup. Use <code>0.0.0.0</code> to represent an &quot;unspecified&quot;interface, which will result in the server binding to all available interfaces.</li>
+<li><strong><code>server_port</code></strong> <em>(type: <code>Integer</code>)</em><br>
+Determines which port the Nails server will listen on. If this port number is below 1000, the Nails server will need administrative (root) access to be able to bind to the specified port; run your startup script with administrator privileges (i.e. through <code>sudo</code> on Linux, or from an elevated command prompt on Windows).</li>
+<li><strong><code>key</code></strong> <em>(type: <code>String</code>)</em><br>
+This is the app’s secret key, used for various cryptographic purposes. The <code>require(&#39;node-nails&#39;).genKey()</code> function can generate a suitable key for this purpose. <strong>WARNING</strong>: Do not check your production secret into a VCS.</li>
+</ul>
+
+<h3>Example File</h3>
+
+<p><strong>JSON:</strong>
+<code>json
+{
+  &quot;key&quot;: &quot;...&quot;,
+  &quot;server_interface&quot;: &quot;127.0.0.1&quot;,
+  &quot;server_port&quot;: 8080
+}
+</code></p>
+
+<p><strong>JavaScript:</strong>
+<code>js
+exports = module.exports = {
+  key: &quot;...&quot;,
+  server_interface: &quot;127.0.0.1&quot;,
+  server_port: 8080
+};
+</code></p>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        
+        <p class="copyright">nails maintained by <a href="http://github.com/ArtOfCode-">ArtOfCode-</a></p>
+        
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+  </body>
+</html>

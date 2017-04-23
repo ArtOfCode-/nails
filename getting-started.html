@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <meta name="description" content="nails : Better-than-expected Rails clone in Node">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=a67ca65be34c0ab7e6fa493f581779f692079849">
+
+    <title>nails</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="http://github.com/ArtOfCode-/nails">View on GitHub</a>
+
+          <h1 id="project_title">nails</h1>
+          <h2 id="project_tagline">Better-than-expected Rails clone in Node</h2>
+
+          
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>Getting Started</h1>
+
+<p>This guide will take you through installation and creation of a simple nails app.</p>
+
+<h2>0. Prerequisites</h2>
+
+<p>You&#39;ll need to have Node.js and npm installed to be able to complete this guide. You can get those from:</p>
+
+<ul>
+<li><strong>Node</strong>: <a href="https://nodejs.org/en/download/current/">nodejs.org</a></li>
+<li><strong>npm</strong>: should come bundled with your Node installation.</li>
+</ul>
+
+<h1>1. Download/Install</h1>
+
+<p>You&#39;ll need to create a new Node project. In an empty directory, run <code>npm init</code> and follow the prompts</p>
+
+<p>Replace the values with things that make sense for your project. Then, <code>cd</code> into your project directory, and run the
+following:
+<code>
+$ npm install --save node-nails
+</code>
+This will download and install the nails package, and save it in your <code>package.json</code> as a dependency for your project.</p>
+
+<h2>2. Server Script</h2>
+
+<p>You need a script that loads nails and tells it where your app is so that it can start serving it. To that end, create a
+<code>server.js</code> file in your project, and copy this into it:</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">nails</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"node-nails"</span><span class="p">);</span>
+<span class="nx">nails</span><span class="p">();</span>
+</code></pre></div>
+<h2>3.1. App: Config</h2>
+
+<p>You can start creating your application now. The first thing you&#39;ll need is a configuration file, which should be stored
+as <code>config.js</code> in the <code>app/</code> directory of your app. At minimum, it should contain the following:</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">key</span><span class="p">:</span> <span class="s2">"..."</span><span class="p">,</span>
+  <span class="na">server_interface</span><span class="p">:</span> <span class="s2">"127.0.0.1"</span><span class="p">,</span>
+  <span class="na">server_port</span><span class="p">:</span> <span class="mi">8080</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>To fill in the <code>key</code> option, run <code>require(&#39;node-nails&#39;).genKey()</code> in a Node REPL.</p>
+
+<p>These two options dictate which IP address your server will bind to, and which port it will listen on. The example
+configuration given here will result in a server available at <code>http://localhost:8080/</code>.</p>
+
+<h2>3.2. App: Routes</h2>
+
+<p>The second configuration file you need is your routes file. This is similar to Rails&#39; routes file, if you&#39;re familiar
+with that. This file should be called <code>routes.js</code> and go in the <code>app</code> directory, along with
+<code>config.js</code>.</p>
+
+<p>The routes file defines which function should handle a request to a given URL. For each route, you need to specify</p>
+
+<ul>
+<li>the request method (GET, POST, etc)</li>
+<li>the request URL (which URL this route should respond to)</li>
+<li>a handling function, which you specify as a string.</li>
+</ul>
+
+<p>For now, put this content in your routes file:</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kr">const</span> <span class="p">{</span> <span class="nx">Router</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'node-nails'</span><span class="p">);</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Router</span><span class="p">.</span><span class="nx">draw</span><span class="p">(({</span> <span class="nx">get</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">get</span><span class="p">(</span><span class="s1">'/status'</span><span class="p">,</span> <span class="s1">'status.index'</span><span class="p">);</span>
+  <span class="nx">get</span><span class="p">(</span><span class="s1">'/status/json'</span><span class="p">,</span> <span class="s1">'status.json'</span><span class="p">);</span>
+<span class="p">})</span>
+</code></pre></div>
+<p>The string provided as the second argument to the <code>get()</code> function is what specifies the function that will be called for the given method/URL combination. It&#39;s composed of the controller name, followed by a dot, followed by the function name.</p>
+
+<h2>3.3. App: Controllers</h2>
+
+<p>The third step in creating this app is to create a controller to handle the routes we just defined. Create a <code>controllers</code> directory in the <code>app</code> directory, and then create a file called <code>status.js</code> within it.</p>
+
+<p>In that file, you&#39;ll need this content:</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">exports</span><span class="p">.</span><span class="nx">index</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">({</span><span class="na">view</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="na">locals</span><span class="p">:</span> <span class="p">{</span><span class="na">ip</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">connection</span><span class="p">.</span><span class="nx">remoteAddress</span><span class="p">,</span> <span class="na">ua</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">headers</span><span class="p">[</span><span class="s1">'user-agent'</span><span class="p">]}});</span>
+<span class="p">};</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">json</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">({</span><span class="na">json</span><span class="p">:</span> <span class="p">{</span><span class="na">status</span><span class="p">:</span> <span class="s1">'up'</span><span class="p">,</span> <span class="na">ip</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">connection</span><span class="p">.</span><span class="nx">remoteAddress</span><span class="p">,</span> <span class="na">ua</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">headers</span><span class="p">[</span><span class="s1">'user-agent'</span><span class="p">]}});</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>Now the <code>exports.index</code> function will respond to requests to <code>/status</code>, and the <code>exports.json</code> function will respond to
+<code>/status/json</code>.</p>
+
+<h2>3.4. App: Views</h2>
+
+<p>The final component to this app is creating the one view we need. Notice how, in <code>controllers/status.js</code>, in the call to <code>render</code>, we specified <code>view: true</code>? That makes that action try to render an EJS view. We need to create that view so it can be rendered.</p>
+
+<p>Create a <code>views</code> directory in the <code>app</code> directory. Within that, create a <code>status</code> directory, and within <em>that</em> create an <code>index.ejs</code> file. Whatever&#39;s in this file will be rendered as the HTTP response; the JS embedded in this view will have access to any data you pass in the <code>locals</code> option to the <code>render</code> call. For now, put this in the file:</p>
+<div class="highlight"><pre><code class="language-ejs" data-lang="ejs">&lt;h1&gt;It's alive!&lt;/h1&gt;
+&lt;p&gt;This page was rendered by the &lt;strong&gt;status&lt;/strong&gt; controller, using action &lt;strong&gt;index&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;You're connecting from &lt;%= ip %&gt;, with user agent &lt;%= ua %&gt;.&lt;/p&gt;
+</code></pre></div>
+<h2>4. Test it!</h2>
+
+<p>You now have a complete nails app. To test it, run your server script using Node:</p>
+<div class="highlight"><pre><code class="language-" data-lang="">$ node server.js
+</code></pre></div>
+<p>If you&#39;ve followed this guide, you&#39;ll get a confirmation that the nails server is listening on 127.0.0.1, port 8080.
+In your browser, go visit http://localhost:8080/status and http://localhost:8080/status/json. For the first one, you
+should see the rendered HTML from <code>views/status/index.ejs</code> (now containing your IP and user agent), and for the second
+you should see JSON data containing <code>status: &#39;up&#39;</code>, and your IP and user agent.</p>
+
+<h2>5. Hack it!</h2>
+
+<p>You&#39;re done. Now, take the app you&#39;ve just made and modify it to do... something else. There&#39;s full documentation
+available <a href="https://artofcode-.github.io/nails">here</a> - if you need help, details of what nails does and doesn&#39;t support should be in there. Bear in mind that nails is by no means fully-fledged, so there are doubtless some major features lacking.</p>
+
+<p>If you think you&#39;ve found a bug, or have a question or feature request, please open a <a href="https://github.com/ArtOfCode-/nails/issues/new">new issue</a> on the GitHub repository.</p>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        
+        <p class="copyright">nails maintained by <a href="http://github.com/ArtOfCode-">ArtOfCode-</a></p>
+        
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+  </body>
+</html>

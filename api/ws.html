@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <meta name="description" content="nails : Better-than-expected Rails clone in Node">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=a67ca65be34c0ab7e6fa493f581779f692079849">
+
+    <title>nails</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="http://github.com/ArtOfCode-/nails">View on GitHub</a>
+
+          <h1 id="project_title">nails</h1>
+          <h2 id="project_tagline">Better-than-expected Rails clone in Node</h2>
+
+          
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>WebSockets</h1>
+
+<p>Nails has simple WebSocket support, using <a href="https://socket.io"><code>socket.io</code></a>. To use WebSockets, use the <code>ws</code> function in <code>Router.draw</code> to create “channels.” Channels are like controllers, but instead of rendering a page once, they are kept alive for as long as the WebSocket stays connnected.</p>
+
+<h2>Example</h2>
+
+<ol>
+<li>Create the file <code>channels/status.js</code> in the <code>app</code> directory, and put this content inside it:
+```js
+const { Channel } = require(&#39;node-nails&#39;);</li>
+</ol>
+
+<p>module.exports = class StatusChannel extends Channel {
+    constructor(...args) {
+      super(...args);
+      process.nextTick(() =&gt; {
+        this.socket.send(&#39;ok!&#39;);
+      });
+    }
+  };
+  <code>
+2. In your routes.js file, ensure the `Router.draw` callback takes the `ws` argument, like this:
+</code>js
+  module.exports = Router.draw(({ get, ws }) =&gt; {
+    // ...
+  })
+  <code>
+3. Add a `ws` route anywhere in the route config, including in `scope` calls:
+</code>js
+  ws(&#39;/status&#39;, &#39;status&#39;)
+  <code>
+4. Include this `&lt;script&gt;` tag in your HTML page:
+</code>html
+  <script src="/socket.io/socket.io.js" charset="utf-8"></script>
+  <code>
+5. Create the socket and join the appropriate room:
+</code>js
+  const socket = io();
+  socket.emit(&#39;join&#39;, &#39;/status&#39;)
+  socket.on(&#39;reconnect&#39;, function() {
+    socket.emit(&#39;join&#39;, &#39;/status&#39;)
+  })
+  ```</p>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        
+        <p class="copyright">nails maintained by <a href="http://github.com/ArtOfCode-">ArtOfCode-</a></p>
+        
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+  </body>
+</html>

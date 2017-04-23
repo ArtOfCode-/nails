@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <meta name="description" content="nails : Better-than-expected Rails clone in Node">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css?v=a67ca65be34c0ab7e6fa493f581779f692079849">
+
+    <title>nails</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="http://github.com/ArtOfCode-/nails">View on GitHub</a>
+
+          <h1 id="project_title">nails</h1>
+          <h2 id="project_tagline">Better-than-expected Rails clone in Node</h2>
+
+          
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>Controllers</h1>
+
+<p>This document covers any controllers in a Nails project.</p>
+
+<h3>Format</h3>
+
+<p>Controllers are Node.JS JavaScript files, and should be stored in the <code>controllers</code> directory within the root of a Nails project.</p>
+
+<h3>Standard Library</h3>
+
+<p>All controllers have access to the Node standard library, but you will need to <code>require()</code> any components of it that you need. Refer to the Node.JS docs for further information about the library and requires.</p>
+
+<h3>Public Methods Are Actions</h3>
+
+<p>Any method you make public by exporting it is eligible to be an action (a route&#39;s processing function) if it is specified in a route.</p>
+
+<h3>Action Format</h3>
+
+<p>An action must take the form of a function that accepts one parameter. This parameter, <code>req</code>, is the HTTP request as passed to the Nails server. This is a Node.JS <code>http.IncomingMessage</code> object, the documentation for which is available
+<a href="https://nodejs.org/api/http.html#http_class_http_incomingmessage">here</a>.</p>
+
+<p>The action will be executed in the context of Nails&#39; controller library, which gives you access to controller helper
+methods including <code>this.render</code> (as demonstrated in the example below) and <code>this.redirect</code>.</p>
+
+<p><strong>Example:</strong>
+<code>js
+exports.index = function (req) {
+  this.render({text: req.headers[&#39;user-agent&#39;]});
+};
+</code></p>
+
+<h3>Rendering</h3>
+
+<p>The renderer available in the library (<code>this.render</code> in your controllers) supports a similar but smaller set of options
+to Rails&#39; <code>render</code> method, if you&#39;re familiar with that. Its signature is this:</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">opts</span><span class="p">,</span> <span class="nx">content</span><span class="p">)</span>
+</code></pre></div>
+<p>Pass options as the <code>opts</code> object; pass any HTML content in the <code>content</code> parameter. If you don&#39;t want to pass options,
+but have HTML content to render, you can just pass the content as the first parameter; Nails will detect this
+automatically.</p>
+
+<p>The <code>opts</code> object supports the following options:</p>
+
+<ul>
+<li><strong><code>text</code></strong> <em>(type: <code>String</code>)</em><br>
+Specifies a string of plain text to render in the HTTP response. Incompatible with the <code>json</code> option; if both are
+specified, <code>text</code> takes priority. Incompatible with the <code>content</code> option; if both are specified, <code>text</code> takes
+priority. Incompatible with the <code>view</code> option; if both are specified, <code>text</code> takes priority.</li>
+<li><strong><code>json</code></strong> <em>(type: <code>Object</code> or <code>Array</code>)</em><br>
+Specifies an object to stringify and render as JSON in the HTTP response. The response will have a <code>Content-Type</code> of
+<code>application/json</code>. Incompatible with the <code>content</code> option; if both are specified, <code>json</code> takes priority.
+Incompatible with the <code>view</code> option; if both are specified, <code>json</code> takes priority.</li>
+<li><strong><code>content</code></strong> <em>(type: <code>String</code>)</em>
+Specifies a string of HTML to render in the HTTP response. Incompatible with the <code>view</code> option; if both are
+specified, <code>html</code> takes priority.</li>
+<li><strong><code>headers</code></strong> <em>(type: <code>Object</code>)</em><br>
+Specifies a list of key-value pairs to send as HTTP headers in the response; keys are header names, and values are
+their values. Specifying the <code>text</code> or <code>json</code> options overrides any <code>Content-Type</code> option set here.</li>
+<li><strong><code>status</code></strong> <em>(type: <code>Integer</code>)</em><br>
+Specifies the HTTP status code to return in the response. Defaults to 200 (OK) if not specified, and may be
+overridden in the case of errors or unexpected circumstances (for example, a nonexistent view with the <code>view</code> option
+set will send 204 (No Content)).</li>
+<li><strong><code>view</code></strong> <em>(type: <code>Boolean</code>)</em><br>
+Specifies whether the view associated with this action should be rendered. Defaults to <code>false</code>.</li>
+<li><strong><code>locals</code></strong> <em>(type: <code>Object</code>)</em><br>
+Specifies a set of variables that will be accessible in the associated view. Has no effect unless the <code>view</code> option
+is set to <code>true</code>.</li>
+</ul>
+
+<p><strong>Example:</strong> An AJAX request returns JSON with an access control header:
+<code>js
+exports.remoteAjax = function (req) {
+  this.render({
+    json: {
+      date: new Date().toISOString()
+    },
+    headers: {
+      &#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;
+    }
+  });
+};
+</code></p>
+
+<p><strong>Example:</strong> A failed request returns a plain string with a status code:
+<code>js
+exports.badRequest = function (req) {
+  this.render({
+    text: &#39;Failed&#39;,
+    status: 409
+  });
+};
+</code></p>
+
+<h3>Redirects</h3>
+
+<p>The other major method available in the Nails library is <code>redirect</code>. From your controller actions, you can call
+<code>this.redirect(path)</code> to redirect the client to another path. The value of <code>path</code> should be a string containing a path
+(for a redirect to elsewhere in your application) or a full URL (for redirection elsewhere on the Internet).</p>
+
+<p>The HTTP response for this will be a 302 Found response with a Location header pointing to your specified resource.</p>
+
+<h4><code>redirect({ back: <em>path</em> })</code></h4>
+
+<p>Redirect back to the previous page, or <em><code>path</code></em> if the HTTP Referer header is not set.</p>
+
+<h3>Cookies</h3>
+
+<p>Nails supports cookies (<code>this.cookies</code>), using the <a href="https://github.com/pillarjs/cookies"><code>cookies</code></a> module from <code>npm</code>, with some modifications:</p>
+
+<h4><code>cookies.delete(<em>name</em>)</code></h4>
+
+<p>Delete the cookie sent under the specified <em><code>name</code></em>.</p>
+
+<h4><code>cookies.set(<em>name</em>, <em>value</em>, <em>options</em>?)</code></h4>
+
+<p>Set the cookie with the <em><code>value</code></em> encoded using JSON.</p>
+
+<h4><code>cookies.get(...)</code></h4>
+
+<p>Decode the cookie’s value using JSON, throwing if it isn’t valid JSON.</p>
+
+<h3>Headers</h3>
+
+<h4><code>header(<em>name</em>, <em>value</em>)</code></h4>
+
+<p>See <a href="http://devdocs.io/node%7E6_lts/http#http_response_setheader_name_value">the Node docs</a></p>
+
+<h4><code>header.get(<em>name</em>)</code></h4>
+
+<p>See <a href="http://devdocs.io/node%7E6_lts/http#http_response_getheader_name">the Node docs</a></p>
+
+<h4><code>header.remove(<em>name</em>)</code></h4>
+
+<h4><code>header.del(<em>name</em>)</code></h4>
+
+<p>See <a href="http://devdocs.io/node%7E6_lts/http#http_response_removeheader_name">the Node docs</a></p>
+
+<h3>Authentication</h3>
+
+<h4><code>auth.enable({ <em>realm</em>? })</code></h4>
+
+<p>Require authentication on this page. The default <em><code>realm</code></em> is the directory the start script is in.</p>
+
+<h4><code>auth.name</code></h4>
+
+<p>The username provided by the auth dialog box</p>
+
+<h4><code>auth.pass</code></h4>
+
+<p>The password provided by the auth dialog box</p>
+
+<h4><code>auth.check(<em>username</em>, <em>password</em>)</code></h4>
+
+<p>Check the password, in a timing-safe manner.</p>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        
+        <p class="copyright">nails maintained by <a href="http://github.com/ArtOfCode-">ArtOfCode-</a></p>
+        
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+  </body>
+</html>
