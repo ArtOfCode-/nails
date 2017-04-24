@@ -1,10 +1,22 @@
-theme: jekyll-theme-slate
 markdown: redcarpet
+theme: jekyll-swiss
+title: nails
+description: A web framework in Node.js
+github_username: ArtOfCode-
+social_link: npm
+package_name: node-nails
+theme_color: white
+github_repo: nails
 redcarpet:
   extensions:
     - tables
+    - no_intra_emphasis
+    - fenced_code_blocks
+    - lax_spacing
 exclude:
   - vendor
   - Gemfile*
 repository: ArtOfCode-/nails
 baseurl: /nails
+gems:
+  - jekyll-readme-index

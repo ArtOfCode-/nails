@@ -1,3 +1,7 @@
+---
+layout: home
+---
+
 # Documentation
 This is the documentation for nails' public API. This also happens to be what nails uses to determine its current
 version number - nails uses [semantic versioning](https://semver.org/):

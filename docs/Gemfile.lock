@@ -196,6 +196,8 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages
+  jekyll-coffeescript
+  jekyll-swiss
   redcarpet
 
 BUNDLED WITH

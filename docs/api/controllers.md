@@ -1,4 +1,7 @@
-# Controllers
+---
+title: Controllers
+---
+
 This document covers any controllers in a Nails project.
 
 ### Format

@@ -1,0 +1,20 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+@charset "utf-8";
+
+// Import partials from `sass_dir` and set theme here
+$color-dot-accent: #BD232A;
+@import "theme-{{ site.theme_color | default: "black" }}.scss";
+@import "syntax.scss";
+
+a:not(.header-link) {
+  color: #00B;
+}
+
+.highlight pre {
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}

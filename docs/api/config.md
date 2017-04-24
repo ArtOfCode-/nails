@@ -1,4 +1,7 @@
-# Config
+---
+title: Config
+---
+
 This document covers the config file required at the root of a Nails project.
 
 ### Format

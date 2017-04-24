@@ -12,6 +12,9 @@ bundle install --deployment
 
 echo "$ npm run doc"
 npm run doc
+cp api/index.md /tmp/api-initial.md
+echo -e "---\ntitle: API\n---" | cat - /tmp/api-initial.md > api/index.md
+rm /tmp/api-initial.md
 
 echo "$ jekyll build"
 JEKYLL_GITHUB_TOKEN=$GH_TOKEN JEKYLL_ENV=production bundle exec jekyll build --incremental --profile

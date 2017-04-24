@@ -1,4 +1,7 @@
-# Getting Started
+---
+title: Getting Started
+---
+
 This guide will take you through installation and creation of a simple nails app.
 
 ## 0. Prerequisites

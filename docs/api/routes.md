@@ -1,4 +1,7 @@
-# Routes JS
+---
+title: Routing from JavaScript
+---
+
 Nails provides a handy library that lets you create routes with pure JS.
 
 To use this library:
