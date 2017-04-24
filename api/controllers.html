@@ -2,36 +2,105 @@
 <html>
 
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width,maximum-scale=2">
-    <meta name="description" content="nails : Better-than-expected Rails clone in Node">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="/nails/assets/css/style.css?v=6c6192d4c90b475970ac4f2c69b32be394b0d669">
+  <title>Controllers</title>
+  <meta name="description" content="A web framework in Node.js">
 
-    <title>nails</title>
-  </head>
+  
+  
+  <link rel="stylesheet" href="http://github.com/nails/assets/style.css">
+
+  <link rel="canonical" href="http://github.com/nails/api/controllers.html">
+  <link rel="alternate" type="application/rss+xml" title="nails" href="http://github.com/nails/feed.xml">
+
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" charset="utf-8"></script>
+  <script src="http://github.com/nails/assets/script.js"></script>
+</head>
+
 
   <body>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="http://github.com/ArtOfCode-/nails">View on GitHub</a>
+    <header class="border-bottom-thick px-2 clearfix">
+  <div class="left sm-width-full py-1 mt-1 mt-lg-0">
+    <a class="align-middle link-primary text-accent" href="/nails/">
+      nails
+    </a>
+  </div>
+  <div class="right sm-width-full">
+    <ul class="list-reset mt-lg-1 mb-2 mb-lg-1">
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/api/config.html">
+            Config
+          </a>
+        </li>
+        
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/api/controllers.html">
+            Controllers
+          </a>
+        </li>
+        
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/getting-started.html">
+            Getting Started
+          </a>
+        </li>
+        
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/api/">
+            API
+          </a>
+        </li>
+        
+      
+        
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/api/routes.html">
+            Routing from JavaScript
+          </a>
+        </li>
+        
+      
+        
+      
+        
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/api/ws.html">
+            WebSockets
+          </a>
+        </li>
+        
+      
+    </ul>
+  </div>
+</header>
 
-          <h1 id="project_title">nails</h1>
-          <h2 id="project_tagline">Better-than-expected Rails clone in Node</h2>
 
-          
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>Controllers</h1>
-
-<p>This document covers any controllers in a Nails project.</p>
+    <div>
+      <article class="container mx-auto px-2 mt2 mb4">
+  <header>
+    <h1 class="h0 py-4 mt-3">Controllers</h1>
+  </header>
+  <div class="col-4 sm-width-full border-top-thin">
+  </div>
+  <div class="prose mb-4 py-4">
+    <p>This document covers any controllers in a Nails project.</p>
 
 <h3>Format</h3>
 
@@ -53,13 +122,11 @@
 <p>The action will be executed in the context of Nails&#39; controller library, which gives you access to controller helper
 methods including <code>this.render</code> (as demonstrated in the example below) and <code>this.redirect</code>.</p>
 
-<p><strong>Example:</strong>
-<code>js
-exports.index = function (req) {
-  this.render({text: req.headers[&#39;user-agent&#39;]});
-};
-</code></p>
-
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">exports</span><span class="p">.</span><span class="nx">index</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">({</span><span class="na">text</span><span class="p">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">headers</span><span class="p">[</span><span class="s1">'user-agent'</span><span class="p">]});</span>
+<span class="p">};</span>
+</code></pre></div>
 <h3>Rendering</h3>
 
 <p>The renderer available in the library (<code>this.render</code> in your controllers) supports a similar but smaller set of options
@@ -98,30 +165,26 @@ Specifies a set of variables that will be accessible in the associated view. Has
 is set to <code>true</code>.</li>
 </ul>
 
-<p><strong>Example:</strong> An AJAX request returns JSON with an access control header:
-<code>js
-exports.remoteAjax = function (req) {
-  this.render({
-    json: {
-      date: new Date().toISOString()
-    },
-    headers: {
-      &#39;Access-Control-Allow-Origin&#39;, &#39;*&#39;
-    }
-  });
-};
-</code></p>
-
-<p><strong>Example:</strong> A failed request returns a plain string with a status code:
-<code>js
-exports.badRequest = function (req) {
-  this.render({
-    text: &#39;Failed&#39;,
-    status: 409
-  });
-};
-</code></p>
-
+<p><strong>Example:</strong> An AJAX request returns JSON with an access control header:</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">exports</span><span class="p">.</span><span class="nx">remoteAjax</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">({</span>
+    <span class="na">json</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">date</span><span class="p">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">toISOString</span><span class="p">()</span>
+    <span class="p">},</span>
+    <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s1">'Access-Control-Allow-Origin'</span><span class="p">,</span> <span class="s1">'*'</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+</code></pre></div>
+<p><strong>Example:</strong> A failed request returns a plain string with a status code:</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">exports</span><span class="p">.</span><span class="nx">badRequest</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">render</span><span class="p">({</span>
+    <span class="na">text</span><span class="p">:</span> <span class="s1">'Failed'</span><span class="p">,</span>
+    <span class="na">status</span><span class="p">:</span> <span class="mi">409</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+</code></pre></div>
 <h3>Redirects</h3>
 
 <p>The other major method available in the Nails library is <code>redirect</code>. From your controller actions, you can call
@@ -184,19 +247,26 @@ exports.badRequest = function (req) {
 
 <p>Check the password, in a timing-safe manner.</p>
 
-      </section>
+  </div>
+</article>
+
     </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        
-        <p class="copyright">nails maintained by <a href="http://github.com/ArtOfCode-">ArtOfCode-</a></p>
-        
-        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
+    <div class="border-top-thin clearfix mt-2 mt-lg-4">
+  <div class="container mx-auto px-2">
+    <p class="col-8 sm-width-full left py-2 mb-0">This project is maintained by <a class="text-accent" href="https://github.com/ArtOfCode-">ArtOfCode</a> and <a href="https://github.com/j-f1">J F</a>.</p>
+    <ul class="list-reset right clearfix sm-width-full py-2 mb-2 mb-lg-0">
+      <!-- <li class="inline-block mr-1">
+        <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="nails">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      </li> -->
+      <li class="inline-block">
+        <a class="github-button" href="https://github.com/ArtOfCode-/nails" data-icon="octicon-star" data-count-href="ArtOfCode-//stargazers" data-count-api="/repos/ArtOfCode-/#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star ArtOfCode-/ on GitHub">Star</a>
+      </li>
+    </ul>
+  </div>
+</div>
 
-    
+
   </body>
+
 </html>

@@ -2,90 +2,161 @@
 <html>
 
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width,maximum-scale=2">
-    <meta name="description" content="nails : Better-than-expected Rails clone in Node">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="/nails/assets/css/style.css?v=6c6192d4c90b475970ac4f2c69b32be394b0d669">
+  <title>WebSockets</title>
+  <meta name="description" content="A web framework in Node.js">
 
-    <title>nails</title>
-  </head>
+  
+  
+  <link rel="stylesheet" href="http://github.com/nails/assets/style.css">
+
+  <link rel="canonical" href="http://github.com/nails/api/ws.html">
+  <link rel="alternate" type="application/rss+xml" title="nails" href="http://github.com/nails/feed.xml">
+
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" charset="utf-8"></script>
+  <script src="http://github.com/nails/assets/script.js"></script>
+</head>
+
 
   <body>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="http://github.com/ArtOfCode-/nails">View on GitHub</a>
+    <header class="border-bottom-thick px-2 clearfix">
+  <div class="left sm-width-full py-1 mt-1 mt-lg-0">
+    <a class="align-middle link-primary text-accent" href="/nails/">
+      nails
+    </a>
+  </div>
+  <div class="right sm-width-full">
+    <ul class="list-reset mt-lg-1 mb-2 mb-lg-1">
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/api/config.html">
+            Config
+          </a>
+        </li>
+        
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/api/controllers.html">
+            Controllers
+          </a>
+        </li>
+        
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/getting-started.html">
+            Getting Started
+          </a>
+        </li>
+        
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/api/">
+            API
+          </a>
+        </li>
+        
+      
+        
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/api/routes.html">
+            Routing from JavaScript
+          </a>
+        </li>
+        
+      
+        
+      
+        
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/api/ws.html">
+            WebSockets
+          </a>
+        </li>
+        
+      
+    </ul>
+  </div>
+</header>
 
-          <h1 id="project_title">nails</h1>
-          <h2 id="project_tagline">Better-than-expected Rails clone in Node</h2>
 
-          
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>WebSockets</h1>
-
-<p>Nails has simple WebSocket support, using <a href="https://socket.io"><code>socket.io</code></a>. To use WebSockets, use the <code>ws</code> function in <code>Router.draw</code> to create “channels.” Channels are like controllers, but instead of rendering a page once, they are kept alive for as long as the WebSocket stays connnected.</p>
+    <div>
+      <article class="container mx-auto px-2 mt2 mb4">
+  <header>
+    <h1 class="h0 py-4 mt-3">WebSockets</h1>
+  </header>
+  <div class="col-4 sm-width-full border-top-thin">
+  </div>
+  <div class="prose mb-4 py-4">
+    <p>Nails has simple WebSocket support, using <a href="https://socket.io"><code>socket.io</code></a>. To use WebSockets, use the <code>ws</code> function in <code>Router.draw</code> to create “channels.” Channels are like controllers, but instead of rendering a page once, they are kept alive for as long as the WebSocket stays connnected.</p>
 
 <h2>Example</h2>
 
 <ol>
-<li>Create the file <code>channels/status.js</code> in the <code>app</code> directory, and put this content inside it:
-```js
-const { Channel } = require(&#39;node-nails&#39;);</li>
+<li><p>Create the file <code>channels/status.js</code> in the <code>app</code> directory, and put this content inside it:</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kr">const</span> <span class="p">{</span> <span class="nx">Channel</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'node-nails'</span><span class="p">);</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kr">class</span> <span class="nx">StatusChannel</span> <span class="kr">extends</span> <span class="nx">Channel</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">(...</span><span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">super</span><span class="p">(...</span><span class="nx">args</span><span class="p">);</span>
+    <span class="nx">process</span><span class="p">.</span><span class="nx">nextTick</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">socket</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">'ok!'</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div></li>
+<li><p>In your routes.js file, ensure the <code>Router.draw</code> callback takes the <code>ws</code> argument, like this:</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Router</span><span class="p">.</span><span class="nx">draw</span><span class="p">(({</span> <span class="nx">get</span><span class="p">,</span> <span class="nx">ws</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// ...</span>
+<span class="p">})</span>
+</code></pre></div></li>
+<li><p>Add a <code>ws</code> route anywhere in the route config, including in <code>scope</code> calls:</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">ws</span><span class="p">(</span><span class="s1">'/status'</span><span class="p">,</span> <span class="s1">'status'</span><span class="p">)</span>
+</code></pre></div></li>
+<li><p>Include this <code>&lt;script&gt;</code> tag in your HTML page:</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/socket.io/socket.io.js"</span> <span class="na">charset=</span><span class="s">"utf-8"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre></div></li>
+<li><p>Create the socket and join the appropriate room:</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kr">const</span> <span class="nx">socket</span> <span class="o">=</span> <span class="nx">io</span><span class="p">();</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">'join'</span><span class="p">,</span> <span class="s1">'/status'</span><span class="p">)</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'reconnect'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">'join'</span><span class="p">,</span> <span class="s1">'/status'</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre></div></li>
 </ol>
 
-<p>module.exports = class StatusChannel extends Channel {
-    constructor(...args) {
-      super(...args);
-      process.nextTick(() =&gt; {
-        this.socket.send(&#39;ok!&#39;);
-      });
-    }
-  };
-  <code>
-2. In your routes.js file, ensure the `Router.draw` callback takes the `ws` argument, like this:
-</code>js
-  module.exports = Router.draw(({ get, ws }) =&gt; {
-    // ...
-  })
-  <code>
-3. Add a `ws` route anywhere in the route config, including in `scope` calls:
-</code>js
-  ws(&#39;/status&#39;, &#39;status&#39;)
-  <code>
-4. Include this `&lt;script&gt;` tag in your HTML page:
-</code>html
-  <script src="/socket.io/socket.io.js" charset="utf-8"></script>
-  <code>
-5. Create the socket and join the appropriate room:
-</code>js
-  const socket = io();
-  socket.emit(&#39;join&#39;, &#39;/status&#39;)
-  socket.on(&#39;reconnect&#39;, function() {
-    socket.emit(&#39;join&#39;, &#39;/status&#39;)
-  })
-  ```</p>
+  </div>
+</article>
 
-      </section>
     </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        
-        <p class="copyright">nails maintained by <a href="http://github.com/ArtOfCode-">ArtOfCode-</a></p>
-        
-        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
+    <div class="border-top-thin clearfix mt-2 mt-lg-4">
+  <div class="container mx-auto px-2">
+    <p class="col-8 sm-width-full left py-2 mb-0">This project is maintained by <a class="text-accent" href="https://github.com/ArtOfCode-">ArtOfCode</a> and <a href="https://github.com/j-f1">J F</a>.</p>
+    <ul class="list-reset right clearfix sm-width-full py-2 mb-2 mb-lg-0">
+      <!-- <li class="inline-block mr-1">
+        <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="nails">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      </li> -->
+      <li class="inline-block">
+        <a class="github-button" href="https://github.com/ArtOfCode-/nails" data-icon="octicon-star" data-count-href="ArtOfCode-//stargazers" data-count-api="/repos/ArtOfCode-/#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star ArtOfCode-/ on GitHub">Star</a>
+      </li>
+    </ul>
+  </div>
+</div>
 
-    
+
   </body>
+
 </html>

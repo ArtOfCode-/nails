@@ -2,36 +2,105 @@
 <html>
 
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width,maximum-scale=2">
-    <meta name="description" content="nails : Better-than-expected Rails clone in Node">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="/nails/assets/css/style.css?v=6c6192d4c90b475970ac4f2c69b32be394b0d669">
+  <title>Routing from JavaScript</title>
+  <meta name="description" content="A web framework in Node.js">
 
-    <title>nails</title>
-  </head>
+  
+  
+  <link rel="stylesheet" href="http://github.com/nails/assets/style.css">
+
+  <link rel="canonical" href="http://github.com/nails/api/routes.html">
+  <link rel="alternate" type="application/rss+xml" title="nails" href="http://github.com/nails/feed.xml">
+
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" charset="utf-8"></script>
+  <script src="http://github.com/nails/assets/script.js"></script>
+</head>
+
 
   <body>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="http://github.com/ArtOfCode-/nails">View on GitHub</a>
+    <header class="border-bottom-thick px-2 clearfix">
+  <div class="left sm-width-full py-1 mt-1 mt-lg-0">
+    <a class="align-middle link-primary text-accent" href="/nails/">
+      nails
+    </a>
+  </div>
+  <div class="right sm-width-full">
+    <ul class="list-reset mt-lg-1 mb-2 mb-lg-1">
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/api/config.html">
+            Config
+          </a>
+        </li>
+        
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/api/controllers.html">
+            Controllers
+          </a>
+        </li>
+        
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/getting-started.html">
+            Getting Started
+          </a>
+        </li>
+        
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/api/">
+            API
+          </a>
+        </li>
+        
+      
+        
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/api/routes.html">
+            Routing from JavaScript
+          </a>
+        </li>
+        
+      
+        
+      
+        
+      
+        
+        <li class="inline-block">
+          <a class="align-middle link-primary mr-2 mr-lg-0 ml-lg-2" href="/nails/api/ws.html">
+            WebSockets
+          </a>
+        </li>
+        
+      
+    </ul>
+  </div>
+</header>
 
-          <h1 id="project_title">nails</h1>
-          <h2 id="project_tagline">Better-than-expected Rails clone in Node</h2>
 
-          
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>Routes JS</h1>
-
-<p>Nails provides a handy library that lets you create routes with pure JS.</p>
+    <div>
+      <article class="container mx-auto px-2 mt2 mb4">
+  <header>
+    <h1 class="h0 py-4 mt-3">Routing from JavaScript</h1>
+  </header>
+  <div class="col-4 sm-width-full border-top-thin">
+  </div>
+  <div class="prose mb-4 py-4">
+    <p>Nails provides a handy library that lets you create routes with pure JS.</p>
 
 <p>To use this library:</p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="kr">const</span> <span class="p">{</span> <span class="nx">Router</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'node-nails'</span><span class="p">);</span>
@@ -101,37 +170,40 @@ should be <code>status.index</code>.</li>
 
 <h3>Example File</h3>
 
-<p><strong>JSON:</strong>
-<code>json
-[
-  { &quot;type&quot;: &quot;GET&quot;, &quot;url&quot;: &quot;/status&quot;, &quot;to&quot;: &quot;status.index&quot; },
-  { &quot;type&quot;: &quot;GET&quot;, &quot;url&quot;: &quot;/status/new&quot;, &quot;to&quot;: &quot;status.new&quot; },
-  { &quot;type&quot;: &quot;POST&quot;, &quot;url&quot;: &quot;/status/new&quot;, &quot;to&quot;: &quot;status.create&quot; }
-]
-</code></p>
+<p><strong>JSON:</strong></p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="p">,</span><span class="w"> </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/status"</span><span class="p">,</span><span class="w"> </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"status.index"</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GET"</span><span class="p">,</span><span class="w"> </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/status/new"</span><span class="p">,</span><span class="w"> </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"status.new"</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w"> </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"POST"</span><span class="p">,</span><span class="w"> </span><span class="nt">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/status/new"</span><span class="p">,</span><span class="w"> </span><span class="nt">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"status.create"</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div>
+<p><strong>JavaScript:</strong></p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">exports</span> <span class="o">=</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span> <span class="na">type</span><span class="p">:</span> <span class="s2">"GET"</span><span class="p">,</span> <span class="na">url</span><span class="p">:</span> <span class="s2">"/status"</span><span class="p">,</span> <span class="na">to</span><span class="p">:</span> <span class="s2">"status.index"</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">type</span><span class="p">:</span> <span class="s2">"GET"</span><span class="p">,</span> <span class="na">url</span><span class="p">:</span> <span class="s2">"/status/new"</span><span class="p">,</span> <span class="na">to</span><span class="p">:</span> <span class="s2">"status.new"</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="na">type</span><span class="p">:</span> <span class="s2">"POST"</span><span class="p">,</span> <span class="na">url</span><span class="p">:</span> <span class="s2">"/status/new"</span><span class="p">,</span> <span class="na">to</span><span class="p">:</span> <span class="s2">"status.create"</span> <span class="p">}</span>
+<span class="p">];</span>
+</code></pre></div>
+  </div>
+</article>
 
-<p><strong>JavaScript:</strong>
-<code>js
-exports = module.exports = [
-  { type: &quot;GET&quot;, url: &quot;/status&quot;, to: &quot;status.index&quot; },
-  { type: &quot;GET&quot;, url: &quot;/status/new&quot;, to: &quot;status.new&quot; },
-  { type: &quot;POST&quot;, url: &quot;/status/new&quot;, to: &quot;status.create&quot; }
-];
-</code></p>
-
-      </section>
     </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        
-        <p class="copyright">nails maintained by <a href="http://github.com/ArtOfCode-">ArtOfCode-</a></p>
-        
-        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
+    <div class="border-top-thin clearfix mt-2 mt-lg-4">
+  <div class="container mx-auto px-2">
+    <p class="col-8 sm-width-full left py-2 mb-0">This project is maintained by <a class="text-accent" href="https://github.com/ArtOfCode-">ArtOfCode</a> and <a href="https://github.com/j-f1">J F</a>.</p>
+    <ul class="list-reset right clearfix sm-width-full py-2 mb-2 mb-lg-0">
+      <!-- <li class="inline-block mr-1">
+        <a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="nails">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      </li> -->
+      <li class="inline-block">
+        <a class="github-button" href="https://github.com/ArtOfCode-/nails" data-icon="octicon-star" data-count-href="ArtOfCode-//stargazers" data-count-api="/repos/ArtOfCode-/#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star ArtOfCode-/ on GitHub">Star</a>
+      </li>
+    </ul>
+  </div>
+</div>
 
-    
+
   </body>
+
 </html>
