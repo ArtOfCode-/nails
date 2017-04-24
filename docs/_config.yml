@@ -17,6 +17,5 @@ exclude:
   - vendor
   - Gemfile*
 repository: ArtOfCode-/nails
+url: https://artofcode-.github.io
 baseurl: /nails
-gems:
-  - jekyll-readme-index
