@@ -20,7 +20,7 @@ echo "$ jekyll build"
 JEKYLL_GITHUB_TOKEN=$GH_TOKEN JEKYLL_ENV=production bundle exec jekyll build --incremental --profile
 
 cd _site
-git add .
+git add --all .
 
 OLD_EMAIL=$(git config user.email)
 OLD_NAME=$(git config user.name)
