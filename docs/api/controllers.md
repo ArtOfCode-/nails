@@ -12,11 +12,11 @@ All controllers have access to the Node standard library, but you will need to `
 Any method you make public by exporting it is eligible to be an action (a route's processing function) if it is specified in a route.
 
 ### Action Format
-An action must take the form of a function that accepts one parameter. This parameter, `req`, is the HTTP request as passed to the Nails server. This is a Node.JS `http.IncomingMessage` object, the documentation for which is available
+An action must take the form of a function that accepts up to one parameter. This parameter, `req`, is the HTTP request as passed to the Nails server. This is a Node.JS `http.IncomingMessage` object, the documentation for which is available
 [here](https://nodejs.org/api/http.html#http_class_http_incomingmessage).
 
 The action will be executed in the context of Nails' controller library, which gives you access to controller helper
-methods including `this.render` (as demonstrated in the example below) and `this.redirect`.
+methods including `this.render` (as demonstrated in the example below) and `this.redirect`. Full documentation for the `this` value, see [the API docs](https://artofcode-.github.io/nails/api/#Context).
 
 **Example:**
 ```js
@@ -138,3 +138,7 @@ Check the password, in a timing-safe manner.
 ### Querystrings
 
 The querystring in the URL is parsed using the Node core `querystring` module and stored in `this.query`. (**Release blocker**: This will switch to the `qs` module for compatibility with Rails)
+
+### Caching
+
+See [the API docs](https://artofcode-.github.io/nails/api/#Cache) for more information.
