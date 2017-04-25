@@ -2,8 +2,6 @@
 title: Controllers
 ---
 
-This document covers any controllers in a Nails project.
-
 ### Format
 Controllers are Node.JS JavaScript files, and should be stored in the `controllers` directory within the root of a Nails project.
 
@@ -136,3 +134,7 @@ The password provided by the auth dialog box
 
 #### <code>auth.check(*username*, *password*)</code>
 Check the password, in a timing-safe manner.
+
+### Querystrings
+
+The querystring in the URL is parsed using the Node core `querystring` module and stored in `this.query`. (**Release blocker**: This will switch to the `qs` module for compatibility with Rails)
