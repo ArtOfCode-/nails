@@ -100,9 +100,7 @@
   <div class="col-4 sm-width-full border-top-thin">
   </div>
   <div class="prose mb-4 py-4">
-    <p>This document covers any controllers in a Nails project.</p>
-
-<h3>Format</h3>
+    <h3>Format</h3>
 
 <p>Controllers are Node.JS JavaScript files, and should be stored in the <code>controllers</code> directory within the root of a Nails project.</p>
 
@@ -246,6 +244,10 @@ is set to <code>true</code>.</li>
 <h4><code>auth.check(<em>username</em>, <em>password</em>)</code></h4>
 
 <p>Check the password, in a timing-safe manner.</p>
+
+<h3>Querystrings</h3>
+
+<p>The querystring in the URL is parsed using the Node core <code>querystring</code> module and stored in <code>this.query</code>. (<strong>Release blocker</strong>: This will switch to the <code>qs</code> module for compatibility with Rails)</p>
 
   </div>
 </article>
