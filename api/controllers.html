@@ -114,11 +114,11 @@
 
 <h3>Action Format</h3>
 
-<p>An action must take the form of a function that accepts one parameter. This parameter, <code>req</code>, is the HTTP request as passed to the Nails server. This is a Node.JS <code>http.IncomingMessage</code> object, the documentation for which is available
+<p>An action must take the form of a function that accepts up to one parameter. This parameter, <code>req</code>, is the HTTP request as passed to the Nails server. This is a Node.JS <code>http.IncomingMessage</code> object, the documentation for which is available
 <a href="https://nodejs.org/api/http.html#http_class_http_incomingmessage">here</a>.</p>
 
 <p>The action will be executed in the context of Nails&#39; controller library, which gives you access to controller helper
-methods including <code>this.render</code> (as demonstrated in the example below) and <code>this.redirect</code>.</p>
+methods including <code>this.render</code> (as demonstrated in the example below) and <code>this.redirect</code>. Full documentation for the <code>this</code> value, see <a href="https://artofcode-.github.io/nails/api/#Context">the API docs</a>.</p>
 
 <p><strong>Example:</strong></p>
 <div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">exports</span><span class="p">.</span><span class="nx">index</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">)</span> <span class="p">{</span>
@@ -248,6 +248,10 @@ is set to <code>true</code>.</li>
 <h3>Querystrings</h3>
 
 <p>The querystring in the URL is parsed using the Node core <code>querystring</code> module and stored in <code>this.query</code>. (<strong>Release blocker</strong>: This will switch to the <code>qs</code> module for compatibility with Rails)</p>
+
+<h3>Caching</h3>
+
+<p>See <a href="https://artofcode-.github.io/nails/api/#Cache">the API docs</a> for more information.</p>
 
   </div>
 </article>
