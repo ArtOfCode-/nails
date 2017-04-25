@@ -6,9 +6,9 @@
 [![npm](https://img.shields.io/npm/v/node-nails.svg?style=flat-square)](https://www.npmjs.com/package/node-nails)
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
 [![Greenkeeper badge](https://badges.greenkeeper.io/ArtOfCode-/nails.svg)](https://greenkeeper.io/)
-[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-[![Gitter](https://img.shields.io/gitter/room/ArtOfCode-/nails.svg?style=flat-square)](https://gitter.im/ArtOfCode-/nails?utm_source=badge&utm_medium=badge&utm_campaign=shields-badge&utm_content=badge)
-
+[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)  
+[![Gitter](https://img.shields.io/gitter/room/ArtOfCode-/nails.svg?style=flat-square)](https://gitter.im/ArtOfCode-/nails?utm_source=badge&utm_medium=badge&utm_campaign=shields-badge&utm_content=badge)  
+[![XO-ish code style](https://img.shields.io/badge/code_style-XO--ish-5ed9c7.svg?style=flat-square)](https://github.com/sindresorhus/xo)  
 
 [![NPM](https://nodei.co/npm/node-nails.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/node-nails/) [![NPM](https://nodei.co/npm-dl/node-nails.png?months=3&height=3)](https://nodei.co/npm/node-nails/)
 
