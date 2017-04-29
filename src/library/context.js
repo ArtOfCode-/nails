@@ -3,6 +3,7 @@ const path = require('path');
 const url = require('url');
 
 const _ = require('lodash');
+const qs = require('qs');
 
 const Handler = require('../handlers');
 const debug = require('./util')('context');
@@ -87,7 +88,7 @@ class Context {
       ['auth', () => createAuth(library, this.header)],
       ['cookies', () => createCookies(library)],
       ['params', () => library.params],
-      ['query', () => url.parse(req.url, true).query],
+      ['query', () => qs.parse(url.parse(req.url).query)],
       ['stream', () => {
         const stream = createStream(res);
         stream.on('pipe', this[S.doubleRender].bind(this));

@@ -1,6 +1,6 @@
-const querystring = require('querystring');
 const path = require('path');
 const fs = require('mz/fs');
+const qs = require('qs');
 
 const { describe, it } = require('mocha');
 
@@ -37,7 +37,7 @@ module.exports = arg => {
       a: 'b',
       c: ['d', 'e'],
     };
-    it('handles querystrings correctly', () => testServer(server, '/test/query?' + querystring.stringify(query)).then(res => {
+    it('handles querystrings correctly', () => testServer(server, '/test/query?' + qs.stringify(query)).then(res => {
       equal([
         [res.statusCode, 200],
         [res._getString(), JSON.stringify(query)],
