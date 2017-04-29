@@ -15,7 +15,7 @@
     "update-submodules": "git submodule update --remote --force",
     "test": "npm run --silent unit && npm run --silent lint",
     "lint": "xo && echo \"No lint issues!\\nxo 💚 you\"",
-    "unit": "istanbul cover --trace-sync-io _mocha",
+    "unit": "istanbul cover _mocha --trace-sync-io",
     "unit-ci": "script/unit-ci.sh",
     "dev-unit": "watch \"clear && npm run --silent unit -- --print none\" -p '/coverage|.git/' .",
     "dev-mocha": "watch \"clear && mocha\" -p '/coverage|.git/' .",
