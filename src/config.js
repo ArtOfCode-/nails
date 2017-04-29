@@ -20,7 +20,7 @@ exports = module.exports = file => {
       throw err;
     }
     /* istanbul ignore next */
-    throw new ReferenceError('File doesn\'t exist: can\'t load config');
+    throw new ReferenceError(`File ${file} doesn't exist: can't load config`);
   }
   return json;
   /* If special behavior is needed:
