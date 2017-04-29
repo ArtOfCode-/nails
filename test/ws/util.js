@@ -1,4 +1,5 @@
 const EventEmitter = require('events');
+/* eslint-disable require-jsdoc */
 
 exports.IO = class IO extends EventEmitter {
   send(...args) {
