@@ -176,7 +176,7 @@ exports = module.exports = class Handler {
     const action = route.to;
     const actionSplat = action.split('.');
     if (actionSplat.length === 1) {
-      actionSplat.push(undefined);
+      actionSplat.push('index');
     }
     const name = actionSplat.slice(0, -1).join('/');
     const method = actionSplat[actionSplat.length - 1];
@@ -188,7 +188,7 @@ exports = module.exports = class Handler {
         config: this.config,
         route,
         routes: this.routes,
-        method: method ? cache[key][name][method] : cache[key][name],
+        method: cache[key][name][method],
       }));
     }
     let loaded;
@@ -212,7 +212,7 @@ exports = module.exports = class Handler {
       config: this.config,
       route,
       routes: this.routes,
-      method: method ? cache[key][name][method] : cache[key][name],
+      method: cache[key][name][method],
     }));
     return promises;
   }
