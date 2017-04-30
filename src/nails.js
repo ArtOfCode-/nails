@@ -11,14 +11,15 @@ require('debug').names.push(/^nails$/);
 const path = require('path');
 const { randomBytes } = require('crypto');
 
-const _ = require('lodash');
+const templateSettings = require('lodash.templatesettings');
+const defaults = require('lodash.defaults');
 
 const debug = require('./util')('init');
 const Server = require('./server');
 const createConfig = require('./config');
 
 // We ❤️ escaping
-[_.templateSettings.interpolate, _.templateSettings.escape] = [_.templateSettings.escape, _.templateSettings.interpolate];
+[templateSettings.interpolate, templateSettings.escape] = [templateSettings.escape, templateSettings.interpolate];
 
 /**
  * Define a lazy property on `exports` that
@@ -53,7 +54,7 @@ exports = module.exports = options => {
       appRoot: options,
     };
   }
-  _.defaults(options, {
+  defaults(options, {
     appRoot: path.dirname(require.main.filename) + '/app',
     appName: '',
     start: true,

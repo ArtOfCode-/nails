@@ -1,7 +1,5 @@
 'use strict';
 
-const _ = require('lodash');
-
 const _createDebug = require('debug');
 
 const createDebug = (...args) => augment(_createDebug(...args));
@@ -20,8 +18,10 @@ function augment(debug) {
    * @instance
    * @private
   **/
-  debug.child = function (...ns) {
-    return createDebug(_(ns).filter().unshift(debug.namespace).join(':'));
+  debug.child = (...ns) => {
+    ns = ns.filter(n => n)
+    ns.unshift(debug.namespace)
+    return createDebug(ns.join(':'));
   };
   return debug;
 }

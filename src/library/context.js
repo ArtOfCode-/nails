@@ -119,7 +119,7 @@ class Context {
   render(opts, content) {
     this[S.doubleRender]();
     debug('rendering', this[S.library].requestHandler.action);
-    if (!_.isObject(opts)) {
+    if (!opts || typeof opts !== 'object') {
       content = opts;
       opts = {};
     }
@@ -137,7 +137,7 @@ class Context {
   redirect(to) {
     this[S.doubleRender]();
     const res = this[S.library].res;
-    if (_.isObject(to)) {
+    if (typeof to === 'object') {
       if (to.back) {
         assert.equal(typeof to.back, 'string', `typeof ${require('util').inspect(to.back, { depth: null })} was "${typeof to.back}", but it was supposed to be "string."`);
         to = this[S.library].req.headers.referer /* [sic] */ || to.back;

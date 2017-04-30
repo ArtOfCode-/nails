@@ -4,7 +4,7 @@ const url = require('url');
 const path = require('path');
 const fs = require('mz/fs');
 
-const _ = require('lodash');
+const template = require('lodash.template');
 const schema = require('validate');
 
 const Route = require('./route');
@@ -143,7 +143,7 @@ exports = module.exports = class Handler {
 
     let promises = [];
 
-    _(rawRoutes).forEach(rawRoute => {
+    rawRoutes.forEach(rawRoute => {
       let errors = routeSchema.validate(rawRoute);
       if (errors.length > 0) {
         if (rawRoute.ws) {
@@ -151,7 +151,7 @@ exports = module.exports = class Handler {
         }
         /* istanbul ignore if: router.js always returns valid JSON */
         if (errors.length > 0) {
-          warn('found route %o: %s', rawRoute, _(errors).map('message').join(', '));
+          warn('found route %o: %s', rawRoute, errors.map(err => err.message).join(', '));
           return;
         }
       }
@@ -159,7 +159,7 @@ exports = module.exports = class Handler {
       promises = promises.concat(this._parseRoute(rawRoute, ws ? 'channels' : 'controllers'));
     });
     /* istanbul ignore if: kinda hard to test */
-    if (_.isEmpty(rawRoutes)) {
+    if (rawRoutes.length === 0) {
       throw new ReferenceError('Tried to load the routing file, but it doesn\'t exist!');
     }
     this.ready = Promise.all(promises);
@@ -256,7 +256,8 @@ exports.getView = (route, config) => {
   const viewPath = path.join(config.appRoot, 'views', controller, method + '.ejs');
   return fs.exists(viewPath).then(exists => {
     if (exists) {
-      return fs.readFile(viewPath, 'utf-8').then(contents => _.template(contents, {
+      return fs.readFile(viewPath, 'utf-8').then(contents =>
+        template(contents, {
         variable: 'locals',
         sourceURL: 'file://' + viewPath,
       }));
