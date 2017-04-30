@@ -258,9 +258,9 @@ exports.getView = (route, config) => {
     if (exists) {
       return fs.readFile(viewPath, 'utf-8').then(contents =>
         template(contents, {
-        variable: 'locals',
-        sourceURL: 'file://' + viewPath,
-      }));
+          variable: 'locals',
+          sourceURL: 'file://' + viewPath,
+        }));
     }
   }).catch(warn);
 };

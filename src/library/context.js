@@ -4,7 +4,6 @@ const assert = require('assert');
 const path = require('path');
 const url = require('url');
 
-const _ = require('lodash');
 const qs = require('qs');
 
 const Handler = require('../handlers');

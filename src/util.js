@@ -19,8 +19,8 @@ function augment(debug) {
    * @private
   **/
   debug.child = (...ns) => {
-    ns = ns.filter(n => n)
-    ns.unshift(debug.namespace)
+    ns = ns.filter(n => n);
+    ns.unshift(debug.namespace);
     return createDebug(ns.join(':'));
   };
   return debug;
