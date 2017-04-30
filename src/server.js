@@ -4,6 +4,8 @@ const http = require('http');
 
 const chalk = require('chalk');
 const socket = require('socket.io');
+const connect = require('connect');
+const finalhandler = require('finalhandler');
 
 const initSocket = require('./ws');
 const Handler = require('./handlers');
@@ -23,6 +25,8 @@ class Server {
   constructor(config) {
     this.handler = new Handler(config);
     this.config = config;
+    this.app = connect();
+    this.use = this.app.use.bind(this.app);
   }
   /**
    * Start the HTTP server when everything is ready
@@ -37,7 +41,10 @@ class Server {
     debug('starting server...');
     const iface = this.config.server_interface;
     const port = this.config.server_port;
-    this.server = http.createServer(this._handleRequest.bind(this));
+    this.server = http.createServer((req, res) => {
+      log(req.method, chalk.underline(req.url), `HTTP/${req.httpVersion}`);
+      this.app.handle(req, res, this._handleRequest.bind(this, req, res));
+    });
 
     this.io = socket(this.server, Object.assign({
     }, this.config.socketOptions));
@@ -50,9 +57,13 @@ class Server {
    * Handle an incoming request
    * @param {Request} req The HTTP Request
    * @param {Response} res The HTTP Response
+   * @param {Error} [err] An optional error encountered while processing the request
   **/
-  _handleRequest(req, res) {
-    log(req.method, chalk.underline(req.url), `HTTP/${req.httpVersion}`);
+  _handleRequest(req, res, err) {
+    if (err) {
+      warn('error handling', chalk.bold(req.url) + ':', err.stack || String(err));
+      finalhandler(req, res)(err);
+    }
 
     const handler = this.handler.getHandler(req);
     if (handler) {
