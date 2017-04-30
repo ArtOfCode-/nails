@@ -1,3 +1,5 @@
+'use strict';
+
 const path = require('path');
 
 process.env.DEBUG = process.env.DEBUG || '-nails, nails:test,nails:test:*';

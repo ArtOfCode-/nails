@@ -1,3 +1,5 @@
+'use strict';
+
 const { describe, it: test } = require('mocha');
 const moment = require('moment');
 

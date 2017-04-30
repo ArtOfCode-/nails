@@ -1,3 +1,5 @@
+'use strict';
+
 const Context = require('./context');
 
 exports = module.exports = class Library {

@@ -1,3 +1,5 @@
+'use strict';
+
 exports = module.exports = class Connection {
   /**
    * @class Connection

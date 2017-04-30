@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Nails, a Rails clone in Node
  * @module nails

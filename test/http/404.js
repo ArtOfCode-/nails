@@ -1,3 +1,5 @@
+'use strict';
+
 const path = require('path');
 const fs = require('mz/fs');
 const { describe, after, it: specify } = require('mocha');

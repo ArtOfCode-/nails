@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * A socket.io server
  * @typedef IO

@@ -1,3 +1,5 @@
+'use strict';
+
 const { describe, it: specify } = require('mocha');
 
 const { testServer, assertContentType, equal } = require('./util');

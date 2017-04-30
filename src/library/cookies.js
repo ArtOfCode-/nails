@@ -1,3 +1,5 @@
+'use strict';
+
 const Cookies = require('cookies');
 
 const getCookie = (get, ...args) => {

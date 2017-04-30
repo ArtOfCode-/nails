@@ -1,3 +1,5 @@
+'use strict';
+
 const { parse, tokensToRegExp, tokensToFunction } = require('path-to-regexp');
 const chalk = require('chalk');
 
