@@ -4,10 +4,10 @@ const url = require('url');
 const path = require('path');
 const fs = require('mz/fs');
 
-const template = require('lodash.template');
 const schema = require('validate');
 
 const Route = require('./route');
+const loadView = require('./views');
 const { createDebug, warn } = require('./util');
 
 const debug = createDebug('handlers');
@@ -254,15 +254,7 @@ exports.getView = (route, config) => {
   const controller = action[0];
   const method = action[action.length - 1];
   const viewPath = path.join(config.appRoot, 'views', controller, method + '.ejs');
-  return fs.exists(viewPath).then(exists => {
-    if (exists) {
-      return fs.readFile(viewPath, 'utf-8').then(contents =>
-        template(contents, {
-          variable: 'locals',
-          sourceURL: 'file://' + viewPath,
-        }));
-    }
-  }).catch(warn);
+  return loadView(viewPath);
 };
 
 /**
@@ -302,7 +294,7 @@ exports.renderer = (req, res, opts) => {
       res.write(view.call(opts.locals, opts.locals));
       res.end();
     } else {
-      warn('handlers.renderer: render specified view: true, but no view present.');
+      warn('handlers.renderer: render specified view: true, but no view present.', opts.route);
       res.statusCode = 204;
       res.end();
     }
