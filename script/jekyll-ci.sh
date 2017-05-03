@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [[ $TRAVIS_BRANCH != "master" ]]
+then
+echo "On branch $TRAVIS_BRANCH, not master. Skipping Pages build."
+exit 0
+fi
+
 cd docs
 git clone -b gh-pages https://$GH_TOKEN@github.com/ArtOfCode-/nails _site
 rm -r _site/*
