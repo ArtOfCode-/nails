@@ -743,7 +743,7 @@ if there was a problem<br>
 <li><a href="#new_Server_new">new Server(config)</a></li>
 <li><a href="#Server+run">server.run()</a></li>
 <li><a href="#Server+_run">server._run()</a></li>
-<li><a href="#Server+_handleRequest">server._handleRequest(req, res)</a></li>
+<li><a href="#Server+_handleRequest">server._handleRequest(req, res, [err])</a></li>
 </ul></li>
 </ul>
 
@@ -781,7 +781,7 @@ if there was a problem<br>
 <p><strong>Kind</strong>: instance method of <code><a href="#Server">Server</a></code><br>
 <a name="Server+_handleRequest"></a></p>
 
-<h3>server._handleRequest(req, res)</h3>
+<h3>server._handleRequest(req, res, [err])</h3>
 
 <p>Handle an incoming request</p>
 
@@ -803,6 +803,11 @@ if there was a problem<br>
 <td>res</td>
 <td><code><a href="#Response">Response</a></code></td>
 <td>The HTTP Response</td>
+</tr>
+<tr>
+<td>[err]</td>
+<td><code>Error</code></td>
+<td>An optional error encountered while processing the request</td>
 </tr>
 </tbody></table>
 
