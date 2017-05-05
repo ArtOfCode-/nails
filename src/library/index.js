@@ -4,6 +4,7 @@ const assert = require('assert');
 const path = require('path');
 const url = require('url');
 
+const status = require('statuses');
 const qs = require('qs');
 
 const Handler = require('../handlers');
@@ -62,10 +63,11 @@ exports = module.exports = class Library {
     req.getHeader = req.header.get = res.getHeader.bind(res);
     req.removeHeader = req.header.remove = req.header.del = res.removeHeader.bind(res);
 
-    bind(this, 'render', 'redirect', 'static');
+    bind(this, 'render', 'redirect', 'static', 'status');
     req.render = this.render;
     req.redirect = this.redirect;
     req.static = this.static;
+    req.status = this.status;
     Object.defineProperty(req, 'rendered', {
       get() {
         return this.rendered;
@@ -189,6 +191,15 @@ exports = module.exports = class Library {
   **/
   static(...components) {
     return path.join(this.config.appRoot, 'static', ...components);
+  }
+
+  /**
+   * Set the status code for a response
+   * @param {string|number} code The status code. Can be a number
+   * or a description.
+  **/
+  status(code) {
+    this.res.statusCode = status(code);
   }
 
   /**
