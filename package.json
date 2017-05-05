@@ -125,6 +125,7 @@
     "istanbul": "^0.4.5",
     "jsdoc-to-markdown": "^3.0.0",
     "live-server": "^1.2.0",
+    "lodash.times": "^4.3.2",
     "mocha": "^3.2.0",
     "mock-req": "^0.2.0",
     "mock-res": "^0.4.0",

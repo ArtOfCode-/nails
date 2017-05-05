@@ -5,7 +5,7 @@ const { describe, it, it: test } = require('mocha');
 
 const { toWordsOrdinal: ordinal } = require('number-to-words');
 const debug = require('debug')('nails:test');
-const _ = require('lodash');
+const times = require('lodash.times');
 
 const { equal } = require('./util');
 
@@ -30,7 +30,7 @@ exports = module.exports = ({ nails }) => {
       connection = nails.Connection;
     });
     describe('returns the same object', () => {
-      _.times(7, i => {
+      times(7, i => {
         i++; // `i` is 0-based
         test(`the ${ordinal(i + 1)} time`, () => {
           equal([
