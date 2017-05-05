@@ -77,8 +77,8 @@ exports = module.exports = class Cache {
   }
   /**
    * @private
-   * @param {Object} options
-   * @param {Response} options.res The response
+   * @param {Library} library The library
+   * @param {Response} library.res The response
   **/
   [S.finalize]({ res }) {
     const directives = [];
