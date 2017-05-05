@@ -1,9 +1,8 @@
 'use strict';
 
 const chalk = require('chalk');
+const methods = require('methods');
 const debug = require('./util')('router');
-
-const methods = 'get head post put delete patch'.split(' ');
 
 const bind = (function () {
   /** @private */
@@ -93,6 +92,13 @@ class Router {
     this.routes.push(route);
     this.debug('created', method === 'GET' ? chalk.gray(method) : chalk.bold(method), 'route', chalk.underline(path) || chalk.gray('<root>'), 'to', chalk.bold(options.to));
     return route;
+  }
+  /**
+   * Create a route for the `m-search` HTTP method
+   * @returns {RouteJSON} The created route
+  **/
+  mSearch(...args) {
+    return this.request('m-search', ...args);
   }
   /**
    * @param {...string} scopes The scopes to push onto the router
