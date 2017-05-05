@@ -1,9 +1,9 @@
 'use strict';
 
-const url = require('url');
 const path = require('path');
 const fs = require('mz/fs');
 
+const url = require('fast-url-parser');
 const schema = require('validate');
 
 const Route = require('./route');
@@ -11,6 +11,8 @@ const loadView = require('./views');
 const { createDebug, warn } = require('./util');
 
 const debug = createDebug('handlers');
+
+url.queryString = require('qs');
 
 const cache = {
   channels: {},
@@ -226,7 +228,7 @@ exports = module.exports = class Handler {
   getHandler(req) {
     const uri = url.parse(req.url, true);
     const route = this.routes[req.method].find(({ match }) => match.match(uri.pathname));
-    return route ? { route, params: route.match.match(uri.pathname) } : null;
+    return route ? { route, params: route.match.match(uri.pathname), uri } : null;
   }
 };
 

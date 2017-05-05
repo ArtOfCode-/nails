@@ -2,10 +2,8 @@
 
 const assert = require('assert');
 const path = require('path');
-const url = require('url');
 
 const status = require('statuses');
-const qs = require('qs');
 
 const Handler = require('../handlers');
 const debug = require('./util')('context');
@@ -96,18 +94,24 @@ exports = module.exports = class Library {
      * @memberof Request
      * @instance
     **/
+    req.params = params;
     /**
     * @member {Cache} cache
     * Control how other servers cache the response
     * @memberof Request
     * @instance
     **/
+    /**
+     * @member {Object} query
+     * The query parameters, decoded with {@link `qs` https://github.com/ljharb/qs}
+     * @memberof Request
+     * @instance
+    **/
+    req.query = requestHandler.uri.query;
 
     [
       ['auth', createAuth],
       ['cookies', createCookies],
-      ['params', () => params],
-      ['query', () => qs.parse(url.parse(req.url).query)],
       ['stream', () => {
         const stream = createStream(res);
         stream.on('pipe', this[S.doubleRender].bind(this));
