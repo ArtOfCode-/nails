@@ -39,6 +39,15 @@ const kit = (...names) => {
     warn: log.child('WARNING', ...names),
     createDebug: child.child,
     kit: kit.bind(null, ...names),
+    bind: (function () {
+      /** @private */
+      function bind(...keys) {
+        keys.forEach(key => {
+          this[key] = this[key].bind(this);
+        });
+      }
+      return bind.call.bind(bind);
+    })(),
   });
 };
 

@@ -3,16 +3,7 @@
 const chalk = require('chalk');
 const methods = require('methods');
 const debug = require('./util')('router');
-
-const bind = (function () {
-  /** @private */
-  function bind(...keys) {
-    keys.forEach(key => {
-      this[key] = this[key].bind(this);
-    });
-  }
-  return bind.call.bind(bind);
-})();
+const { bind } = require('./util');
 
 /**
  * The routing helper

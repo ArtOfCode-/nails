@@ -32,7 +32,7 @@ const auth = require('basic-auth');
  * @param {Function} setHeader The function to call to set a header on the response
  * @returns {Object} The auth module of the context
 **/
-module.exports = ({ req, config }, setHeader) => Object.assign(auth(req) || { invalid: true }, {
+module.exports = ({ req, config }) => Object.assign(auth(req) || { invalid: true }, {
   /**
    * Check the username and password in a semi-timing-safe manner
    * @memberof Auth
@@ -59,6 +59,6 @@ module.exports = ({ req, config }, setHeader) => Object.assign(auth(req) || { in
    * @param {string} [options.realm=config.appName] The realm name to send to the user
   **/
   enable: ({ realm = config.appName }) => {
-    setHeader('WWW-Authenticate', `Basic realm="${String(realm).replace('"', '\\"')}"`);
+    req.header('WWW-Authenticate', `Basic realm="${String(realm).replace('"', '\\"')}"`);
   },
 });

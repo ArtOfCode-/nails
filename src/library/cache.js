@@ -80,7 +80,7 @@ exports = module.exports = class Cache {
    * @param {Request} req The request
    * @param {Response} res The response
   **/
-  [S.finalize](req, res) {
+  [S.finalize]({ req, res }) {
     const directives = [];
     const add = directives.push.bind(directives);
     if (this.cache) {
