@@ -30,15 +30,12 @@ title: API
 <dt><a href="#Cache">Cache</a></dt>
 <dd><p>Class handling caching</p>
 </dd>
-<dt><a href="#DoubleRenderError">DoubleRenderError</a></dt>
-<dd><p>Error thrown when a controller calls a rendering method multiple times</p>
-</dd>
-<dt><a href="#Context">Context</a></dt>
-<dd><p>The <code>this</code> value available in controllers</p>
-</dd>
 <dt><a href="#Cookies">Cookies</a></dt>
 <dd><p>Cookie handling extended from the <a href="https://github.com/pillarjs/cookies#api"><code>cookies</code> module</a> on npm.
 The <code>get</code> and <code>set</code> methods serialize and deserialize the data as JSON.</p>
+</dd>
+<dt><a href="#DoubleRenderError">DoubleRenderError</a></dt>
+<dd><p>Error thrown when a controller calls a rendering method multiple times</p>
 </dd>
 </dl>
 
@@ -81,6 +78,7 @@ Nails, a Rails clone in Node
             * [new Router()](#new_module_nails--exports.Router_new)
             * [router.method(path, to, options)](#module_nails--exports.Router+method) ⇒ <code>[RouteJSON](#RouteJSON)</code>
             * [router.request(method, path, to, options)](#module_nails--exports.Router+request) ⇒ <code>[RouteJSON](#RouteJSON)</code>
+            * [router.mSearch()](#module_nails--exports.Router+mSearch) ⇒ <code>[RouteJSON](#RouteJSON)</code>
             * [router.scope(...scopes, f)](#module_nails--exports.Router+scope)
             * [router.ws(path, [to], [options])](#module_nails--exports.Router+ws) ⇒ <code>[RouteJSON](#RouteJSON)</code>
             * [Router.draw(f)](#module_nails--exports.Router.draw) ⇒ <code>Array</code>
@@ -116,6 +114,7 @@ The routing helper
     * [new Router()](#new_module_nails--exports.Router_new)
     * [router.method(path, to, options)](#module_nails--exports.Router+method) ⇒ <code>[RouteJSON](#RouteJSON)</code>
     * [router.request(method, path, to, options)](#module_nails--exports.Router+request) ⇒ <code>[RouteJSON](#RouteJSON)</code>
+    * [router.mSearch()](#module_nails--exports.Router+mSearch) ⇒ <code>[RouteJSON](#RouteJSON)</code>
     * [router.scope(...scopes, f)](#module_nails--exports.Router+scope)
     * [router.ws(path, [to], [options])](#module_nails--exports.Router+ws) ⇒ <code>[RouteJSON](#RouteJSON)</code>
     * [Router.draw(f)](#module_nails--exports.Router.draw) ⇒ <code>Array</code>
@@ -155,6 +154,13 @@ Create a route for an HTTP request.
 | to | <code>string</code> | The controller to call, represented as a string |
 | options | <code>object</code> | More values to include in the route |
 
+<a name="module_nails--exports.Router+mSearch"></a>
+
+##### router.mSearch() ⇒ <code>[RouteJSON](#RouteJSON)</code>
+Create a route for the `m-search` HTTP method
+
+**Kind**: instance method of <code>[Router](#module_nails--exports.Router)</code>  
+**Returns**: <code>[RouteJSON](#RouteJSON)</code> - The created route  
 <a name="module_nails--exports.Router+scope"></a>
 
 ##### router.scope(...scopes, f)
@@ -368,7 +374,7 @@ HTTP Server handler
     * [new Server(config)](#new_Server_new)
     * [server.run()](#Server+run)
     * [server._run()](#Server+_run)
-    * [server._handleRequest(req, res)](#Server+_handleRequest)
+    * [server._handleRequest(req, res, [err])](#Server+_handleRequest)
 
 <a name="new_Server_new"></a>
 
@@ -392,7 +398,7 @@ Start the HTTP server for real
 **Kind**: instance method of <code>[Server](#Server)</code>  
 <a name="Server+_handleRequest"></a>
 
-### server._handleRequest(req, res)
+### server._handleRequest(req, res, [err])
 Handle an incoming request
 
 **Kind**: instance method of <code>[Server](#Server)</code>  
@@ -401,6 +407,7 @@ Handle an incoming request
 | --- | --- | --- |
 | req | <code>[Request](#Request)</code> | The HTTP Request |
 | res | <code>[Response](#Response)</code> | The HTTP Response |
+| [err] | <code>Error</code> | An optional error encountered while processing the request |
 
 <a name="Auth"></a>
 
@@ -501,126 +508,6 @@ Class handling caching
 
 ### Cache.expires : <code>[Expires](#Expires)</code>
 **Kind**: static property of <code>[Cache](#Cache)</code>  
-<a name="DoubleRenderError"></a>
-
-## DoubleRenderError
-Error thrown when a controller calls a rendering method multiple times
-
-**Kind**: global class  
-<a name="new_DoubleRenderError_new"></a>
-
-### new DoubleRenderError(message)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| message | <code>string</code> | The error message |
-
-<a name="Context"></a>
-
-## Context
-The `this` value available in controllers
-
-**Kind**: global class  
-
-* [Context](#Context)
-    * [new Context(library)](#new_Context_new)
-    * [context.auth](#Context+auth) : <code>[Auth](#Auth)</code>
-    * [context.cookies](#Context+cookies) : <code>[Cookies](#Cookies)</code>
-    * [context.params](#Context+params) : <code>Object</code>
-    * [context.cache](#Context+cache) : <code>[Cache](#Cache)</code>
-    * [context.rendered](#Context+rendered) ⇒ <code>boolean</code>
-    * [context.render([opts], [content])](#Context+render)
-    * [context.redirect(to)](#Context+redirect)
-    * [context.static(...components)](#Context+static) ⇒ <code>string</code>
-    * [context.stream(options)](#Context+stream)
-
-<a name="new_Context_new"></a>
-
-### new Context(library)
-
-| Param | Type | Description |
-| --- | --- | --- |
-| library | <code>[Library](#new_Library_new)</code> | The library to attach to |
-
-<a name="Context+auth"></a>
-
-### context.auth : <code>[Auth](#Auth)</code>
-The HTTP authentication provided
-
-**Kind**: instance property of <code>[Context](#Context)</code>  
-<a name="Context+cookies"></a>
-
-### context.cookies : <code>[Cookies](#Cookies)</code>
-Cookies sent by the client
-
-**Kind**: instance property of <code>[Context](#Context)</code>  
-<a name="Context+params"></a>
-
-### context.params : <code>Object</code>
-The query params in the URL
-
-**Kind**: instance property of <code>[Context](#Context)</code>  
-<a name="Context+cache"></a>
-
-### context.cache : <code>[Cache](#Cache)</code>
-Control how other servers cache the response
-
-**Kind**: instance property of <code>[Context](#Context)</code>  
-<a name="Context+rendered"></a>
-
-### context.rendered ⇒ <code>boolean</code>
-**Kind**: instance property of <code>[Context](#Context)</code>  
-**Returns**: <code>boolean</code> - Has the controller rendered its view?  
-<a name="Context+render"></a>
-
-### context.render([opts], [content])
-Render content to the user
-
-**Kind**: instance method of <code>[Context](#Context)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [opts] | <code>Object</code> | The options |
-| [content] | <code>string</code> | The HTML content to render |
-
-<a name="Context+redirect"></a>
-
-### context.redirect(to)
-Redirect to the specified location
-
-**Kind**: instance method of <code>[Context](#Context)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| to | <code>Object</code> \| <code>string</code> | The location to redirect to. If `to` is a string, redirect to that path/URL If `to` is an object with a `back` key, redirect to the previous page, or the value of the `back` key if the referrer isn’t present. |
-
-<a name="Context+static"></a>
-
-### context.static(...components) ⇒ <code>string</code>
-Get the path to a static file
-
-**Kind**: instance method of <code>[Context](#Context)</code>  
-**Returns**: <code>string</code> - The absolute path to the static file  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| ...components | <code>string</code> | The path components to join together |
-
-<a name="Context+stream"></a>
-
-### context.stream(options)
-Stream something to the response.
-This function is also a writable stream, so streams
-can be piped into it:
-`myStream.pipe(this.stream)`
-
-**Kind**: instance method of <code>[Context](#Context)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| options | <code>Object</code> | The options |
-| [options.path] | <code>string</code> | The path to a file to stream into the response |
-
 <a name="Cookies"></a>
 
 ## Cookies
@@ -636,6 +523,20 @@ The `get` and `set` methods serialize and deserialize the data as JSON.
 | Param | Type | Description |
 | --- | --- | --- |
 | key | <code>string</code> | The key to delete |
+
+<a name="DoubleRenderError"></a>
+
+## DoubleRenderError
+Error thrown when a controller calls a rendering method multiple times
+
+**Kind**: global class  
+<a name="new_DoubleRenderError_new"></a>
+
+### new DoubleRenderError(message)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| message | <code>string</code> | The error message |
 
 <a name="createConfig"></a>
 
@@ -711,6 +612,37 @@ An HTTP request
 
 **Kind**: global typedef  
 **See**: the [`http.IncomingMessage` docs](http://devdocs.io/node~6_lts/http#http_class_http_incomingmessage)  
+
+* [Request](#Request)
+    * [.auth](#Request+auth) : <code>[Auth](#Auth)</code>
+    * [.cookies](#Request+cookies) : <code>[Cookies](#Cookies)</code>
+    * [.params](#Request+params) : <code>Object</code>
+    * [.cache](#Request+cache) : <code>[Cache](#Cache)</code>
+
+<a name="Request+auth"></a>
+
+### request.auth : <code>[Auth](#Auth)</code>
+The HTTP authentication provided
+
+**Kind**: instance property of <code>[Request](#Request)</code>  
+<a name="Request+cookies"></a>
+
+### request.cookies : <code>[Cookies](#Cookies)</code>
+Cookies sent by the client
+
+**Kind**: instance property of <code>[Request](#Request)</code>  
+<a name="Request+params"></a>
+
+### request.params : <code>Object</code>
+The query params in the URL
+
+**Kind**: instance property of <code>[Request](#Request)</code>  
+<a name="Request+cache"></a>
+
+### request.cache : <code>[Cache](#Cache)</code>
+Control how other servers cache the response
+
+**Kind**: instance property of <code>[Request](#Request)</code>  
 <a name="Response"></a>
 
 ## Response
