@@ -28,12 +28,15 @@ The `router` object passed to the function (it’s also the `this` value if you 
   * *`scope`*: the scope component to add
   * *`function`*: the function to call in this scope. The function is passed the router as its first argument and `this` value.
   * Example:
+
     ```js
     scope('status', ({ get }) => {
       get('', 'index') // matches /status, routes to status.index
     })
     ```
+
     is equivalent to:
+
     ```js
     get('status', 'status.index')
     ```
