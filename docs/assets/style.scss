@@ -1,6 +1,7 @@
 ---
 # Only the main Sass file needs front matter (the dashes are enough)
 ---
+
 @charset "utf-8";
 
 // Import partials from `sass_dir` and set theme here
@@ -17,4 +18,8 @@ a:not(.header-link) {
   margin: 0;
   padding: 0;
   width: 100%;
+}
+
+body {
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 }
