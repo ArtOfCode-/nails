@@ -184,7 +184,7 @@ The <code>get</code> and <code>set</code> methods serialize and deserialize the 
 <li><a href="#new_module_nails--exports.Router_new">new Router()</a></li>
 <li><a href="#module_nails--exports.Router+method">router.method(path, to, options)</a> ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></li>
 <li><a href="#module_nails--exports.Router+request">router.request(method, path, to, options)</a> ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></li>
-<li><a href="#module_nails--exports.Router+mSearch">router.mSearch()</a> ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></li>
+<li><a href="#module_nails--exports.Router+mSearch">router.mSearch(path, to, options)</a> ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></li>
 <li><a href="#module_nails--exports.Router+scope">router.scope(...scopes, f)</a></li>
 <li><a href="#module_nails--exports.Router+ws">router.ws(path, [to], [options])</a> ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></li>
 <li><a href="#module_nails--exports.Router.draw">Router.draw(f)</a> ⇒ <code>Array</code></li>
@@ -245,7 +245,7 @@ The <code>get</code> and <code>set</code> methods serialize and deserialize the 
 <li><a href="#new_module_nails--exports.Router_new">new Router()</a></li>
 <li><a href="#module_nails--exports.Router+method">router.method(path, to, options)</a> ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></li>
 <li><a href="#module_nails--exports.Router+request">router.request(method, path, to, options)</a> ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></li>
-<li><a href="#module_nails--exports.Router+mSearch">router.mSearch()</a> ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></li>
+<li><a href="#module_nails--exports.Router+mSearch">router.mSearch(path, to, options)</a> ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></li>
 <li><a href="#module_nails--exports.Router+scope">router.scope(...scopes, f)</a></li>
 <li><a href="#module_nails--exports.Router+ws">router.ws(path, [to], [options])</a> ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></li>
 <li><a href="#module_nails--exports.Router.draw">Router.draw(f)</a> ⇒ <code>Array</code></li>
@@ -292,6 +292,9 @@ The <code>get</code> and <code>set</code> methods serialize and deserialize the 
 </tr>
 </tbody></table>
 
+<p><strong>Example</strong>  </p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">router</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="s1">'home:index'</span><span class="p">)</span>
+</code></pre></div>
 <p><a name="module_nails--exports.Router+request"></a></p>
 
 <h5>router.request(method, path, to, options) ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></h5>
@@ -332,13 +335,38 @@ The <code>get</code> and <code>set</code> methods serialize and deserialize the 
 
 <p><a name="module_nails--exports.Router+mSearch"></a></p>
 
-<h5>router.mSearch() ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></h5>
+<h5>router.mSearch(path, to, options) ⇒ <code><a href="#RouteJSON">RouteJSON</a></code></h5>
 
 <p>Create a route for the <code>m-search</code> HTTP method</p>
 
 <p><strong>Kind</strong>: instance method of <code><a href="#module_nails--exports.Router">Router</a></code><br>
-<strong>Returns</strong>: <code><a href="#RouteJSON">RouteJSON</a></code> - The created route<br>
-<a name="module_nails--exports.Router+scope"></a></p>
+<strong>Returns</strong>: <code><a href="#RouteJSON">RouteJSON</a></code> - The created route  </p>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>path</td>
+<td><code>string</code></td>
+<td>The path to match, matched using <code>path-to-regexp</code></td>
+</tr>
+<tr>
+<td>to</td>
+<td><code>string</code></td>
+<td>The controller to call, represented as a string</td>
+</tr>
+<tr>
+<td>options</td>
+<td><code>object</code></td>
+<td>More values to include in the route</td>
+</tr>
+</tbody></table>
+
+<p><a name="module_nails--exports.Router+scope"></a></p>
 
 <h5>router.scope(...scopes, f)</h5>
 
