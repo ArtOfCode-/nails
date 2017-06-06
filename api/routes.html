@@ -127,22 +127,20 @@
 <li><em><code>to</code></em>: the controller to render</li>
 <li><em><code>options</code></em>: an object of other options</li>
 </ul></li>
-<li><code>scope(<em>scope</em>, <em>function</em>)</code>
+<li><p><code>scope(<em>scope</em>, <em>function</em>)</code></p>
 
 <ul>
 <li><em><code>scope</code></em>: the scope component to add</li>
 <li><em><code>function</code></em>: the function to call in this scope. The function is passed the router as its first argument and <code>this</code> value.</li>
-<li>Example:
-<code>js
-scope(&#39;status&#39;, ({ get }) =&gt; {
-get(&#39;&#39;, &#39;index&#39;) // matches /status, routes to status.index
-})
-</code>
-is equivalent to:
-<code>js
-get(&#39;status&#39;, &#39;status.index&#39;)
-</code></li>
-</ul></li>
+<li>Example:</li>
+</ul>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">scope</span><span class="p">(</span><span class="s1">'status'</span><span class="p">,</span> <span class="p">({</span> <span class="nx">get</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">get</span><span class="p">(</span><span class="s1">''</span><span class="p">,</span> <span class="s1">'index'</span><span class="p">)</span> <span class="c1">// matches /status, routes to status.index</span>
+<span class="p">})</span>
+</code></pre></div>
+<p>is equivalent to:</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="nx">get</span><span class="p">(</span><span class="s1">'status'</span><span class="p">,</span> <span class="s1">'status.index'</span><span class="p">)</span>
+</code></pre></div></li>
 </ul>
 
 <h1>Routes as JSON</h1>
