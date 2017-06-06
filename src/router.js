@@ -60,6 +60,7 @@ class Router {
    * @param {string} path The path to match, matched using `path-to-regexp`
    * @param {?string} to The controller to call, represented as a string
    * @param {?object} options More values to include in the route
+   * @example router.get('/', 'home:index')
    * @returns {RouteJSON} The created route
    * @see {@link module:nails.Router#request}
   **/
@@ -86,6 +87,9 @@ class Router {
   }
   /**
    * Create a route for the `m-search` HTTP method
+   * @param {string} path The path to match, matched using `path-to-regexp`
+   * @param {?string} to The controller to call, represented as a string
+   * @param {?object} options More values to include in the route
    * @returns {RouteJSON} The created route
   **/
   mSearch(...args) {
