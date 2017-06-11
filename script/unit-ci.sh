@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 npm run --silent unit
-$ERR = $?
+ERR = $?
 
 if [[ $ERR != 0 ]]; then
   exit $ERR
