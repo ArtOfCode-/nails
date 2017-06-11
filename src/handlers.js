@@ -228,7 +228,8 @@ exports = module.exports = class Handler {
   getHandler(req) {
     const uri = url.parse(req.url, true);
     const route = this.routes[req.method].find(({ match }) => match.match(uri.pathname));
-    return route ? { route, params: route.match.match(uri.pathname), uri } : null;
+    route.uri = uri;
+    return route ? { route, params: route.match.match(uri.pathname) } : null;
   }
 };
 
