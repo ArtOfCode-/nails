@@ -1,3 +1,11 @@
+# This project is UNMAINTAINED.
+
+Check out [Koa](http://koajs.com/) and [Express](https://expressjs.com/) instead if you want to make a website.
+
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
+---
+
 # Nails _(node-nails)_
 
 [![Travis](https://img.shields.io/travis/ArtOfCode-/nails.svg?style=flat-square)](https://travis-ci.org/ArtOfCode-/nails)
