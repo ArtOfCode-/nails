@@ -766,6 +766,8 @@ if there was a problem<br>
 
 <ul>
 <li><a href="#new_Server_new">new Server(config)</a></li>
+<li><a href="#Server+run">server.run()</a></li>
+<li><a href="#Server+_run">server._run()</a></li>
 <li><a href="#Server+_handleRequest">server._handleRequest(req, res, [err])</a></li>
 </ul></li>
 </ul>
@@ -788,7 +790,21 @@ if there was a problem<br>
 </tr>
 </tbody></table>
 
-<p><a name="Server+_handleRequest"></a></p>
+<p><a name="Server+run"></a></p>
+
+<h3>server.run()</h3>
+
+<p>Start the HTTP server when everything is ready</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Server"><code>Server</code></a><br>
+<a name="Server+_run"></a></p>
+
+<h3>server._run()</h3>
+
+<p>Start the HTTP server for real</p>
+
+<p><strong>Kind</strong>: instance method of <a href="#Server"><code>Server</code></a><br>
+<a name="Server+_handleRequest"></a></p>
 
 <h3>server._handleRequest(req, res, [err])</h3>
 
@@ -1016,7 +1032,25 @@ The <code>get</code> and <code>set</code> methods serialize and deserialize the 
 <p>Error thrown when a controller calls a rendering method multiple times</p>
 
 <p><strong>Kind</strong>: global class<br>
-<a name="createConfig"></a></p>
+<a name="new_DoubleRenderError_new"></a></p>
+
+<h3>new DoubleRenderError(message)</h3>
+
+<table><thead>
+<tr>
+<th>Param</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>message</td>
+<td><code>string</code></td>
+<td>The error message</td>
+</tr>
+</tbody></table>
+
+<p><a name="createConfig"></a></p>
 
 <h2>createConfig(file) ⇒ <code>Object</code></h2>
 
