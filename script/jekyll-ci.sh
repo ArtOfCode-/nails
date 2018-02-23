@@ -27,7 +27,7 @@ JEKYLL_GITHUB_TOKEN=$GH_TOKEN JEKYLL_ENV=production bundle exec jekyll build --i
 
 cd _site
 git add --all .
-set -v
+set -x
 OLD_EMAIL=$(git config user.email)
 OLD_NAME=$(git config user.name)
 git config push.default matching
