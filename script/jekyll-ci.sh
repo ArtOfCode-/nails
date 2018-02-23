@@ -27,7 +27,6 @@ JEKYLL_GITHUB_TOKEN=$GH_TOKEN JEKYLL_ENV=production bundle exec jekyll build --i
 
 cd _site
 git add --all .
-set -x
 OLD_EMAIL=$(git config user.email)
 OLD_NAME=$(git config user.name)
 git config push.default matching
@@ -42,8 +41,8 @@ else
   echo -e "Skipped upload."
 fi
 if [[ $OLD_EMAIL != "" ]]; then
-  git config user.email $OLD_EMAIL
+  git config user.email "$OLD_EMAIL"
 fi
 if [[ $OLD_NAME != "" ]]; then
-  git config user.name $OLD_NAME
+  git config user.name "$OLD_NAME"
 fi
