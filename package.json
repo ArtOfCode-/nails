@@ -116,7 +116,8 @@
           "avoidEscape": true
         }
       ],
-      "no-multi-assign": "off"
+      "no-multi-assign": "off",
+      "lines-between-class-members": "off",
     }
   },
   "devDependencies": {
