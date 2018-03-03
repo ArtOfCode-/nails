@@ -146,7 +146,7 @@
     "lodash.template": "^4.4.0",
     "lodash.templatesettings": "^4.1.0",
     "methods": "^1.1.2",
-    "moment": "^2.18.1",
+    "moment": "^2.21.0",
     "mz": "^2.6.0",
     "path-to-regexp": "^2.0.0",
     "qs": "^6.4.0",
