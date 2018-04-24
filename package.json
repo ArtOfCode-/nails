@@ -148,7 +148,7 @@
     "methods": "^1.1.2",
     "moment": "^2.18.1",
     "mz": "^2.6.0",
-    "path-to-regexp": "^2.0.0",
+    "path-to-regexp": "^2.2.1",
     "qs": "^6.4.0",
     "rewire": "^2.5.2",
     "socket.io": "^2.0.0",
